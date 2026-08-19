@@ -1,0 +1,329 @@
+@import "tailwindcss";
+
+:root {
+  /* Light-first canvas. Two sections (the homepage Hero and the closing CTA)
+     stay bold/dark on purpose — they use --color-canvas-dark and the
+     --color-*-on-dark tokens below instead of these. */
+  --color-canvas: #ffffff;
+  --color-canvas-raised: #f5f4f0;
+  --color-canvas-elevated: #ffffff;
+
+  --color-surface: #ffffff;
+  --color-surface-strong: #f5f4f1;
+  --color-border: rgba(15, 23, 42, 0.09);
+  --color-border-strong: rgba(15, 23, 42, 0.18);
+
+  --color-text-primary: #0b0d17;
+  --color-text-secondary: rgba(11, 13, 23, 0.66);
+  --color-text-muted: rgba(11, 13, 23, 0.46);
+
+  /* One confident electric-blurple family, used with real saturation and
+     presence rather than diluted to "safe corporate blue." Violet/cobalt are
+     dark enough to double as AA-contrast text on white; cyan is reserved for
+     dots, icons, and use on the dark sections, not body text on light. */
+  --color-accent-violet: #5b4fef;
+  --color-accent-violet-soft: #b6afff;
+  --color-accent-cobalt: #2e5cff;
+  --color-accent-cobalt-soft: #9db8ff;
+  --color-accent-cyan: #2dd4f5;
+  --color-accent-cyan-soft: #a6ecfb;
+  /* Deep teal: the cyan hue at AA contrast, for eyebrow/label text on light backgrounds. */
+  --color-accent-cyan-ink: #0e7490;
+
+  --gradient-brand: linear-gradient(135deg, #6a5cff 0%, #2e5cff 100%);
+  --gradient-brand-soft: linear-gradient(135deg, #b6afff 0%, #9db8ff 100%);
+  --gradient-atmosphere: linear-gradient(135deg, #2dd4f5 0%, #5b4fef 55%, #2e5cff 100%);
+  --gradient-text: linear-gradient(90deg, #ffffff 0%, #cfc8ff 40%, #a6c3ff 75%, #7fe0f7 100%);
+
+  --shadow-glow-violet: 0 0 100px -22px rgba(91, 79, 239, 0.65);
+  --shadow-glow-cobalt: 0 0 100px -22px rgba(46, 92, 255, 0.6);
+  --shadow-glow-cyan: 0 0 100px -22px rgba(45, 212, 245, 0.45);
+
+  /* Retained-dark-section tokens: the homepage Hero and FinalCta sit on the
+     brand gradient/near-black rather than the light canvas above, so text and
+     cards inside them read against dark, not against --color-canvas. */
+  --color-canvas-dark: #0a0a16;
+  --color-text-on-dark-primary: rgba(255, 255, 255, 0.97);
+  --color-text-on-dark-secondary: rgba(255, 255, 255, 0.78);
+  --color-text-on-dark-muted: rgba(255, 255, 255, 0.56);
+  --color-border-on-dark: rgba(255, 255, 255, 0.22);
+}
+
+@theme inline {
+  --color-canvas: var(--color-canvas);
+  --color-canvas-raised: var(--color-canvas-raised);
+  --color-canvas-elevated: var(--color-canvas-elevated);
+
+  --color-surface: var(--color-surface);
+  --color-surface-strong: var(--color-surface-strong);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+
+  --color-accent-violet: var(--color-accent-violet);
+  --color-accent-violet-soft: var(--color-accent-violet-soft);
+  --color-accent-cobalt: var(--color-accent-cobalt);
+  --color-accent-cobalt-soft: var(--color-accent-cobalt-soft);
+  --color-accent-cyan: var(--color-accent-cyan);
+  --color-accent-cyan-soft: var(--color-accent-cyan-soft);
+  --color-accent-cyan-ink: var(--color-accent-cyan-ink);
+
+  --color-canvas-dark: var(--color-canvas-dark);
+  --color-text-on-dark-primary: var(--color-text-on-dark-primary);
+  --color-text-on-dark-secondary: var(--color-text-on-dark-secondary);
+  --color-text-on-dark-muted: var(--color-text-on-dark-muted);
+  --color-border-on-dark: var(--color-border-on-dark);
+
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-fraunces);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(91, 79, 239, 0.22);
+  color: #0b0d17;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+}
+
+.text-gradient {
+  background-image: var(--gradient-text);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.label-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Fine structural grid, used as an atmosphere layer behind hero/section
+   content on light backgrounds. .bg-grid-dark is the white-line counterpart
+   for use on the two retained dark/bold sections. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Subtle digital noise, layered at low opacity over light surfaces.
+   .bg-noise-dark is the overlay-blend counterpart for the two dark sections. */
+.bg-noise {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+}
+
+.bg-noise-dark {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 160px 160px;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+}
+
+/* Halftone-style dot shading, used as a small tactile accent (e.g. a card
+   corner) rather than a full-bleed texture. */
+.bg-dots {
+  background-image: radial-gradient(currentColor 1px, transparent 1.5px);
+  background-size: 7px 7px;
+}
+
+/* Clean elevated card: the default "panel" everywhere, including as a white
+   card/chip floating on the two dark/gradient sections (Hero, FinalCta). */
+.glass-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 16px 40px -20px rgba(15, 23, 42, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 6s ease-in-out infinite;
+}
+
+/* Slow atmospheric drift for hero/ambient gradient blobs. */
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(3%, -4%) scale(1.06);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.animate-drift {
+  animation: drift 22s ease-in-out infinite;
+}
+
+.animate-drift-slow {
+  animation: drift 32s ease-in-out infinite;
+  animation-delay: -8s;
+}
+
+/* Converging chips for the final CTA sequence: elements start at a scattered
+   offset (set per-element via --tx/--ty/--tr custom properties) and settle
+   into place once revealed. */
+@keyframes converge {
+  0% {
+    opacity: 0;
+    transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--tr, 0deg)) scale(0.85);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(calc(var(--tx, 0) * 0.12), calc(var(--ty, 0) * 0.12)) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.4);
+  }
+}
+
+.animate-converge {
+  animation: converge 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-scan {
+  animation: scan 2.4s linear infinite;
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0.12);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-bar-grow {
+  animation: bar-grow 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: bottom;
+}
+
+@keyframes check-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-check-pop {
+  animation: check-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-travel {
+  animation: travel 1.8s ease-in-out infinite;
+}

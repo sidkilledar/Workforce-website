@@ -1,52 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  /* Light-first canvas. Two sections (the homepage Hero and the closing CTA)
-     stay bold/dark on purpose — they use --color-canvas-dark and the
-     --color-*-on-dark tokens below instead of these. */
-  --color-canvas: #ffffff;
-  --color-canvas-raised: #f5f4f0;
-  --color-canvas-elevated: #ffffff;
+  /* Warm paper canvas. Three sections (Hero, the Operating Loop, and the
+     closing CTA) stay bold/dark on purpose — they use --color-canvas-dark and
+     the --color-*-on-dark tokens below instead of these. */
+  --color-canvas: #f1ece0;
+  --color-canvas-raised: #e8e0cd;
+  --color-canvas-elevated: #fbf8f1;
 
-  --color-surface: #ffffff;
-  --color-surface-strong: #f5f4f1;
-  --color-border: rgba(15, 23, 42, 0.09);
-  --color-border-strong: rgba(15, 23, 42, 0.18);
+  --color-surface: #fbf8f1;
+  --color-surface-strong: #e8e0cd;
+  --color-border: rgba(23, 19, 16, 0.12);
+  --color-border-strong: rgba(23, 19, 16, 0.22);
 
-  --color-text-primary: #0b0d17;
-  --color-text-secondary: rgba(11, 13, 23, 0.66);
-  --color-text-muted: rgba(11, 13, 23, 0.46);
+  --color-text-primary: #17130f;
+  --color-text-secondary: rgba(23, 19, 16, 0.66);
+  --color-text-muted: rgba(23, 19, 16, 0.46);
 
-  /* One confident electric-blurple family, used with real saturation and
-     presence rather than diluted to "safe corporate blue." Violet/cobalt are
-     dark enough to double as AA-contrast text on white; cyan is reserved for
-     dots, icons, and use on the dark sections, not body text on light. */
-  --color-accent-violet: #5b4fef;
-  --color-accent-violet-soft: #b6afff;
-  --color-accent-cobalt: #2e5cff;
-  --color-accent-cobalt-soft: #9db8ff;
-  --color-accent-cyan: #2dd4f5;
-  --color-accent-cyan-soft: #a6ecfb;
-  /* Deep teal: the cyan hue at AA contrast, for eyebrow/label text on light backgrounds. */
-  --color-accent-cyan-ink: #0e7490;
+  /* One signal color, used deliberately and sparingly: primary CTAs, live/
+     active diagram states, the loop's resolved pulse. Everything else in the
+     system is ink, paper, and their tints — no second or third "accent." */
+  --color-signal: #ff4e1f;
+  --color-signal-strong: #d63c12;
+  --color-signal-soft: #ffd9c4;
 
-  --gradient-brand: linear-gradient(135deg, #6a5cff 0%, #2e5cff 100%);
-  --gradient-brand-soft: linear-gradient(135deg, #b6afff 0%, #9db8ff 100%);
-  --gradient-atmosphere: linear-gradient(135deg, #2dd4f5 0%, #5b4fef 55%, #2e5cff 100%);
-  --gradient-text: linear-gradient(90deg, #ffffff 0%, #cfc8ff 40%, #a6c3ff 75%, #7fe0f7 100%);
+  /* Small supporting utility hues for status only — never treated as brand
+     colors, never used for emphasis or decoration. */
+  --color-status-resolved: #4c7a5d;
+  --color-status-wait: rgba(23, 19, 16, 0.4);
 
-  --shadow-glow-violet: 0 0 100px -22px rgba(91, 79, 239, 0.65);
-  --shadow-glow-cobalt: 0 0 100px -22px rgba(46, 92, 255, 0.6);
-  --shadow-glow-cyan: 0 0 100px -22px rgba(45, 212, 245, 0.45);
+  --shadow-glow-signal: 0 0 90px -26px rgba(255, 78, 31, 0.55);
 
-  /* Retained-dark-section tokens: the homepage Hero and FinalCta sit on the
-     brand gradient/near-black rather than the light canvas above, so text and
+  /* Retained-dark-section tokens: the Hero, Operating Loop, and FinalCta sit
+     on warm operational ink rather than the paper canvas above, so text and
      cards inside them read against dark, not against --color-canvas. */
-  --color-canvas-dark: #0a0a16;
-  --color-text-on-dark-primary: rgba(255, 255, 255, 0.97);
-  --color-text-on-dark-secondary: rgba(255, 255, 255, 0.78);
-  --color-text-on-dark-muted: rgba(255, 255, 255, 0.56);
-  --color-border-on-dark: rgba(255, 255, 255, 0.22);
+  --color-canvas-dark: #15110c;
+  --color-canvas-dark-raised: #1f1a13;
+  --color-text-on-dark-primary: rgba(245, 239, 226, 0.97);
+  --color-text-on-dark-secondary: rgba(245, 239, 226, 0.78);
+  --color-text-on-dark-muted: rgba(245, 239, 226, 0.5);
+  --color-border-on-dark: rgba(245, 239, 226, 0.22);
+
+  /* Legacy alias layer: a handful of untouched routes (/product,
+     /industries, IndustryDetail, OperationsPanel, CapabilityVisual,
+     ScrollStory) still reference the old three-hue accent tokens. Rather
+     than maintain two live palettes, those names resolve into the new
+     ink/paper/signal system so the pages stay visually coherent without
+     code changes. New work should reference --color-signal-* and
+     --color-status-* directly, never these. */
+  --color-accent-violet: var(--color-signal-strong);
+  --color-accent-violet-soft: var(--color-signal-soft);
+  --color-accent-cobalt: var(--color-text-primary);
+  --color-accent-cobalt-soft: var(--color-text-secondary);
+  --color-accent-cyan: var(--color-status-resolved);
+  --color-accent-cyan-soft: #d7e6dc;
+  --color-accent-cyan-ink: var(--color-status-resolved);
+  --gradient-brand: linear-gradient(135deg, var(--color-signal) 0%, var(--color-signal-strong) 100%);
 }
 
 @theme inline {
@@ -63,15 +72,14 @@
   --color-text-secondary: var(--color-text-secondary);
   --color-text-muted: var(--color-text-muted);
 
-  --color-accent-violet: var(--color-accent-violet);
-  --color-accent-violet-soft: var(--color-accent-violet-soft);
-  --color-accent-cobalt: var(--color-accent-cobalt);
-  --color-accent-cobalt-soft: var(--color-accent-cobalt-soft);
-  --color-accent-cyan: var(--color-accent-cyan);
-  --color-accent-cyan-soft: var(--color-accent-cyan-soft);
-  --color-accent-cyan-ink: var(--color-accent-cyan-ink);
+  --color-signal: var(--color-signal);
+  --color-signal-strong: var(--color-signal-strong);
+  --color-signal-soft: var(--color-signal-soft);
+  --color-status-resolved: var(--color-status-resolved);
+  --color-status-wait: var(--color-status-wait);
 
   --color-canvas-dark: var(--color-canvas-dark);
+  --color-canvas-dark-raised: var(--color-canvas-dark-raised);
   --color-text-on-dark-primary: var(--color-text-on-dark-primary);
   --color-text-on-dark-secondary: var(--color-text-on-dark-secondary);
   --color-text-on-dark-muted: var(--color-text-on-dark-muted);
@@ -103,21 +111,14 @@ body {
 }
 
 ::selection {
-  background: rgba(91, 79, 239, 0.22);
-  color: #0b0d17;
+  background: var(--color-signal-soft);
+  color: #17130f;
 }
 
 .font-display {
   font-family: var(--font-display), Georgia, serif;
   font-optical-sizing: auto;
   letter-spacing: -0.01em;
-}
-
-.text-gradient {
-  background-image: var(--gradient-text);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
 }
 
 .label-mono {
@@ -128,19 +129,19 @@ body {
 }
 
 /* Fine structural grid, used as an atmosphere layer behind hero/section
-   content on light backgrounds. .bg-grid-dark is the white-line counterpart
-   for use on the two retained dark/bold sections. */
+   content on the paper canvas. .bg-grid-dark is the warm-white-line
+   counterpart for use on the retained dark/ink sections. */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+    linear-gradient(to right, rgba(23, 19, 16, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(23, 19, 16, 0.06) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
 .bg-grid-dark {
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    linear-gradient(to right, rgba(245, 239, 226, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 239, 226, 0.07) 1px, transparent 1px);
   background-size: 64px 64px;
 }
 
@@ -167,16 +168,53 @@ body {
   background-size: 7px 7px;
 }
 
-/* Clean elevated card: the default "panel" everywhere, including as a white
-   card/chip floating on the two dark/gradient sections (Hero, FinalCta). */
+/* Clean elevated card: the default "panel" everywhere, including as a paper
+   card/chip floating on the dark ink sections (Hero, Operating Loop, FinalCta). */
 .glass-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04),
-    0 16px 40px -20px rgba(15, 23, 42, 0.18);
+    0 1px 2px rgba(23, 19, 16, 0.04),
+    0 16px 40px -20px rgba(23, 19, 16, 0.16);
 }
 
+/* Event-slip motif: a card with a perforated top edge, used for scenario
+   timeline entries, capability trigger/action/outcome groupings, and the
+   announcement bar. The dashed line is drawn with a background gradient
+   rather than border-style: dashed so the dash length is controllable. */
+.ticket-slip {
+  position: relative;
+  background: var(--color-canvas-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
+}
+
+.ticket-slip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background-image: linear-gradient(to right, var(--color-border-strong) 0 4px, transparent 4px 9px);
+  background-size: 9px 1px;
+  background-repeat: repeat-x;
+}
+
+.ticket-number {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+/* One-time legacy alias layer: a handful of untouched routes (/product,
+   /industries, IndustryDetail, OperationsPanel, CapabilityVisual,
+   ScrollStory) still reference the old three-hue accent tokens. Rather than
+   maintain two live palettes, those names now resolve into the new
+   ink/paper/signal system so the pages stay visually coherent without code
+   changes. New work should reference --color-signal-* and --color-status-*
+   directly, never these. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -326,4 +364,47 @@ body {
 
 .animate-travel {
   animation: travel 1.8s ease-in-out infinite;
+}
+
+/* The operating-loop hub: a steady resolved pulse rather than a loop of
+   urgency — the loop stays calm because it stays resolved. */
+@keyframes signal-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.82;
+  }
+}
+
+.animate-signal-pulse {
+  animation: signal-pulse 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* A ticket slip traveling one quarter of the loop's circumference, used for
+   the small animated event-slip markers in the Sense→Plan→Act→Verify
+   diagram. Consumers set --loop-rotate-from/--loop-rotate-to per instance. */
+@keyframes loop-travel {
+  from {
+    transform: rotate(var(--loop-rotate-from, 0deg));
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  to {
+    transform: rotate(var(--loop-rotate-to, 90deg));
+    opacity: 0;
+  }
+}
+
+.animate-loop-travel {
+  animation: loop-travel 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  transform-origin: var(--loop-origin, 300px 300px);
 }

@@ -8,17 +8,18 @@ type Variant = "primary" | "secondary" | "ghost" | "light";
 type Size = "md" | "lg";
 
 const base =
-  "relative inline-flex items-center justify-center gap-2 rounded-full font-medium transition-[transform,filter,background-color,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-canvas)] focus-visible:ring-[var(--color-accent-cobalt-soft)] disabled:opacity-50 disabled:pointer-events-none";
+  "relative inline-flex items-center justify-center gap-2 rounded-[3px] font-medium transition-[transform,filter,background-color,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-canvas)] focus-visible:ring-[var(--color-signal)] disabled:opacity-50 disabled:pointer-events-none";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-[image:var(--gradient-brand)] text-white shadow-[0_10px_36px_-10px_rgba(46,92,255,0.65),inset_0_1px_0_rgba(255,255,255,0.16)] hover:brightness-110 active:scale-[0.98]",
-  /** Outline style for placement on a solid/gradient dark color block (e.g. the Hero). */
+    "bg-[var(--color-signal)] text-[#fbf8f1] shadow-[0_10px_28px_-12px_rgba(255,78,31,0.55)] hover:bg-[var(--color-signal-strong)] active:scale-[0.98]",
+  /** Outline style for placement on a solid dark ink block (e.g. the Hero, Operating Loop). */
   secondary:
-    "border border-[var(--color-border-on-dark)] text-white hover:border-white hover:bg-white/10 active:translate-y-0",
+    "border border-[var(--color-border-on-dark)] text-[var(--color-text-on-dark-primary)] hover:border-[var(--color-text-on-dark-primary)] hover:bg-white/5 active:translate-y-0",
   ghost: "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
-  /** Solid white, for placement directly on a solid/gradient dark color block. */
-  light: "bg-white text-[#0b0d17] hover:brightness-95 active:scale-[0.98]",
+  /** Solid paper, for placement directly on a solid dark ink block. */
+  light:
+    "bg-[var(--color-canvas-elevated)] text-[var(--color-text-primary)] hover:bg-white active:scale-[0.98]",
 };
 
 const sizes: Record<Size, string> = {

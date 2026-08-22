@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/Button";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing",
   description:
-    "Workforce OS is configured for each organization's locations, team structure, and operational needs.",
+    "WorkforceOS is configured for each organization's locations, team structure, and operational needs.",
   path: "/pricing",
 });
 
@@ -35,7 +35,7 @@ export default function PricingPage() {
       <PageHero
         eyebrow="Pricing"
         title="Built around how your operation runs."
-        description="Workforce OS is configured for each organization's locations, team structure, and operational needs."
+        description="WorkforceOS is configured for each organization's locations, team structure, and operational needs."
       />
 
       <Section className="pt-0">

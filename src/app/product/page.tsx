@@ -34,7 +34,7 @@ export default function ProductPage() {
       <PageHero
         eyebrow="Product"
         title="One system for the work behind every shift."
-        description="Workforce OS connects forecasting, scheduling, coverage, approvals, communication, and follow-ups so managers stop reassembling the picture by hand."
+        description="WorkforceOS connects forecasting, scheduling, coverage, approvals, communication, and follow-ups so managers stop reassembling the picture by hand."
       />
 
       <Section className="pt-0">

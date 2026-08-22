@@ -39,7 +39,7 @@ export function IndustryDetail({ industry }: { industry: Industry }) {
 
             <Reveal delay={80}>
               <h2 className="font-display text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]">
-                How Workforce OS helps
+                How WorkforceOS helps
               </h2>
               <div className="mt-6 space-y-4">
                 {industry.highlights.map((highlight) => (

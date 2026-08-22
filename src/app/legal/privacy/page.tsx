@@ -4,7 +4,7 @@ import { LegalPlaceholder } from "@/components/site/LegalPlaceholder";
 
 export const metadata: Metadata = buildMetadata({
   title: "Privacy Policy",
-  description: "How Workforce OS collects, uses, and protects your information.",
+  description: "How WorkforceOS collects, uses, and protects your information.",
   path: "/legal/privacy",
 });
 

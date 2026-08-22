@@ -12,7 +12,7 @@ import { cn } from "@/lib/cn";
 export const metadata: Metadata = buildMetadata({
   title: "Industries",
   description:
-    "Workforce OS serves restaurants, multi-location chains, catering operations, college campuses, and other shift-based organizations.",
+    "WorkforceOS serves restaurants, multi-location chains, catering operations, college campuses, and other shift-based organizations.",
   path: "/industries",
 });
 

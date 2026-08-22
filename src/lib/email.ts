@@ -64,7 +64,7 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
     html: `
       <div style="font-family:sans-serif;max-width:560px;">
         <h2 style="margin-bottom:4px;">New demo request</h2>
-        <p style="color:#666;margin-top:0;">Submitted via the Workforce OS website.</p>
+        <p style="color:#666;margin-top:0;">Submitted via the WorkforceOS website.</p>
         <table style="border-collapse:collapse;width:100%;">${rowsHtml}</table>
         ${
           data.message
@@ -91,12 +91,12 @@ export async function sendDemoRequestConfirmation(data: DemoRequestInput) {
   await resend.emails.send({
     from: fromAddress,
     to: data.email,
-    subject: "We received your Workforce OS demo request",
+    subject: "We received your WorkforceOS demo request",
     html: `
       <div style="font-family:sans-serif;max-width:560px;">
         <h2>Thanks, ${escapeHtml(firstName)}.</h2>
         <p>
-          We received your request for a Workforce OS demo for ${escapeHtml(
+          We received your request for a WorkforceOS demo for ${escapeHtml(
             data.company,
           )}. Our team will reach out at ${escapeHtml(
             data.email,
@@ -104,7 +104,7 @@ export async function sendDemoRequestConfirmation(data: DemoRequestInput) {
         </p>
         <p>In the meantime, feel free to reply to this email with any questions.</p>
         <p style="color:#666;font-size:12px;margin-top:32px;">
-          Workforce OS &middot; This message was sent because you requested a demo on our website.
+          WorkforceOS &middot; This message was sent because you requested a demo on our website.
         </p>
       </div>
     `,

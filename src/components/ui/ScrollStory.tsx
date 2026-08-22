@@ -57,7 +57,7 @@ export function ScrollStory({
     <div className={className}>
       {(eyebrow || title || description) && (
         <div className="mx-auto mb-14 max-w-2xl text-center">
-          {eyebrow && <p className="label-mono text-[var(--color-accent-cyan-ink)]">{eyebrow}</p>}
+          {eyebrow && <p className="label-mono text-[var(--color-signal-strong)]">{eyebrow}</p>}
           {title && (
             <h2 className="font-display mt-4 text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
               {title}

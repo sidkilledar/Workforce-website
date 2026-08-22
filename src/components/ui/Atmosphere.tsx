@@ -1,10 +1,11 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Shared atmospheric background: fine structural grid, drifting radial
- * gradient light, and a low-opacity noise layer. "light" (default) is tuned
- * for the site's light canvas — used behind PageHero on every inner page.
- * "dark" is tuned for the two retained bold/dark sections (Hero, FinalCta).
+ * Shared atmospheric background: fine structural grid plus a low-opacity
+ * paper-grain layer. "light" (default) is tuned for the site's paper canvas —
+ * used behind PageHero on every inner page. "dark" is tuned for the retained
+ * bold/dark sections (Hero, Operating Loop, FinalCta). No color blobs — this
+ * identity uses one signal color deliberately, not a wash of accent gradients.
  */
 export function Atmosphere({
   className,
@@ -29,23 +30,11 @@ export function Atmosphere({
         )}
       />
       <div className={cn(isDark ? "bg-noise-dark" : "bg-noise", "absolute inset-0")} />
-      <div
-        className={cn(
-          "animate-drift absolute left-1/2 top-[-15%] h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-[var(--color-accent-cobalt)] blur-[140px]",
-          isDark ? "opacity-[0.34]" : "opacity-[0.12]",
-        )}
-      />
-      <div
-        className={cn(
-          "animate-drift-slow absolute right-[-12%] top-[15%] h-[480px] w-[480px] rounded-full bg-[var(--color-accent-violet)] blur-[140px]",
-          isDark ? "opacity-[0.3]" : "opacity-[0.1]",
-        )}
-      />
       {dense && (
         <div
           className={cn(
-            "animate-drift absolute left-[-10%] bottom-[-10%] h-[440px] w-[440px] rounded-full bg-[var(--color-accent-cyan)] blur-[140px] [animation-delay:-6s]",
-            isDark ? "opacity-[0.2]" : "opacity-[0.09]",
+            "animate-pulse-glow absolute left-1/2 top-[-10%] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[var(--color-signal)] blur-[160px]",
+            isDark ? "opacity-[0.14]" : "opacity-[0.06]",
           )}
         />
       )}

@@ -10,7 +10,7 @@ import { FinalCta } from "@/components/site/FinalCta";
 export const metadata: Metadata = buildMetadata({
   title: "About",
   description:
-    "Workforce OS is building the AI operations manager for frontline businesses — starting with the people who run operations every day.",
+    "WorkforceOS is building the AI operations manager for frontline businesses — starting with the people who run operations every day.",
   path: "/about",
 });
 
@@ -18,12 +18,12 @@ const principles = [
   {
     title: "Operators first",
     description:
-      "Every feature starts from a real shift, a real call-out, or a real schedule — not a theoretical workflow. We build alongside the operators piloting Workforce OS today.",
+      "Every feature starts from a real shift, a real call-out, or a real schedule — not a theoretical workflow. We build alongside the operators piloting WorkforceOS today.",
   },
   {
     title: "Automate the busywork, not the judgment",
     description:
-      "Workforce OS handles forecasting, drafting, and routing so managers spend their time on the decisions that actually need a person.",
+      "WorkforceOS handles forecasting, drafting, and routing so managers spend their time on the decisions that actually need a person.",
   },
   {
     title: "Earn trust before scale",
@@ -38,7 +38,7 @@ export default function AboutPage() {
       <PageHero
         eyebrow="About"
         title="Building the operating system frontline businesses deserve"
-        description="Shift-based operations run a huge share of the economy, and most still run on spreadsheets, group chats, and a manager's memory. Workforce OS exists to replace that with one operating layer."
+        description="Shift-based operations run a huge share of the economy, and most still run on spreadsheets, group chats, and a manager's memory. WorkforceOS exists to replace that with one operating layer."
       />
 
       <Section className="pt-0">
@@ -55,7 +55,7 @@ export default function AboutPage() {
               stall because there&apos;s no clear system of record.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-              Workforce OS is our answer: an AI operations manager that forecasts
+              WorkforceOS is our answer: an AI operations manager that forecasts
               demand, plans labor, builds schedules, and keeps every shift covered — so
               the people running these operations can spend their time leading a team,
               not fighting a spreadsheet.
@@ -95,7 +95,7 @@ export default function AboutPage() {
               What&apos;s next
             </h2>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-text-secondary)]">
-              Workforce OS is currently in a working pilot with early operators across
+              WorkforceOS is currently in a working pilot with early operators across
               restaurants and adjacent shift-based businesses. We&apos;re deliberately
               staying close to that group while we harden the product, before opening
               access more broadly.

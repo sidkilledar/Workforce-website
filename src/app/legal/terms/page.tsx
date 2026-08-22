@@ -4,7 +4,7 @@ import { LegalPlaceholder } from "@/components/site/LegalPlaceholder";
 
 export const metadata: Metadata = buildMetadata({
   title: "Terms of Service",
-  description: "The terms governing use of Workforce OS.",
+  description: "The terms governing use of WorkforceOS.",
   path: "/legal/terms",
 });
 

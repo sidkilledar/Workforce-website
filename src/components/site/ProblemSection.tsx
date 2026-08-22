@@ -1,116 +1,59 @@
-"use client";
-
+import { sectionIds } from "@/lib/site-config";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { ScrollStory, type ScrollStoryStep } from "@/components/ui/ScrollStory";
-import { OperationsPanel, type OperationsPanelState } from "@/components/site/OperationsPanel";
-import { operationalTimeline } from "@/lib/site-config";
+import { Reveal } from "@/components/ui/Reveal";
+import { LoopDiagram } from "@/components/site/LoopDiagram";
 
-const stageStates: OperationsPanelState[] = [
-  {
-    caption: "6:10 AM — EMPLOYEE CALLS OUT",
-    pulse: "signal",
-    forecastLabel: "Baseline",
-    coverageLabel: "1 shift open",
-    coverageStatus: "warning",
-    approvalStatus: "none",
-    taskStatus: "pending",
-    highlightCell: { row: 0, col: 1 },
-  },
-  {
-    caption: "7:30 AM — DEMAND FORECAST CHANGES",
-    pulse: "signal",
-    forecastLabel: "+18% expected",
-    coverageLabel: "1 shift open",
-    coverageStatus: "warning",
-    approvalStatus: "none",
-    taskStatus: "pending",
-    highlightCell: { row: 0, col: 1 },
-  },
-  {
-    caption: "9:15 AM — COVERAGE GAP DETECTED",
-    pulse: "risk",
-    forecastLabel: "+18% expected",
-    coverageLabel: "Gap — dinner service",
-    coverageStatus: "warning",
-    approvalStatus: "none",
-    taskStatus: "pending",
-    highlightCell: { row: 0, col: 4 },
-  },
-  {
-    caption: "11:40 AM — APPROVAL PENDING",
-    pulse: "resolving",
-    forecastLabel: "+18% expected",
-    coverageLabel: "Gap — dinner service",
-    coverageStatus: "warning",
-    approvalStatus: "pending",
-    taskStatus: "pending",
-    highlightCell: { row: 0, col: 4 },
-  },
-  {
-    caption: "2:00 PM — CLOSING TASK UNASSIGNED",
-    pulse: "resolving",
-    forecastLabel: "+18% expected",
-    coverageLabel: "Gap — dinner service",
-    coverageStatus: "warning",
-    approvalStatus: "pending",
-    taskStatus: "pending",
-    highlightCell: { row: 0, col: 4 },
-  },
-  {
-    caption: "WORKFORCE OS — CONSOLIDATED",
-    pulse: "resolved",
-    forecastLabel: "On track",
-    coverageLabel: "Fully staffed",
-    coverageStatus: "resolved",
-    approvalStatus: "approved",
-    taskStatus: "done",
-    highlightCell: null,
-  },
+const inputs = [
+  { time: "5:52 PM", label: "Call-out, texted in", rotate: "-2deg" },
+  { time: "SAT", label: "No-show, no warning", rotate: "1.5deg" },
+  { time: "FRI", label: "Headcount change", rotate: "-1deg" },
+  { time: "14 UNREAD", label: "Group chat, buried", rotate: "2deg" },
 ];
 
 export function ProblemSection() {
-  const steps: ScrollStoryStep[] = [
-    ...operationalTimeline.map((item, index) => ({
-      key: item.time,
-      content: (
-        <div>
-          <p className="label-mono text-[var(--color-accent-cyan-ink)]">
-            {String(index + 1).padStart(2, "0")} / {operationalTimeline.length + 1}
-          </p>
-          <p className="label-mono mt-3 text-[var(--color-text-muted)]">{item.time}</p>
-          <h3 className="font-display mt-2 text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl">
-            {item.event}
-          </h3>
-        </div>
-      ),
-    })),
-    {
-      key: "consolidated",
-      content: (
-        <div>
-          <p className="label-mono text-[var(--color-accent-cyan-ink)]">
-            {operationalTimeline.length + 1} / {operationalTimeline.length + 1}
-          </p>
-          <p className="label-mono mt-3 text-[var(--color-text-muted)]">ONE SYSTEM</p>
-          <h3 className="font-display mt-2 text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl">
-            Every signal lands in one place — and Workforce OS resolves it.
-          </h3>
-        </div>
-      ),
-    },
-  ];
-
   return (
-    <Section className="bg-[var(--color-canvas-raised)]">
+    <Section id={sectionIds.problem} className="bg-[var(--color-canvas-raised)]">
       <Container>
-        <ScrollStory
-          eyebrow="THE REALITY OF FRONTLINE OPERATIONS"
-          title="Your managers are running the business through texts, spreadsheets, and memory."
-          description="Schedules change. Employees call out. Demand moves. Approvals wait. Tasks get missed. Managers spend their day chasing updates instead of leading the operation."
-          steps={steps}
-          renderVisual={(activeIndex) => <OperationsPanel state={stageStates[activeIndex]!} />}
-        />
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <p className="label-mono text-[var(--color-signal-strong)]">The Reality Of Shift-Based Work</p>
+          <h2 className="font-display mt-4 text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+            A scheduling app, a group chat, and a stream of texts — all fighting each other.
+          </h2>
+          <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+            Call-outs, no-shows, and headcount changes land in a different
+            place every time. WorkforceOS puts it all through one loop instead.
+          </p>
+        </Reveal>
+
+        <div className="mt-16 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          <Reveal>
+            <p className="label-mono text-[var(--color-text-muted)]">Coordinated manually</p>
+            <div className="relative mt-6 flex min-h-[280px] flex-col items-start gap-4 rounded-[3px] border border-dashed border-[var(--color-border-strong)] bg-[var(--color-canvas)] p-6 sm:p-8">
+              {inputs.map((input) => (
+                <div
+                  key={input.label}
+                  className="ticket-slip w-full max-w-xs px-4 pb-3 pt-4 sm:w-auto"
+                  style={{ transform: `rotate(${input.rotate})` }}
+                >
+                  <p className="ticket-number">{input.time}</p>
+                  <p className="mt-1 text-sm font-medium text-[var(--color-text-primary)]">{input.label}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <p className="label-mono text-[var(--color-signal-strong)]">Kept moving by WorkforceOS</p>
+            <div className="mt-6 flex min-h-[280px] flex-col items-center justify-center gap-6 rounded-[3px] bg-[var(--color-canvas-dark)] p-8 text-center">
+              <LoopDiagram size={200} />
+              <p className="max-w-[240px] text-[15px] leading-relaxed text-[var(--color-text-on-dark-secondary)]">
+                Every signal lands in one loop — sensed, planned, acted on, and
+                verified resolved.
+              </p>
+            </div>
+          </Reveal>
+        </div>
       </Container>
     </Section>
   );

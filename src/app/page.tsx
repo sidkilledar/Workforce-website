@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/site/Hero";
+import { CustomerTrustStrip } from "@/components/site/CustomerTrustStrip";
 import { ProblemSection } from "@/components/site/ProblemSection";
-import { HowItWorksSection } from "@/components/site/HowItWorksSection";
-import { CoreCapabilities } from "@/components/site/CoreCapabilities";
-import { AdaptiveScenario } from "@/components/site/AdaptiveScenario";
-import { IndustriesShowcase } from "@/components/site/IndustriesShowcase";
-import { ManagerExperience } from "@/components/site/ManagerExperience";
-import { PilotTrust } from "@/components/site/PilotTrust";
-import { ImplementationJourney } from "@/components/site/ImplementationJourney";
+import { OperatingLoop } from "@/components/site/OperatingLoop";
+import { CapabilityStories } from "@/components/site/CapabilityStories";
+import { ScenarioWalkthrough } from "@/components/site/ScenarioWalkthrough";
+import { OperationOutcomes } from "@/components/site/OperationOutcomes";
+import { CustomerStories } from "@/components/site/CustomerStories";
+import { AudienceSegments } from "@/components/site/AudienceSegments";
+import { ImplementationControl } from "@/components/site/ImplementationControl";
 import { FinalCta } from "@/components/site/FinalCta";
 import { buildMetadata } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
@@ -22,14 +23,15 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <CustomerTrustStrip />
       <ProblemSection />
-      <HowItWorksSection />
-      <CoreCapabilities />
-      <AdaptiveScenario />
-      <IndustriesShowcase />
-      <ManagerExperience />
-      <PilotTrust />
-      <ImplementationJourney />
+      <OperatingLoop />
+      <CapabilityStories />
+      <ScenarioWalkthrough />
+      <OperationOutcomes />
+      <CustomerStories />
+      <AudienceSegments />
+      <ImplementationControl />
       <FinalCta />
     </>
   );

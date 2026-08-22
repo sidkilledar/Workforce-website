@@ -1,13 +1,13 @@
 "use client";
 
-import { useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
 import {
   demoRequestDefaultValues,
   demoRequestSchema,
   type DemoRequestInput,
 } from "@/lib/validation";
-import { frictionWorkflows, hourlyEmployeeBands, industries, locationBands } from "@/lib/site-config";
+import { demoIndustries, frictionWorkflows, hourlyEmployeeBands, locationBands } from "@/lib/site-config";
 import { Button } from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 
@@ -15,8 +15,11 @@ type FieldErrors = Partial<Record<keyof DemoRequestInput, string>>;
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
+// focus:border uses signal-strong, not the brighter signal — against the
+// input's light background, bright signal fails the WCAG 3:1 non-text
+// contrast minimum for a focus indicator (~2.8:1); signal-strong clears it.
 const inputClasses =
-  "w-full rounded-[3px] border border-[var(--color-border)] bg-[var(--color-canvas-elevated)] px-4 py-2.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] transition-colors focus:border-[var(--color-signal)] focus:outline-none focus:ring-2 focus:ring-[var(--color-signal)]/20";
+  "w-full rounded-[3px] border border-[var(--color-border)] bg-[var(--color-canvas-elevated)] px-4 py-2.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] transition-colors focus:border-[var(--color-signal-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-signal)]/20";
 
 const labelClasses = "text-sm font-medium text-[var(--color-text-primary)]";
 
@@ -26,6 +29,24 @@ export function DemoForm() {
   const [status, setStatus] = useState<SubmitState>("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const hasStartedRef = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Focus the first invalid field after validation fails — client-side or
+  // server-side — so keyboard/screen-reader users land where the problem is
+  // instead of an unchanged focus position.
+  useEffect(() => {
+    const firstErrorKey = Object.keys(errors)[0];
+    if (!firstErrorKey || !formRef.current) return;
+    const field = formRef.current.elements.namedItem(firstErrorKey) as HTMLElement | null;
+    field?.focus();
+  }, [errors]);
+
+  // Move focus to the confirmation heading on success, so screen-reader
+  // users hear the outcome rather than nothing changing.
+  useEffect(() => {
+    if (status === "success") successHeadingRef.current?.focus();
+  }, [status]);
 
   function updateField<K extends keyof DemoRequestInput>(key: K, value: DemoRequestInput[K]) {
     if (!hasStartedRef.current) {
@@ -94,7 +115,7 @@ export function DemoForm() {
 
   if (status === "success") {
     return (
-      <div className="ticket-slip p-10 text-center sm:p-14" role="status">
+      <div className="ticket-slip animate-confirm-in p-10 text-center sm:p-14" role="status">
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-signal-soft)]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path
@@ -106,7 +127,11 @@ export function DemoForm() {
             />
           </svg>
         </div>
-        <h2 className="font-display mt-5 text-2xl font-semibold text-[var(--color-text-primary)] sm:text-3xl">
+        <h2
+          ref={successHeadingRef}
+          tabIndex={-1}
+          className="font-display mt-5 text-2xl font-semibold text-[var(--color-text-primary)] outline-none sm:text-3xl"
+        >
           Request received
         </h2>
         <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)]">
@@ -131,7 +156,7 @@ export function DemoForm() {
 
   return (
     <div className="ticket-slip p-6 sm:p-10">
-      <form noValidate onSubmit={handleSubmit} className="space-y-8">
+      <form ref={formRef} noValidate onSubmit={handleSubmit} className="space-y-8">
         <fieldset className="space-y-6">
           <legend className="label-mono text-[var(--color-signal-strong)]">About You</legend>
           <div className="grid gap-6 sm:grid-cols-2">
@@ -162,7 +187,7 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Phone number" htmlFor="phone" error={errors.phone}>
+            <Field label="Phone number (optional)" htmlFor="phone" error={errors.phone}>
               <input
                 id="phone"
                 name="phone"
@@ -204,9 +229,9 @@ export function DemoForm() {
                   updateField("industry", event.target.value as DemoRequestInput["industry"])
                 }
               >
-                {industries.map((industry) => (
-                  <option key={industry.slug} value={industry.slug}>
-                    {industry.name}
+                {demoIndustries.map((industry) => (
+                  <option key={industry.value} value={industry.value}>
+                    {industry.label}
                   </option>
                 ))}
               </select>
@@ -342,8 +367,8 @@ export function DemoForm() {
         </Button>
 
         <p className="text-center text-xs text-[var(--color-text-muted)]">
-          Your information is used only to prepare and schedule your demo. We never sell
-          or share it with third parties.
+          We use this information to prepare and schedule your demo. We do not sell it;
+          service providers may process it for hosting, email delivery, and analytics.
         </p>
       </form>
     </div>

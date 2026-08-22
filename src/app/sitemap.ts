@@ -1,26 +1,13 @@
 import type { MetadataRoute } from "next";
-import { industries, siteConfig } from "@/lib/site-config";
+import { siteConfig } from "@/lib/site-config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = [
-    "",
-    "/product",
-    "/industries",
-    "/about",
-    "/pricing",
-    "/demo",
-    "/legal/privacy",
-    "/legal/terms",
-  ];
-
-  const industryRoutes = industries.map((industry) => `/industries/${industry.slug}`);
-
-  const routes = [...staticRoutes, ...industryRoutes];
+  const routes = ["", "/demo", "/legal/privacy", "/legal/terms"];
 
   return routes.map((route) => ({
     url: new URL(route, siteConfig.url).toString(),
     lastModified: new Date(),
     changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    priority: route === "" ? 1 : route === "/demo" ? 0.8 : 0.3,
   }));
 }

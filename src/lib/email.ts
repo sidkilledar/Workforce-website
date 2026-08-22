@@ -1,6 +1,6 @@
 import { Resend } from "resend";
 import type { DemoRequestInput } from "@/lib/validation";
-import { frictionWorkflows, industries } from "@/lib/site-config";
+import { demoIndustries, frictionWorkflows } from "@/lib/site-config";
 
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
@@ -11,7 +11,7 @@ function getResendClient() {
 }
 
 function industryLabel(slug: string) {
-  return industries.find((industry) => industry.slug === slug)?.name ?? slug;
+  return demoIndustries.find((industry) => industry.value === slug)?.label ?? slug;
 }
 
 function frictionWorkflowLabel(value: string) {
@@ -39,7 +39,7 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
   const rows: [string, string][] = [
     ["Name", data.name],
     ["Work email", data.email],
-    ["Phone", data.phone],
+    ["Phone", data.phone || "Not provided"],
     ["Company", data.company],
     ["Industry", industryLabel(data.industry)],
     ["Locations", data.locations],

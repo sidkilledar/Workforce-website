@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { ctaNav, footerNav, pilotCustomers, siteConfig } from "@/lib/site-config";
+import { ctaNav, footerNav, siteConfig } from "@/lib/site-config";
 import { Container } from "@/components/ui/Container";
-import { LinkedInPlaceholder } from "@/components/layout/LinkedInPlaceholder";
 
 export function Footer() {
   return (
@@ -13,7 +12,7 @@ export function Footer() {
               {siteConfig.name}
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--color-text-muted)]">
-              The AI ops manager for shift-based teams.
+              The AI operations command center for frontline businesses.
             </p>
             <Link
               href={ctaNav.href}
@@ -48,12 +47,6 @@ export function Footer() {
           <p className="text-xs text-[var(--color-text-muted)]">
             © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
-            <p className="text-xs text-[var(--color-text-muted)]">
-              In active pilots with {pilotCustomers.join(" and ")}.
-            </p>
-            <LinkedInPlaceholder />
-          </div>
         </div>
       </Container>
     </footer>

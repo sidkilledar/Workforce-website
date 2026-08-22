@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/site/Hero";
-import { CustomerTrustStrip } from "@/components/site/CustomerTrustStrip";
 import { ProblemSection } from "@/components/site/ProblemSection";
-import { OperatingLoop } from "@/components/site/OperatingLoop";
-import { CapabilityStories } from "@/components/site/CapabilityStories";
-import { ScenarioWalkthrough } from "@/components/site/ScenarioWalkthrough";
-import { OperationOutcomes } from "@/components/site/OperationOutcomes";
-import { CustomerStories } from "@/components/site/CustomerStories";
+import { IntegrationSection } from "@/components/site/IntegrationSection";
+import { CommandCenter } from "@/components/site/CommandCenter";
+import { OperatingPillars } from "@/components/site/OperatingPillars";
+import { AiAssistant } from "@/components/site/AiAssistant";
+import { OperatingCycle } from "@/components/site/OperatingCycle";
+import { DayInOperation } from "@/components/site/DayInOperation";
+import { InsightsSection } from "@/components/site/InsightsSection";
+import { AuthoritySection } from "@/components/site/AuthoritySection";
 import { AudienceSegments } from "@/components/site/AudienceSegments";
+import { CustomerTrustStrip } from "@/components/site/CustomerTrustStrip";
 import { ImplementationControl } from "@/components/site/ImplementationControl";
 import { FinalCta } from "@/components/site/FinalCta";
 import { buildMetadata } from "@/lib/metadata";
@@ -23,14 +26,17 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <CustomerTrustStrip />
       <ProblemSection />
-      <OperatingLoop />
-      <CapabilityStories />
-      <ScenarioWalkthrough />
-      <OperationOutcomes />
-      <CustomerStories />
+      <IntegrationSection />
+      <CommandCenter />
+      <OperatingPillars />
+      <AiAssistant />
+      <OperatingCycle />
+      <DayInOperation />
+      <InsightsSection />
+      <AuthoritySection />
       <AudienceSegments />
+      <CustomerTrustStrip />
       <ImplementationControl />
       <FinalCta />
     </>

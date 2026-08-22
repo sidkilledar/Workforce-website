@@ -7,11 +7,12 @@ import { Container } from "@/components/ui/Container";
 import { sectionIds } from "@/lib/site-config";
 import { trackEvent } from "@/lib/analytics";
 
+// Echoes the hero's four-part promise, converging into one wordmark.
 const chips: { label: string; tx: string; ty: string; tr: string }[] = [
-  { label: "Schedule", tx: "-160px", ty: "-70px", tr: "-8deg" },
-  { label: "Coverage", tx: "150px", ty: "-90px", tr: "6deg" },
-  { label: "Approval", tx: "-140px", ty: "80px", tr: "5deg" },
-  { label: "Task", tx: "160px", ty: "70px", tr: "-6deg" },
+  { label: "Connect", tx: "-160px", ty: "-70px", tr: "-8deg" },
+  { label: "Understand", tx: "150px", ty: "-90px", tr: "6deg" },
+  { label: "Act", tx: "-140px", ty: "80px", tr: "5deg" },
+  { label: "Improve", tx: "160px", ty: "70px", tr: "-6deg" },
 ];
 
 export function FinalCta() {
@@ -76,17 +77,20 @@ export function FinalCta() {
         </div>
       </Container>
 
-      <div className="relative bg-[var(--color-signal)] py-16 sm:py-20">
+      {/* signal-strong, not the brighter signal — white/near-white text on
+          bright signal only reaches ~3.1:1, under WCAG AA 4.5:1 for the
+          paragraph below (18px normal weight doesn't qualify as "large text"). */}
+      <div className="relative bg-[var(--color-signal-strong)] py-16 sm:py-20">
         <Container className="relative flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
           <div>
             <h2 className="font-display max-w-xl text-3xl font-medium tracking-tight text-[#fbf8f1] sm:text-5xl">
-              Stay in the loop. Not in the weeds.
+              Get your managers back on the floor.
             </h2>
             <p className="mt-4 max-w-lg text-lg text-[#fbf8f1]/85">
-              Built for caterers, restaurant groups, and campus sports &amp;
-              recreation departments staffed mostly by students and hourly
-              workers. Book a demo and we&apos;ll walk through it on your
-              operation.
+              The demo starts with your systems and your highest-friction
+              workflow — not a generic tour. We won&apos;t promise a fully
+              configured environment on the first call, but you&apos;ll see
+              exactly how it&apos;d fit your operation.
             </p>
           </div>
           <Button

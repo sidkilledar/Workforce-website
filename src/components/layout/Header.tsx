@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { ctaNav, navAnchors, siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { trackEvent } from "@/lib/analytics";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /** Anchors always resolve to the landing page's sections, from any route. */
 function resolveAnchorHref(href: string, pathname: string) {
@@ -18,6 +23,8 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [activeHref, setActiveHref] = useState<string | null>(null);
 
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -35,10 +42,46 @@ export function Header() {
     if (!mobileOpen) return;
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+
     return () => {
       document.body.style.overflow = original;
+      window.removeEventListener("keydown", onKeyDown);
     };
   }, [mobileOpen]);
+
+  function closeMobileMenu() {
+    setMobileOpen(false);
+  }
+
+  // Highlights whichever nav anchor's section is currently in the reading
+  // band — driven by ScrollTrigger (the shared runtime), never a raw scroll
+  // listener. Only meaningful on the homepage, where the sections live.
+  useGSAP(
+    () => {
+      if (pathname !== "/") return;
+      navAnchors.forEach(({ href }) => {
+        const el = document.getElementById(href.slice(1));
+        if (!el) return;
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 40%",
+          end: "bottom 40%",
+          onToggle: (self) => {
+            if (self.isActive) setActiveHref(href);
+          },
+        });
+      });
+    },
+    { dependencies: [pathname] },
+  );
 
   return (
     <header
@@ -62,7 +105,13 @@ export function Header() {
             <Link
               key={link.href}
               href={resolveAnchorHref(link.href, pathname)}
-              className="text-sm font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+              aria-current={activeHref === link.href ? "true" : undefined}
+              className={cn(
+                "text-sm font-medium transition-colors duration-[var(--duration-ui)]",
+                activeHref === link.href
+                  ? "text-[var(--color-signal-strong)]"
+                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+              )}
             >
               {link.label}
             </Link>
@@ -81,8 +130,9 @@ export function Header() {
         </div>
 
         <button
+          ref={menuButtonRef}
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-[var(--color-text-primary)] md:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-text-primary)] md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -108,33 +158,41 @@ export function Header() {
         </button>
       </div>
 
-      {mobileOpen && (
-        <div
-          id="mobile-nav"
-          className="border-t border-[var(--color-border)] bg-[var(--color-canvas)] px-6 py-6 md:hidden"
+      {/* Always mounted (not conditionally rendered) so it can play its own
+          exit transition instead of vanishing instantly. */}
+      <div
+        id="mobile-nav"
+        className={cn(
+          "mobile-menu border-t border-[var(--color-border)] bg-[var(--color-canvas)] px-6 py-6 md:hidden",
+          mobileOpen && "is-open",
+        )}
+        inert={!mobileOpen ? true : undefined}
+      >
+        <nav aria-label="Mobile" className="flex flex-col gap-1">
+          {navAnchors.map((link) => (
+            <Link
+              key={link.href}
+              href={resolveAnchorHref(link.href, pathname)}
+              onClick={closeMobileMenu}
+              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--color-text-primary)] hover:bg-black/[0.03]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <Button
+          href={ctaNav.href}
+          className="mt-4 w-full"
+          size="lg"
+          arrow
+          onClick={() => {
+            trackEvent("demo_cta_click", { location: "mobile_menu" });
+            closeMobileMenu();
+          }}
         >
-          <nav aria-label="Mobile" className="flex flex-col gap-1">
-            {navAnchors.map((link) => (
-              <Link
-                key={link.href}
-                href={resolveAnchorHref(link.href, pathname)}
-                className="rounded-lg px-3 py-3 text-base font-medium text-[var(--color-text-primary)] hover:bg-black/[0.03]"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-          <Button
-            href={ctaNav.href}
-            className="mt-4 w-full"
-            size="lg"
-            arrow
-            onClick={() => trackEvent("demo_cta_click", { location: "mobile_menu" })}
-          >
-            {ctaNav.label}
-          </Button>
-        </div>
-      )}
+          {ctaNav.label}
+        </Button>
+      </div>
     </header>
   );
 }

@@ -20,8 +20,12 @@
   /* One signal color, used deliberately and sparingly: primary CTAs, live/
      active diagram states, the loop's resolved pulse. Everything else in the
      system is ink, paper, and their tints — no second or third "accent." */
+  /* Darkened from an earlier #d63c12: that value was only ~4:1 against the
+     paper canvas and ~3.1:1 for white button text on a signal-strong fill —
+     both fail WCAG AA 4.5:1 for normal text. #b8330d clears both (~5.1:1 on
+     paper, ~6:1 with white text) while staying the same rust-orange hue. */
   --color-signal: #ff4e1f;
-  --color-signal-strong: #d63c12;
+  --color-signal-strong: #b8330d;
   --color-signal-soft: #ffd9c4;
 
   /* Small supporting utility hues for status only — never treated as brand
@@ -41,21 +45,18 @@
   --color-text-on-dark-muted: rgba(245, 239, 226, 0.5);
   --color-border-on-dark: rgba(245, 239, 226, 0.22);
 
-  /* Legacy alias layer: a handful of untouched routes (/product,
-     /industries, IndustryDetail, OperationsPanel, CapabilityVisual,
-     ScrollStory) still reference the old three-hue accent tokens. Rather
-     than maintain two live palettes, those names resolve into the new
-     ink/paper/signal system so the pages stay visually coherent without
-     code changes. New work should reference --color-signal-* and
-     --color-status-* directly, never these. */
-  --color-accent-violet: var(--color-signal-strong);
-  --color-accent-violet-soft: var(--color-signal-soft);
-  --color-accent-cobalt: var(--color-text-primary);
-  --color-accent-cobalt-soft: var(--color-text-secondary);
-  --color-accent-cyan: var(--color-status-resolved);
-  --color-accent-cyan-soft: #d7e6dc;
-  --color-accent-cyan-ink: var(--color-status-resolved);
-  --gradient-brand: linear-gradient(135deg, var(--color-signal) 0%, var(--color-signal-strong) 100%);
+  /* Motion foundation — named durations/easings, not isolated one-off
+     keyframes. Every animated component should reference these rather than
+     inventing new timing values. GSAP-driven motion (scroll-linked, pinned,
+     entrance) uses the equivalent named eases directly (power3.out,
+     expo.out) — see src/lib/motion.ts. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --duration-press: 140ms;
+  --duration-hover: 240ms;
+  --duration-ui: 260ms;
+  --duration-state: 300ms;
+  --duration-entrance: 700ms;
 }
 
 @theme inline {
@@ -145,22 +146,6 @@ body {
   background-size: 64px 64px;
 }
 
-/* Subtle digital noise, layered at low opacity over light surfaces.
-   .bg-noise-dark is the overlay-blend counterpart for the two dark sections. */
-.bg-noise {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size: 160px 160px;
-  opacity: 0.03;
-  mix-blend-mode: multiply;
-}
-
-.bg-noise-dark {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-size: 160px 160px;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-}
-
 /* Halftone-style dot shading, used as a small tactile accent (e.g. a card
    corner) rather than a full-bleed texture. */
 .bg-dots {
@@ -176,6 +161,17 @@ body {
   box-shadow:
     0 1px 2px rgba(23, 19, 16, 0.04),
     0 16px 40px -20px rgba(23, 19, 16, 0.16);
+}
+
+.legal-copy ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.legal-copy a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* Event-slip motif: a card with a perforated top edge, used for scenario
@@ -208,28 +204,86 @@ body {
   color: var(--color-text-muted);
 }
 
-/* One-time legacy alias layer: a handful of untouched routes (/product,
-   /industries, IndustryDetail, OperationsPanel, CapabilityVisual,
-   ScrollStory) still reference the old three-hue accent tokens. Rather than
-   maintain two live palettes, those names now resolve into the new
-   ink/paper/signal system so the pages stay visually coherent without code
-   changes. New work should reference --color-signal-* and --color-status-*
-   directly, never these. */
+/* Stacked-paper depth: a hard, unblurred offset shadow (not a soft glow) —
+   reads as a sheet of paper lifted off the stack beneath it. Reserved for
+   showcase moments (the command-center modules) rather than every card, so
+   it stays a deliberate accent. */
+.paper-stack {
+  box-shadow: 5px 5px 0 var(--color-border-strong);
+}
+
+.paper-stack-dark {
+  box-shadow: 5px 5px 0 rgba(245, 239, 226, 0.14);
+}
+
+/* Reduced motion removes translation, scaling, path travel, and continuous
+   pulses — but keeps a brief opacity/color transition so state changes
+   (a reveal, a menu opening, an FAQ answer) still register as feedback
+   rather than an instant, disorienting snap. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .animate-reveal-soft,
+  .animate-reveal-clip,
+  .animate-reveal-state,
+  .animate-confirm-in,
+  .animate-slip-route {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+
+  .animate-signal-pulse,
+  .animate-converge {
+    animation: none !important;
+  }
+
+  .animate-connector-grow,
+  .animate-rail-grow {
+    transition: opacity 180ms ease !important;
+    transform: none !important;
+  }
+
+  details::details-content {
+    transition: opacity 180ms ease !important;
+  }
+
+  .mobile-menu {
+    transform: none !important;
+    clip-path: none !important;
+    transition:
+      opacity 180ms ease,
+      visibility 0s linear 180ms !important;
+  }
+
+  .mobile-menu.is-open {
+    transition:
+      opacity 180ms ease,
+      visibility 0s linear 0s !important;
   }
 }
 
-@keyframes fade-up {
+/* Reveal variants — replace the old universal 700ms fade-up. Each name
+   describes what it's for, not just what it looks like; pick by content
+   type, not by habit.
+   - soft: default content reveal (paragraphs, cards, list items).
+   - clip: headings — reveals through a clip-path wipe rather than a slide,
+     so display type reads as "drawn," not "dropped in."
+   - state: a UI element changing state in place (active-step highlight,
+     re-rendered content) — quick, not a narrative beat.
+   - none: immediately visible, no animation (used when JS/observer isn't
+     applicable, or motion would be redundant). */
+@keyframes reveal-soft {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -237,44 +291,170 @@ body {
   }
 }
 
+.animate-reveal-soft {
+  animation: reveal-soft 500ms var(--ease-out) both;
+}
+
+@keyframes reveal-clip {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0% 0 0);
+  }
+}
+
+.animate-reveal-clip {
+  animation: reveal-clip 650ms var(--ease-out) both;
+}
+
+@keyframes reveal-state {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-reveal-state {
+  animation: reveal-state var(--duration-ui) var(--ease-out) both;
+}
+
+/* Legacy alias — old call sites still reference animate-fade-up; it now
+   maps onto the "soft" variant rather than carrying its own timing. */
 .animate-fade-up {
-  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: reveal-soft 500ms var(--ease-out) both;
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.55;
+/* Demo-form success confirmation — a settle, not a bounce: no overshoot. */
+@keyframes confirm-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
   }
-  50% {
-    opacity: 0.9;
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 6s ease-in-out infinite;
+.animate-confirm-in {
+  animation: confirm-in 240ms var(--ease-out) both;
 }
 
-/* Slow atmospheric drift for hero/ambient gradient blobs. */
-@keyframes drift {
+/* Problem-section event slips: appear scattered (per-item --slip-x/--slip-r),
+   hold briefly, then route into one ordered stream — transform only, so the
+   items never leave normal document flow. */
+@keyframes slip-route {
   0% {
-    transform: translate(0, 0) scale(1);
+    opacity: 0;
+    transform: translateX(var(--slip-x, 0)) rotate(var(--slip-r, 0deg));
   }
-  50% {
-    transform: translate(3%, -4%) scale(1.06);
+  35% {
+    opacity: 1;
+    transform: translateX(var(--slip-x, 0)) rotate(var(--slip-r, 0deg));
   }
   100% {
-    transform: translate(0, 0) scale(1);
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
   }
 }
 
-.animate-drift {
-  animation: drift 22s ease-in-out infinite;
+.animate-slip-route {
+  animation: slip-route 900ms var(--ease-out) both;
 }
 
-.animate-drift-slow {
-  animation: drift 32s ease-in-out infinite;
-  animation-delay: -8s;
+/* A connector line between chapter fields (Trigger → Action → Outcome):
+   grows from its origin edge rather than resizing, so it never touches
+   layout. */
+.animate-connector-grow {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-entrance) var(--ease-out);
+}
+
+.animate-connector-grow.is-active {
+  transform: scaleX(1);
+}
+
+/* Scenario timeline rail: draws downward once the section is in view. */
+.animate-rail-grow {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform var(--duration-entrance) var(--ease-out);
+}
+
+.animate-rail-grow.is-active {
+  transform: scaleY(1);
+}
+
+/* Native <details> disclosure — opacity only (no height/grid-rows), letting
+   content-visibility's discrete transition handle the show/hide timing so
+   the browser's own accessible open/close semantics stay untouched. Degrades
+   to an instant native toggle in browsers without ::details-content. */
+@supports (interpolate-size: allow-keywords) {
+  details {
+    interpolate-size: allow-keywords;
+  }
+}
+
+details::details-content {
+  opacity: 0;
+  transition:
+    opacity var(--duration-ui) var(--ease-out),
+    content-visibility var(--duration-ui) allow-discrete;
+}
+
+details[open]::details-content {
+  opacity: 1;
+}
+
+@starting-style {
+  details[open]::details-content {
+    opacity: 0;
+  }
+}
+
+/* Mobile menu: kept mounted for its exit transition rather than
+   conditionally rendered — visibility/pointer-events flip at the same
+   timing so it's untabbable while hidden. */
+/* position: absolute so the closed (but still-mounted, for its exit
+   transition) panel never occupies document flow — otherwise it pushes
+   the rest of the page down by its own height even while invisible. The
+   header establishes the positioning context via its own `sticky`. */
+.mobile-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  opacity: 0;
+  transform: translateY(-8px);
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-ui) var(--ease-out),
+    transform var(--duration-ui) var(--ease-out),
+    clip-path var(--duration-ui) var(--ease-out),
+    visibility 0s linear var(--duration-ui);
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  clip-path: inset(0 0 0% 0);
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity var(--duration-ui) var(--ease-out),
+    transform var(--duration-ui) var(--ease-out),
+    clip-path var(--duration-ui) var(--ease-out),
+    visibility 0s linear 0s;
 }
 
 /* Converging chips for the final CTA sequence: elements start at a scattered
@@ -299,73 +479,6 @@ body {
   animation: converge 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes scan {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-scan {
-  animation: scan 2.4s linear infinite;
-}
-
-@keyframes bar-grow {
-  from {
-    transform: scaleY(0.12);
-  }
-  to {
-    transform: scaleY(1);
-  }
-}
-
-.animate-bar-grow {
-  animation: bar-grow 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-  transform-origin: bottom;
-}
-
-@keyframes check-pop {
-  0% {
-    transform: scale(0.4);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.animate-check-pop {
-  animation: check-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-@keyframes travel {
-  0% {
-    left: 0%;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    left: 100%;
-    opacity: 0;
-  }
-}
-
-.animate-travel {
-  animation: travel 1.8s ease-in-out infinite;
-}
-
 /* The operating-loop hub: a steady resolved pulse rather than a loop of
    urgency — the loop stays calm because it stays resolved. */
 @keyframes signal-pulse {
@@ -384,27 +497,45 @@ body {
   animation: signal-pulse 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
-/* A ticket slip traveling one quarter of the loop's circumference, used for
-   the small animated event-slip markers in the Sense→Plan→Act→Verify
-   diagram. Consumers set --loop-rotate-from/--loop-rotate-to per instance. */
-@keyframes loop-travel {
+/* Hero loop diagram, one-shot sequence: the path draws once... */
+@keyframes arc-draw {
   from {
-    transform: rotate(var(--loop-rotate-from, 0deg));
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
+    stroke-dashoffset: var(--arc-length, 345);
   }
   to {
-    transform: rotate(var(--loop-rotate-to, 90deg));
-    opacity: 0;
+    stroke-dashoffset: 0;
   }
 }
 
-.animate-loop-travel {
-  animation: loop-travel 3.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  transform-origin: var(--loop-origin, 300px 300px);
+/* ...then one event travels toward the hub and fades as it arrives — shared
+   by the hero's one-shot sequence and the loop section's per-stage event. */
+@keyframes hub-arrive {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(1);
+  }
+  22% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--arrive-tx, 0), var(--arrive-ty, 0)) scale(0.5);
+  }
 }
+
+/* ...then the hub brightens once to mark resolution, before settling. */
+@keyframes resolve-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.28;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.28;
+  }
+}
+

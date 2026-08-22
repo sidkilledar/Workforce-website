@@ -12,14 +12,14 @@ import { Reveal } from "@/components/ui/Reveal";
  */
 export function CustomerTrustStrip() {
   return (
-    <Section id={sectionIds.customers} className="py-16 sm:py-20">
+    <Section id={sectionIds.pilots} className="py-16 sm:py-20">
       <Container>
         <Reveal className="text-center">
-          <p className="label-mono text-[var(--color-signal-strong)]">Customer Trust</p>
+          <p className="label-mono text-[var(--color-signal-strong)]">Active Pilots</p>
           <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
             {customerProof.length > 0
               ? "Trusted by operators running WorkforceOS."
-              : "In active pilots — approved logos and results will appear here as they're published."}
+              : "WorkforceOS is being shaped with frontline teams in catering and campus recreation."}
           </p>
         </Reveal>
 

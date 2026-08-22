@@ -17,7 +17,6 @@ beforeEach(() => {
 async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/full name/i), "Jamie Rivera");
   await user.type(screen.getByLabelText(/work email/i), "jamie@example.com");
-  await user.type(screen.getByLabelText(/phone number/i), "555-123-4567");
   await user.type(screen.getByLabelText("Company"), "Rivera Restaurant Group");
   await user.click(screen.getByLabelText(/i agree to be contacted/i));
 }
@@ -69,5 +68,44 @@ describe("DemoForm", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
       /couldn't send your request/i,
     );
+  });
+
+  it("focuses the first invalid field after a failed validation", async () => {
+    const user = userEvent.setup();
+    render(<DemoForm />);
+
+    await user.click(screen.getByRole("button", { name: /request a demo/i }));
+
+    await waitFor(() => {
+      expect(screen.getByLabelText(/full name/i)).toHaveFocus();
+    });
+  });
+
+  it("focuses the confirmation heading on success", async () => {
+    const user = userEvent.setup();
+    render(<DemoForm />);
+
+    await fillValidForm(user);
+    await user.click(screen.getByRole("button", { name: /request a demo/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /request received/i })).toHaveFocus();
+    });
+  });
+
+  it("returns to an empty form after choosing to submit another request", async () => {
+    const user = userEvent.setup();
+    render(<DemoForm />);
+
+    await fillValidForm(user);
+    await user.click(screen.getByRole("button", { name: /request a demo/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: /request received/i })).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByRole("button", { name: /submit another request/i }));
+
+    expect(screen.getByLabelText(/full name/i)).toHaveValue("");
   });
 });

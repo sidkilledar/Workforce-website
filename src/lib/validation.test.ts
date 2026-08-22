@@ -31,6 +31,11 @@ describe("demoRequestSchema", () => {
     expect(result.success).toBe(false);
   });
 
+  it("accepts an empty optional phone number", () => {
+    const result = demoRequestSchema.safeParse({ ...validPayload, phone: "" });
+    expect(result.success).toBe(true);
+  });
+
   it("requires consent to be true", () => {
     const result = demoRequestSchema.safeParse({ ...validPayload, consent: false });
     expect(result.success).toBe(false);

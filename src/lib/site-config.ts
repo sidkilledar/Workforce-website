@@ -1,10 +1,10 @@
 export const siteConfig = {
   name: "WorkforceOS",
-  tagline: "The AI ops manager for shift-based teams.",
+  tagline: "The AI operations command center for frontline businesses.",
   description:
-    "WorkforceOS is the AI ops manager for shift-based teams — it schedules your staff, absorbs the daily chaos, and keeps managers in the loop instead of in the weeds.",
+    "WorkforceOS connects the systems you already use, brings the operation into one manager dashboard, turns data into insights, and lets AI coordinate daily work within authority rules you control — so managers can spend less time behind a screen and more time on the floor.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.workforceos.com",
-  ogImage: "/og-image.png",
+  ogImage: "/opengraph-image",
   email: "hello@workforceos.com",
 } as const;
 
@@ -23,10 +23,11 @@ export type NavLink = {
 // below. Used from any route as `/#id` (Header prefixes the leading `/` when
 // not already on the homepage) so the same links work from `/demo` too.
 export const navAnchors: NavLink[] = [
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "What It Handles", href: "#what-it-handles" },
-  { label: "Customers", href: "#customers" },
-  { label: "Who It's For", href: "#who-its-for" },
+  { label: "Platform", href: "#command-center" },
+  { label: "Operations", href: "#pillars" },
+  { label: "How AI Works", href: "#cycle" },
+  { label: "Integrations", href: "#integration" },
+  { label: "Active Pilots", href: "#pilots" },
 ];
 
 export const ctaNav: NavLink = { label: "Book a Demo", href: "/demo" };
@@ -47,13 +48,16 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
 export const sectionIds = {
   announcement: "announcement",
   hero: "hero",
-  customers: "customers",
+  pilots: "pilots",
   problem: "problem",
-  howItWorks: "how-it-works",
-  whatItHandles: "what-it-handles",
-  scenario: "scenario",
-  outcomes: "outcomes",
-  stories: "stories",
+  integration: "integration",
+  commandCenter: "command-center",
+  pillars: "pillars",
+  aiAssistant: "ai-assistant",
+  cycle: "cycle",
+  dayInOperation: "day-in-operation",
+  insights: "insights",
+  authority: "authority",
   whoItsFor: "who-its-for",
   control: "control",
   finalCta: "final-cta",
@@ -63,14 +67,14 @@ export type CtaLocation =
   | "header"
   | "mobile_menu"
   | "hero"
-  | "scenario"
+  | "command_center"
   | "control"
   | "final_cta"
   | "demo_page";
 
 export const ctaCopy = {
   primary: "Book a Demo",
-  secondary: "See How It Works",
+  secondary: "See the Command Center",
 } as const;
 
 export type Announcement = {
@@ -92,275 +96,513 @@ export const socialLinks = {
   linkedinPlaceholder: true,
 } as const;
 
-export type Capability = {
-  slug: string;
-  name: string;
-  summary: string;
+// ---------------------------------------------------------------------------
+// Patchwork problem — the disconnected sources a manager reconciles by hand.
+// ---------------------------------------------------------------------------
+
+export type PatchworkSource = {
+  source: string;
+  label: string;
+};
+
+export const patchworkSources: PatchworkSource[] = [
+  { source: "POS / SALES", label: "Tonight's covers running high" },
+  { source: "SCHEDULING", label: "Shift marked open" },
+  { source: "INVENTORY", label: "Low-stock count, unresolved" },
+  { source: "TASKS", label: "Closing checklist, incomplete" },
+  { source: "SLACK / DISCORD", label: "“Can anyone cover tonight?”" },
+  { source: "SPREADSHEET", label: "Manager's own tracking, out of date" },
+];
+
+// ---------------------------------------------------------------------------
+// Integration & customization — the implementation model, not vendor logos.
+// ---------------------------------------------------------------------------
+
+export type IntegrationCategory = {
+  category: string;
+  purpose: string;
+  exampleInputs: string[];
+  /** States plainly that scope depends on the customer's actual systems. */
+  implementationQualifier: string;
+};
+
+export const integrationCategories: IntegrationCategory[] = [
+  {
+    category: "POS",
+    purpose: "Bring sales and transaction activity into the same operating view as staffing.",
+    exampleInputs: ["Sales volume", "Transaction timing", "Covers or order counts"],
+    implementationQualifier: "Depends on the POS system already in place and what it exposes.",
+  },
+  {
+    category: "Scheduling",
+    purpose: "Connect the schedule and staff availability WorkforceOS coordinates around.",
+    exampleInputs: ["Shifts", "Availability", "Roles and locations"],
+    implementationQualifier: "Configured around the scheduling process already in use.",
+  },
+  {
+    category: "Inventory",
+    purpose: "Bring inventory counts and exceptions into the same workflow as tasks and shifts.",
+    exampleInputs: ["Stock counts", "Low-stock thresholds", "Transfers"],
+    implementationQualifier: "Scope depends on how inventory is currently tracked.",
+  },
+  {
+    category: "Communication",
+    purpose: "Route messages and notifications through the systems the team already checks.",
+    exampleInputs: ["Team messaging", "Notifications", "Approval requests"],
+    implementationQualifier: "Connects to the channels the team actually uses, where supported.",
+  },
+  {
+    category: "Operational systems",
+    purpose: "Connect other systems of record the operation depends on day to day.",
+    exampleInputs: ["Task and checklist tools", "Location and role data", "Operating history"],
+    implementationQualifier: "Confirmed during implementation, on a per-customer basis.",
+  },
+];
+
+export type ImplementationStep = {
+  number: string;
+  title: string;
   description: string;
 };
 
-export const capabilities: Capability[] = [
+export const implementationSteps: ImplementationStep[] = [
   {
-    slug: "forecasting",
-    name: "Forecasting",
-    summary: "Know the labor and staffing each location is likely to need before the week begins.",
-    description:
-      "WorkforceOS reads demand patterns, seasonality, and upcoming events to forecast staffing and labor needs by location and daypart, before a single shift is scheduled.",
+    number: "01",
+    title: "Connect your systems",
+    description: "WorkforceOS connects to the POS, scheduling, inventory, and communication systems already in place.",
   },
   {
-    slug: "smart-scheduling",
-    name: "Smart Scheduling",
-    summary: "Build schedules around demand, availability, roles, labor targets, and operating rules.",
-    description:
-      "Schedules are drafted directly from the forecast, staff availability, roles, certifications, and labor targets — giving managers a strong starting point instead of a blank grid.",
+    number: "02",
+    title: "Map your operation",
+    description: "Terminology, locations, roles, and workflows get mapped to how this operation actually runs — not a generic template.",
   },
   {
-    slug: "shift-coverage",
-    name: "Shift Coverage",
-    summary: "Detect gaps, identify qualified team members, coordinate outreach, and keep managers informed.",
-    description:
-      "When a gap opens up, WorkforceOS identifies who's qualified and available, coordinates outreach automatically, and keeps the manager informed until it's resolved.",
+    number: "03",
+    title: "Define AI actions and approvals",
+    description: "Which actions run automatically and which need a manager's approval is configured per workflow, not assumed.",
   },
   {
-    slug: "approvals",
-    name: "Approvals",
-    summary: "Route time-off requests, schedule changes, and operational decisions to the right person.",
-    description:
-      "Time-off requests, schedule changes, and operational decisions route to the right person automatically, with the context they need attached.",
+    number: "04",
+    title: "Build the unified manager view",
+    description: "Labor, sales, inventory, tasks, and communication come together into one operating picture.",
   },
   {
-    slug: "team-communication",
-    name: "Team Communication",
-    summary: "Deliver the correct update to the correct team without managers repeating themselves.",
-    description:
-      "Updates, reminders, and coverage requests reach the right team on the channels they actually check — without a manager typing the same message twice.",
-  },
-  {
-    slug: "task-coordination",
-    name: "Task Coordination",
-    summary: "Assign, track, and follow up on recurring operational work across shifts and locations.",
-    description:
-      "Recurring operational work — opening checklists, prep, closing tasks — is assigned, tracked, and followed up on automatically across every shift and location.",
-  },
-  {
-    slug: "operational-follow-ups",
-    name: "Operational Follow-ups",
-    summary: "Notice what is late, missing, or unresolved and move it forward automatically.",
-    description:
-      "WorkforceOS notices what's late, missing, or unresolved — an unconfirmed shift, a stalled approval, an incomplete task — and moves it forward automatically.",
+    number: "05",
+    title: "Improve from operating history",
+    description: "As WorkforceOS runs, recommendations get sharpened by what's actually happened in this operation.",
   },
 ];
 
-export type CapabilityStory = {
+// ---------------------------------------------------------------------------
+// Operations command center — the manager's shared operating picture.
+// ---------------------------------------------------------------------------
+
+export type DashboardModule = {
+  slug: string;
+  label: string;
+  state: string;
+  priority: "normal" | "attention" | "resolved";
+  /** A complete, standalone plain-language summary for screen readers and no-JS rendering. */
+  accessibleSummary: string;
+};
+
+// All values are illustrative — a representative day, not real customer data.
+export const dashboardModules: DashboardModule[] = [
+  {
+    slug: "sales",
+    label: "Sales signal",
+    state: "Dinner covers trending above a typical Thursday",
+    priority: "attention",
+    accessibleSummary: "Sales signal: dinner covers are trending above a typical Thursday for this location.",
+  },
+  {
+    slug: "labor",
+    label: "Labor & coverage",
+    state: "Fully staffed — one open shift being backfilled",
+    priority: "normal",
+    accessibleSummary: "Labor and coverage: the schedule is fully staffed, with one open shift currently being backfilled.",
+  },
+  {
+    slug: "inventory",
+    label: "Inventory exception",
+    state: "Low stock flagged — prep task created for closing",
+    priority: "attention",
+    accessibleSummary: "Inventory exception: a low-stock item was flagged and a prep task was created for the closing shift.",
+  },
+  {
+    slug: "task",
+    label: "Open task",
+    state: "Opening checklist — 2 items outstanding",
+    priority: "attention",
+    accessibleSummary: "Open task: the opening checklist has two items still outstanding.",
+  },
+  {
+    slug: "message",
+    label: "Team message",
+    state: "Closing team notified of updated prep list",
+    priority: "resolved",
+    accessibleSummary: "Team message: the closing team has been notified of the updated prep list.",
+  },
+  {
+    slug: "recommendation",
+    label: "AI recommendation",
+    state: "Add one closer, 5–9 PM, based on tonight's covers",
+    priority: "attention",
+    accessibleSummary: "AI recommendation: add one closer from 5 to 9 PM, based on tonight's covers.",
+  },
+  {
+    slug: "approval",
+    label: "Approval request",
+    state: "Waiting on manager — additional closer shift",
+    priority: "attention",
+    accessibleSummary: "Approval request: waiting on the manager to approve adding the additional closer shift.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// The five operating pillars — the complete present-day offer.
+// ---------------------------------------------------------------------------
+
+export type OperatingPillar = {
   slug: string;
   ticketNumber: string;
   title: string;
-  trigger: string;
-  action: string;
+  /** The operational signal that starts this pillar's loop. */
+  signals: string;
+  /** What WorkforceOS reads or already knows to act. */
+  connectedData: string;
+  /** What AI concludes from that signal, before it does anything. */
+  interpretation: string;
+  /** What WorkforceOS actually does. */
+  aiActions: string;
+  /** What the manager retains authority over. */
+  managerControl: string;
+  /** The resulting operational state once it's handled. */
   outcome: string;
+  /** A single illustrative, audience-specific example — not a customer's data. */
+  example: string;
 };
 
-// The four focused capability stories for "What It Handles" — each framed
-// as an operational trigger, WorkforceOS's action, and the manager-visible
-// outcome, rather than a generic feature list.
-export const capabilityStories: CapabilityStory[] = [
+export const operatingPillars: OperatingPillar[] = [
   {
-    slug: "scheduling",
+    slug: "labor",
     ticketNumber: "#041",
-    title: "Scheduling & staffing",
-    trigger: "A new set of shifts needs to be built.",
-    action: "WorkforceOS builds and fills the schedule around real staff availability — not manual spreadsheet juggling.",
-    outcome: "Shifts are staffed before anyone has to chase it.",
+    title: "Labor and staffing",
+    signals: "Availability, schedules, open shifts, call-outs, no-shows, and headcount changes.",
+    connectedData: "Submitted availability, the current schedule, and how similar exceptions were resolved before.",
+    interpretation: "Whether this is a normal fluctuation or a coverage gap that needs a response before the shift starts.",
+    aiActions:
+      "Prepares schedules, identifies the right response to an exception, and coordinates backfill, reassignment, or notification — or requests approval.",
+    managerControl: "Managers review schedules before publishing and set which labor actions need their approval.",
+    outcome: "Fewer unresolved labor issues and less manual coordination.",
+    example:
+      "A call-out backfills automatically from available staff; a bigger headcount change instead waits for a manager's approval.",
   },
   {
-    slug: "learns",
+    slug: "sales",
     ticketNumber: "#042",
-    title: "Learns your operation",
-    trigger: "Your operation runs its own way.",
-    action: "It picks up patterns from your own operating history instead of requiring a big upfront rules setup.",
-    outcome: "It fits how you already run — not a template you adopt.",
+    title: "Sales and POS insights",
+    signals: "Sales and transaction activity from the point-of-sale system, where that integration is configured.",
+    connectedData: "POS activity alongside the schedule and staffing plan for the same period.",
+    interpretation: "Whether staffing on the floor lines up with what's actually selling right now.",
+    aiActions: "Surfaces how demand, staffing, and execution relate, and flags unusual changes with a contextual summary.",
+    managerControl: "Managers decide which sales signals are worth acting on — WorkforceOS surfaces them, it doesn't decide for them.",
+    outcome: "A clearer read on how staffing lines up with demand, without pulling a separate report.",
+    example: "Dinner sales run higher than a typical Thursday; the AI briefing notes it alongside that night's staffing level.",
   },
   {
-    slug: "exceptions",
+    slug: "inventory",
     ticketNumber: "#043",
-    title: "Handles exceptions automatically",
-    trigger: "A call-out, no-show, or headcount change happens.",
-    action: "It resolves it — backfill, reassign, or notify — through a configurable human-approval layer.",
-    outcome: "Managers stay in control without chasing every exception themselves.",
+    title: "Inventory operations",
+    signals: "Inventory counts, low-stock conditions, and prep or transfer needs, where that data is connected.",
+    connectedData: "Current inventory state alongside the tasks and shifts that depend on it.",
+    interpretation: "Whether the shortfall affects tonight's service or can wait for the next scheduled count.",
+    aiActions: "Coordinates counts, low-stock follow-up, transfers, or prep needs — or escalates to a manager when configured.",
+    managerControl: "Managers set which inventory exceptions route to them versus resolve automatically.",
+    outcome: "Inventory exceptions get followed up on instead of discovered mid-shift.",
+    example: "A low-stock count triggers a prep task for the closing shift instead of surfacing at the start of service tomorrow.",
   },
   {
-    slug: "comms",
+    slug: "tasks",
     ticketNumber: "#044",
-    title: "One comms channel",
-    trigger: "The team needs an update.",
-    action: "Team messaging and notifications live where the schedule lives, not in a separate app.",
-    outcome: "No more Slack, Discord, and texts competing with the schedule.",
+    title: "Tasks and daily execution",
+    signals: "Opening, closing, prep, event, and location-specific work that needs to get done.",
+    connectedData: "The relevant shift, role, and location for each task.",
+    interpretation: "Whether a task is on track, at risk of running past the shift, or already overdue.",
+    aiActions: "Creates and assigns tasks by team, role, location, or shift, and tracks completion.",
+    managerControl: "Managers set the escalation rules for unresolved work — what gets flagged, and to whom.",
+    outcome: "Task completion is tracked and unresolved work is escalated instead of falling through.",
+    example: "An unfinished closing checklist item escalates to the on-duty manager instead of being found the next morning.",
+  },
+  {
+    slug: "communication",
+    ticketNumber: "#045",
+    title: "Team communication and approvals",
+    signals: "Messages, notifications, and decisions tied to schedules, tasks, and inventory events.",
+    connectedData: "The schedule, task, or inventory event a message actually relates to.",
+    interpretation: "Who actually needs to see this, and whether it's an FYI or a decision waiting on someone.",
+    aiActions:
+      "Routes notifications to the relevant people and attaches the context, proposed action, and consequence before a manager approves.",
+    managerControl: "Managers see the full context before approving — nothing executes on their behalf without it being visible.",
+    outcome: "The right people get the right update once, instead of a manager repeating themselves across channels.",
+    example: "A reassignment request shows the manager who's affected and what changes before they approve it — not just a yes/no prompt.",
   },
 ];
 
-export type Industry = {
-  slug: string;
-  name: string;
-  shortName: string;
-  summary: string;
-  heroDescription: string;
-  challenges: string[];
-  highlights: { title: string; description: string }[];
-  tint: "violet" | "cobalt" | "cyan";
+// ---------------------------------------------------------------------------
+// AI assistant — ask, understand, and act.
+// ---------------------------------------------------------------------------
+
+export type AiAssistantExample = {
+  prompt: string;
+  responseType: "answers" | "recommends" | "executes" | "requests-approval";
+  response: string;
 };
 
-export const industries: Industry[] = [
+export const aiAssistantExamples: AiAssistantExample[] = [
   {
-    slug: "restaurants",
-    name: "Restaurants",
-    shortName: "Restaurants",
-    summary: "Keep every shift staffed without building the week through group chats and spreadsheets.",
-    heroDescription:
-      "WorkforceOS forecasts demand by daypart, builds the week around it, and fills coverage gaps before they hit the floor — so independent restaurants run on a plan instead of a scramble.",
-    challenges: [
-      "Demand that swings by daypart, day of week, and season",
-      "Last-minute call-outs during peak service",
-      "Building the schedule by hand every single week",
-      "No clear system of record for approvals and coverage",
-    ],
-    highlights: [
-      {
-        title: "Daypart-level forecasting",
-        description: "Predict volume by meal period so every shift is staffed to demand, not a flat weekly average.",
-      },
-      {
-        title: "Automatic coverage outreach",
-        description: "Open shifts route to eligible, available staff automatically instead of a manager working the phones.",
-      },
-      {
-        title: "One place for the whole operation",
-        description: "Scheduling, coverage, approvals, and communication live in one system instead of five.",
-      },
-    ],
-    tint: "violet",
+    prompt: "What needs my attention before the dinner shift?",
+    responseType: "answers",
+    response: "Answers from connected operational data — the open task, the low-stock flag, and tonight's staffing level.",
   },
   {
-    slug: "chains",
-    name: "Multi-Location Chains",
-    shortName: "Multi-location chains",
-    summary: "Give every location a consistent operating system while preserving local flexibility.",
-    heroDescription:
-      "WorkforceOS gives multi-location operators one consistent operating layer across every site — while leaving room for each location's manager, team, and local conditions.",
-    challenges: [
-      "Inconsistent scheduling and coverage practices across locations",
-      "No unified view of labor cost and coverage risk",
-      "Local managers need flexibility, leadership needs consistency",
-      "Coordinating staffing decisions across a growing footprint",
-    ],
-    highlights: [
-      {
-        title: "One standard, every location",
-        description: "The same forecasting, scheduling, and approval logic runs everywhere, configured for local conditions.",
-      },
-      {
-        title: "Portfolio-level visibility",
-        description: "Leadership sees labor, coverage, and risk across every location from a single operating layer.",
-      },
-      {
-        title: "Local flexibility, not local chaos",
-        description: "Location managers keep control over their day-to-day decisions inside a consistent framework.",
-      },
-    ],
-    tint: "cobalt",
+    prompt: "Why was labor higher yesterday?",
+    responseType: "answers",
+    response: "Answers by connecting yesterday's schedule to the sales activity recorded for the same shift.",
   },
   {
-    slug: "catering",
-    name: "Catering",
-    shortName: "Catering",
-    summary: "Coordinate fluctuating demand, event staffing, availability, and last-minute changes.",
-    heroDescription:
-      "Catering labor needs change event to event. WorkforceOS turns event scope into a staffing plan, keeps a flexible roster ready, and adapts fast when details change.",
-    challenges: [
-      "Staffing needs that vary dramatically by event",
-      "Coordinating a flexible or on-call workforce",
-      "Short lead times between booking and event day",
-      "Last-minute changes to guest count, timing, or scope",
-    ],
-    highlights: [
-      {
-        title: "Event-based staffing plans",
-        description: "Event scope and guest count translate into a staffing plan without rebuilding a spreadsheet each time.",
-      },
-      {
-        title: "A flexible roster, organized",
-        description: "On-call and flexible staff stay organized, with availability and eligibility always current.",
-      },
-      {
-        title: "Fast adaptation to change",
-        description: "When event details shift, staffing and coordination adjust without starting over.",
-      },
-    ],
-    tint: "cyan",
+    prompt: "Find coverage for tonight and ask me before confirming.",
+    responseType: "requests-approval",
+    response: "Identifies available staff and prepares outreach, but waits for manager approval before confirming anything.",
   },
   {
-    slug: "campuses",
-    name: "College Campuses",
-    shortName: "College campuses",
-    summary: "Manage complex schedules across dining, facilities, events, and other hourly teams.",
-    heroDescription:
-      "Campus operations run on an academic calendar full of exceptions. WorkforceOS plans around semester schedules, student availability, and campus events across every hourly team.",
-    challenges: [
-      "Student staff with constantly changing class schedules",
-      "Semester, break, and event-driven demand swings",
-      "Coordinating dining, facilities, and event teams together",
-      "High turnover as students graduate or change availability",
-    ],
-    highlights: [
-      {
-        title: "Academic-calendar-aware planning",
-        description: "Labor plans adjust automatically for semester breaks, finals periods, and campus events.",
-      },
-      {
-        title: "Built around student availability",
-        description: "Schedules respect changing class schedules without a manual back-and-forth every term.",
-      },
-      {
-        title: "Cross-department coordination",
-        description: "Dining, facilities, and event teams share one operating picture instead of separate systems.",
-      },
-    ],
-    tint: "violet",
+    prompt: "What inventory issue could affect tomorrow's events?",
+    responseType: "recommends",
+    response: "Recommends a prep or transfer action based on the current inventory exception and the events on tomorrow's schedule.",
   },
   {
-    slug: "other",
-    name: "Other Shift-Based Teams",
-    shortName: "Other shift-based teams",
-    summary: "Adapt WorkforceOS to the operating rules, roles, and scheduling patterns of the organization.",
-    heroDescription:
-      "If your team runs on shifts, not salaries, WorkforceOS applies the same forecasting, scheduling, and coverage engine to your operation — configured around how you actually run.",
-    challenges: [
-      "Operating rules and roles that don't fit an off-the-shelf template",
-      "Disconnected tools for scheduling, messaging, and task tracking",
-      "Limited visibility into labor cost versus plan",
-      "Manual work to keep shifts covered and compliant",
-    ],
-    highlights: [
-      {
-        title: "Configured to your operation",
-        description: "Forecasting, scheduling, and coverage logic configure around your specific rules and roles.",
-      },
-      {
-        title: "One operating layer",
-        description: "Replace disconnected scheduling, messaging, and task tools with a single coordinated system.",
-      },
-      {
-        title: "Built for shift-based work",
-        description: "Every part of WorkforceOS is designed around the realities of hourly, shift-based operations.",
-      },
-    ],
-    tint: "cobalt",
+    prompt: "Send the closing team the updated checklist.",
+    responseType: "executes",
+    response: "Executes within granted authority — sends the update to the closing team and reports it back once sent.",
+  },
+  {
+    prompt: "Summarize unresolved issues across all locations.",
+    responseType: "answers",
+    response: "Answers from connected operational data across every location the manager has visibility into.",
   },
 ];
+
+// ---------------------------------------------------------------------------
+// The operating cycle — Connect, Understand, Act, Improve.
+// ---------------------------------------------------------------------------
+
+export type OperatingCycleStage = {
+  key: "connect" | "understand" | "act" | "improve";
+  code: string;
+  number: string;
+  title: string;
+  heading: string;
+  description: string;
+};
+
+// Not a pinned scroll narrative — "A Day in the Operation" is the page's one
+// pinned story. This stays a readable stacked sequence at any width.
+export const operatingCycleStages: OperatingCycleStage[] = [
+  {
+    key: "connect",
+    code: "C",
+    number: "01",
+    title: "Connect",
+    heading: "Receive signals from operational systems",
+    description:
+      "Sales, scheduling, inventory, and communication signals arrive from the systems already in place — not a new one to learn.",
+  },
+  {
+    key: "understand",
+    code: "U",
+    number: "02",
+    title: "Understand",
+    heading: "Combine current state with operating history",
+    description: "It reads what's happening right now against how this operation has usually run.",
+  },
+  {
+    key: "act",
+    code: "A",
+    number: "03",
+    title: "Act",
+    heading: "Coordinate the configured response",
+    description:
+      "It carries out the response automatically or asks a manager first, depending on the authority your team has configured for that workflow.",
+  },
+  {
+    key: "improve",
+    code: "I",
+    number: "04",
+    title: "Improve",
+    heading: "Learn from what actually happened",
+    description:
+      "The result gets recorded, so the next recommendation reflects real operating history — not a rule quietly rewriting itself without oversight.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// A Day in the Operation — the site's one pinned scroll narrative.
+// ---------------------------------------------------------------------------
+
+export type AuthorityMode = "inform" | "recommend" | "execute";
+
+export type DayInOperationEvent = {
+  time: string;
+  source: string;
+  event: string;
+  aiAction: string;
+  authorityMode: AuthorityMode;
+  result: string;
+};
+
+// A single illustrative day, showing cross-functional coordination rather
+// than one isolated call-out. Not a real customer's operating data.
+export const dayInOperation: DayInOperationEvent[] = [
+  {
+    time: "7:15 AM",
+    source: "AI briefing",
+    event: "Morning briefing generated for the manager on duty.",
+    aiAction: "Summarizes overnight changes, today's schedule, and anything already flagged.",
+    authorityMode: "inform",
+    result: "Manager starts the day with one briefing instead of five apps.",
+  },
+  {
+    time: "11:40 AM",
+    source: "POS",
+    event: "Lunch covers trending above forecasted demand for a private event.",
+    aiAction: "Flags the sales signal alongside the current staffing level for the shift.",
+    authorityMode: "inform",
+    result: "Manager sees the demand change before it becomes a coverage problem.",
+  },
+  {
+    time: "11:52 AM",
+    source: "Labor",
+    event: "Staffing looks tight for the rest of service.",
+    aiAction: "Identifies available staff and prepares a shift extension for approval.",
+    authorityMode: "recommend",
+    result: "Manager approves; the extension is confirmed and the schedule updates.",
+  },
+  {
+    time: "2:10 PM",
+    source: "Inventory",
+    event: "A prep item drops below its low-stock threshold.",
+    aiAction: "Creates a prep task for the afternoon team automatically.",
+    authorityMode: "execute",
+    result: "Task appears on the afternoon team's list — no manager step needed.",
+  },
+  {
+    time: "4:30 PM",
+    source: "Tasks",
+    event: "An opening-shift task is still incomplete heading into the dinner rush.",
+    aiAction: "Reassigns the task to an available closer and notifies both team members.",
+    authorityMode: "execute",
+    result: "The task moves forward without the manager tracking it down personally.",
+  },
+  {
+    time: "5:05 PM",
+    source: "Communication",
+    event: "The closing team needs the updated prep list before service.",
+    aiAction: "Sends the update to the closing team, attached to tonight's schedule.",
+    authorityMode: "execute",
+    result: "Everyone closing tonight has the same list, in the same place as the schedule.",
+  },
+  {
+    time: "6:20 PM",
+    source: "Approval",
+    event: "A same-day schedule swap is requested between two staff members.",
+    aiAction: "Prepares the swap with both staff members' eligibility, and requests manager approval.",
+    authorityMode: "recommend",
+    result: "Manager approves in one tap, with the context already attached.",
+  },
+  {
+    time: "10:45 PM",
+    source: "End of shift",
+    event: "Service ends for the day.",
+    aiAction: "Compiles a resolved end-of-shift summary — what happened, what was handled, what's still open.",
+    authorityMode: "inform",
+    result: "Manager closes the day with a record, not a mental list of loose ends.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Insights and labor efficiency — qualitative only.
+// ---------------------------------------------------------------------------
+
+export type InsightExample = {
+  question: string;
+  connectedSignals: string;
+  qualitativeFinding: string;
+  possibleAction: string;
+};
+
+export const insightExamples: InsightExample[] = [
+  {
+    question: "Are labor decisions keeping up with demand?",
+    connectedSignals: "Scheduled labor hours alongside POS sales activity, by shift.",
+    qualitativeFinding: "Some shifts are staffed well above or below what recent demand for that day and time would suggest.",
+    possibleAction: "Review staffing levels for the specific shifts where the gap shows up most.",
+  },
+  {
+    question: "Where is manager time actually going?",
+    connectedSignals: "Approval requests, exceptions, and manual schedule edits, by manager and location.",
+    qualitativeFinding: "A small number of recurring exception types account for most manager interventions.",
+    possibleAction: "Adjust the approval rules for that recurring exception type so it needs less manual attention.",
+  },
+  {
+    question: "Which exceptions take longest to resolve?",
+    connectedSignals: "Time between an exception being detected and being marked resolved.",
+    qualitativeFinding: "Certain exception types consistently sit unresolved longer than others.",
+    possibleAction: "Tighten the escalation timing for that exception type so it surfaces to a manager sooner.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Configurable authority and trust.
+// ---------------------------------------------------------------------------
+
+export type AuthorityLevel = {
+  key: AuthorityMode;
+  title: string;
+  description: string;
+  example: string;
+};
+
+export const authorityLevels: AuthorityLevel[] = [
+  {
+    key: "inform",
+    title: "Inform",
+    description: "AI summarizes and alerts. Nothing changes without a manager acting on it.",
+    example: "The morning briefing and the sales-vs-staffing flag are both inform-level — visibility, not action.",
+  },
+  {
+    key: "recommend",
+    title: "Recommend",
+    description: "AI prepares an action and waits for approval before anything happens.",
+    example: "A shift extension or a schedule swap gets prepared, then sits in the approval queue for a manager.",
+  },
+  {
+    key: "execute",
+    title: "Execute",
+    description: "AI completes a pre-authorized routine action and reports the result.",
+    example: "A low-stock prep task or a routine team notification can be configured to send without a manager step.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Audience applications — the same operating layer, adapted per audience.
+// ---------------------------------------------------------------------------
 
 export type AudienceSegment = {
   slug: string;
   name: string;
   situation: string;
+  /** A short, specific workflow sequence — replaces a generic fade-up card with something that reads as this segment's actual day. */
+  workflow: string[];
 };
 
 // "Who It's For" — concise operational situations rather than separate
@@ -371,143 +613,28 @@ export const audienceSegments: AudienceSegment[] = [
     slug: "catering",
     name: "Caterers staffing events",
     situation:
-      "Staffing changes event to event — headcount, roles, and timing shift with every booking, not on a fixed weekly schedule.",
+      "Event headcount changes, prep and inventory needs shift with every booking, and staffing has to flex with it — not on a fixed weekly schedule.",
+    workflow: ["Event headcount changes", "Prep & inventory adjust", "Flexible roster notified"],
   },
   {
     slug: "restaurant-groups",
     name: "Restaurant groups",
     situation:
-      "A mostly hourly staff across multiple locations, where a call-out or no-show lands right at peak service.",
+      "Sales signals, labor, coverage, and inventory exceptions all move independently across locations, and opening/closing execution needs to stay consistent.",
+    workflow: ["Sales & labor connected", "Coverage checked cross-location", "Opening/closing tracked"],
   },
   {
     slug: "campus-sports",
     name: "Campus sports & recreation",
     situation:
-      "A roster of student staff whose availability changes every quarter, coordinating shifts around class schedules and events.",
+      "Student availability changes every quarter, event staffing and facilities tasks pile up together, and supervisor approvals need to keep pace.",
+    workflow: ["Student availability updates", "Event & facilities tasks coordinated", "Supervisor approves"],
   },
 ];
 
-export type OperationOutcome = {
-  title: string;
-  description: string;
-};
-
-// Qualitative benefits only — no ROI calculator, no invented numbers.
-// Framed around shifts/events/locations rather than "portfolio" language,
-// since the actual customer base spans single-site caterers and campus
-// departments as much as multi-location restaurant groups.
-export const operationOutcomes: OperationOutcome[] = [
-  {
-    title: "One system, not five",
-    description: "Scheduling, exceptions, and team communication live in one place instead of a scheduling app plus Slack, Discord, and texts.",
-  },
-  {
-    title: "Configured to how you run",
-    description: "It learns from your operating history instead of asking you to set up a big rules engine before it's useful.",
-  },
-  {
-    title: "Fewer unresolved exceptions",
-    description: "Call-outs, no-shows, and headcount changes get backfilled, reassigned, or escalated automatically instead of piling up.",
-  },
-  {
-    title: "Managers stay in the loop, not in the weeds",
-    description: "A configurable approval layer keeps managers deciding the judgment calls, not chasing every exception by hand.",
-  },
-];
-
-export type OperatingLoopStage = {
-  key: "sense" | "plan" | "act" | "verify";
-  code: string;
-  number: string;
-  title: string;
-  heading: string;
-  description: string;
-};
-
-// The central explanation of the product mechanism — Sense → Plan → Act →
-// Verify — driving both the desktop scroll narrative and the mobile stacked
-// sequence in the operating-loop section.
-export const operatingLoopStages: OperatingLoopStage[] = [
-  {
-    key: "sense",
-    code: "S",
-    number: "01",
-    title: "Sense",
-    heading: "Notice the exception",
-    description:
-      "A call-out, a no-show, a headcount change — WorkforceOS watches for it the moment it happens, learned from how your operation actually runs.",
-  },
-  {
-    key: "plan",
-    code: "P",
-    number: "02",
-    title: "Plan",
-    heading: "Decide the response",
-    description:
-      "It weighs who's eligible and available, and whether the fix is a backfill, a reassignment, or a notification to the manager.",
-  },
-  {
-    key: "act",
-    code: "A",
-    number: "03",
-    title: "Act",
-    heading: "Act, within the approval layer",
-    description:
-      "It reaches out to qualified staff and resolves it automatically — or routes it to a manager first, based on the approval rules you've set.",
-  },
-  {
-    key: "verify",
-    code: "V",
-    number: "04",
-    title: "Verify",
-    heading: "Confirm it's resolved",
-    description:
-      "The shift is covered, the message is sent, and the manager sees it resolved in the same place the schedule lives — not a separate chat thread.",
-  },
-];
-
-export type ScenarioStep = {
-  time: string;
-  title: string;
-  description: string;
-};
-
-// A single illustrative call-out, presented as an operational timeline
-// (detect → eligibility → outreach → confirmation → schedule update →
-// manager notification). Not a real customer workflow — the section labels
-// it illustrative unless that changes.
-export const scenarioWalkthrough: ScenarioStep[] = [
-  {
-    time: "5:52 PM",
-    title: "Call-out detected",
-    description: "A staff member messages out for tonight's shift.",
-  },
-  {
-    time: "5:53 PM",
-    title: "Eligibility checked",
-    description: "WorkforceOS checks availability and weekly hours against the rest of the roster.",
-  },
-  {
-    time: "5:54 PM",
-    title: "Backfill outreach sent",
-    description: "Two qualified, available staff are contacted automatically for the open shift.",
-  },
-  {
-    time: "6:03 PM",
-    title: "Coverage confirmed",
-    description: "One staff member accepts. The shift is filled before service starts.",
-  },
-  {
-    time: "6:03 PM",
-    title: "Schedule updated",
-    description: "The schedule and coverage record update automatically — no manual re-entry.",
-  },
-  {
-    time: "6:04 PM",
-    title: "Manager notified",
-    description: "The manager sees the gap and the resolution in the same channel as the schedule — not a string of unanswered texts.",
-  },
-];
+// ---------------------------------------------------------------------------
+// Implementation and control (FAQ).
+// ---------------------------------------------------------------------------
 
 export type ImplementationTopic = {
   question: string;
@@ -516,27 +643,32 @@ export type ImplementationTopic = {
 
 // Answers the predictable buyer objections: existing processes, approvals,
 // organizational rules, rollout, and human oversight. No integration claims
-// — none are technically confirmed yet.
+// beyond category-level, and no unverified vendor compatibility.
 export const implementationControl: ImplementationTopic[] = [
   {
     question: "Does this replace how our managers make decisions?",
     answer:
-      "No. WorkforceOS handles the coordination — backfill outreach, reassignment, notifications — through a configurable approval layer, so judgment calls still go to a person.",
+      "No. WorkforceOS coordinates the workflows you configure — labor, inventory, tasks, communication — through an approval layer, so judgment calls still go to a person.",
   },
   {
-    question: "Does it work with how we already run things?",
+    question: "Does it work with the systems we already use?",
     answer:
-      "WorkforceOS learns from your own operating history instead of asking you to configure a big rules engine before it's useful.",
+      "It's configured around your existing POS, scheduling, inventory, and communication systems rather than asking you to replace them. Integration scope depends on what you're running today.",
   },
   {
-    question: "How does rollout actually work?",
+    question: "What decides which actions run automatically?",
     answer:
-      "Rollout starts as a focused pilot — one team or one workflow — and runs there until it's solid before expanding further.",
+      "You do. Authority is configured per workflow and action — some things run automatically, sensitive decisions wait for approval — and you can change that boundary at any time.",
   },
   {
     question: "What do managers still control?",
     answer:
-      "Managers set what needs their approval, confirm the judgment calls, and can always step in — the approval layer is configurable, not fixed.",
+      "Managers set what needs their approval, see the context before approving anything, and can always step in — the authority layer is configurable, not fixed.",
+  },
+  {
+    question: "What happens when no one's available to cover a shift?",
+    answer:
+      "WorkforceOS notifies the manager that no replacement was found, rather than leaving the shift silently uncovered — the decision on what to do next stays with a person.",
   },
 ];
 
@@ -549,15 +681,23 @@ export const hourlyEmployeeBands = [
   "500+",
 ] as const;
 
+// Expanded to match the five operating pillars plus cross-system reporting
+// and a custom-workflow catch-all.
 export const frictionWorkflows = [
-  { value: "forecasting", label: "Forecasting" },
-  { value: "scheduling", label: "Scheduling" },
-  { value: "coverage", label: "Shift coverage" },
-  { value: "approvals", label: "Approvals" },
-  { value: "communication", label: "Team communication" },
-  { value: "tasks", label: "Task coordination" },
-  { value: "follow-ups", label: "Operational follow-ups" },
-  { value: "other", label: "Something else" },
+  { value: "labor", label: "Labor and staffing" },
+  { value: "sales-pos", label: "Sales / POS visibility" },
+  { value: "inventory", label: "Inventory operations" },
+  { value: "tasks", label: "Tasks and execution" },
+  { value: "communication", label: "Communication and approvals" },
+  { value: "reporting", label: "Cross-system reporting" },
+  { value: "other", label: "Custom workflow" },
+] as const;
+
+export const demoIndustries = [
+  { value: "catering", label: "Catering and event staffing" },
+  { value: "restaurant-groups", label: "Restaurant group" },
+  { value: "campus-sports", label: "Campus sports and recreation" },
+  { value: "other", label: "Another shift-based team" },
 ] as const;
 
 export type CustomerProofItem = {

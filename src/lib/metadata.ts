@@ -54,14 +54,5 @@ export function softwareApplicationJsonLd() {
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     description: siteConfig.description,
-    offers: {
-      "@type": "Offer",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        price: "0",
-        priceCurrency: "USD",
-        description: "Contact sales for pricing tailored to your operation.",
-      },
-    },
   };
 }

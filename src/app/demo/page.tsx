@@ -10,14 +10,14 @@ import { customerProof, pilotCustomers, siteConfig } from "@/lib/site-config";
 export const metadata: Metadata = buildMetadata({
   title: "Book a Demo",
   description:
-    "See how WorkforceOS schedules your staff and absorbs the daily chaos — call-outs, no-shows, headcount changes. Tell us about your operation and we'll follow up to schedule a walkthrough.",
+    "See how WorkforceOS connects your systems, brings the operation into one dashboard, and lets AI coordinate daily work within the authority rules you control. Tell us about your operation and we'll follow up to schedule a walkthrough.",
   path: "/demo",
 });
 
 const nextSteps = [
   { title: "We review your request", description: "A real person looks at your operation, not a queue." },
-  { title: "We schedule a walkthrough", description: "A short call, at a time that works for your team." },
-  { title: "You see it on your operation", description: "Configured around how you actually run, not a generic demo." },
+  { title: "We schedule a walkthrough", description: "Starting with your systems and your highest-friction workflow — not a generic tour." },
+  { title: "You see how it fits", description: "We won't promise a fully configured environment on the first call, but you'll see exactly how it'd work." },
 ];
 
 export default function DemoPage() {
@@ -42,12 +42,13 @@ export default function DemoPage() {
           <Reveal className="max-w-xl">
             <p className="label-mono text-[var(--color-signal-strong)]">Book A Demo</p>
             <h1 className="font-display mt-4 text-3xl font-semibold leading-[1.1] tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-              See it run on your operation, not a generic walkthrough.
+              See where WorkforceOS fits into your day.
             </h1>
             <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
               Tell us about your operation and we&apos;ll walk through how
-              WorkforceOS schedules your staff and absorbs the daily chaos —
-              configured around how you already run, not a template.
+              WorkforceOS connects your systems and coordinates labor, sales,
+              inventory, tasks, and communication in one dashboard — without
+              adding another disconnected tool.
             </p>
           </Reveal>
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { frictionWorkflows, hourlyEmployeeBands, industries, locationBands } from "@/lib/site-config";
+import { demoIndustries, frictionWorkflows, hourlyEmployeeBands, locationBands } from "@/lib/site-config";
 
-const industrySlugs = industries.map((industry) => industry.slug) as [
+const industrySlugs = demoIndustries.map((industry) => industry.value) as [
   string,
   ...string[],
 ];
@@ -25,9 +25,11 @@ export const demoRequestSchema = z.object({
   phone: z
     .string()
     .trim()
-    .min(7, "Enter a valid phone number.")
     .max(32, "Phone number is too long.")
-    .regex(/^[0-9()+\-.\s]+$/, "Use only numbers and phone symbols."),
+    .refine(
+      (value) => value === "" || (/^[0-9()+\-.\s]+$/.test(value) && value.length >= 7),
+      "Enter a valid phone number or leave it blank.",
+    ),
   company: z
     .string()
     .trim()
@@ -67,7 +69,7 @@ export const demoRequestDefaultValues: DemoRequestInput = {
   email: "",
   phone: "",
   company: "",
-  industry: industries[0].slug as DemoRequestInput["industry"],
+  industry: demoIndustries[0].value as DemoRequestInput["industry"],
   locations: locationBands[0],
   hourlyEmployees: hourlyEmployeeBands[0],
   frictionWorkflow: frictionWorkflows[0].value,

@@ -12,17 +12,14 @@ export function Footer() {
               {siteConfig.name}
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--color-text-muted)]">
-              Give managers back the hours lost coordinating work across disconnected systems.
+              The AI operations command center for frontline businesses.
             </p>
             <Link
               href={ctaNav.href}
               className="mt-4 inline-flex text-sm font-medium text-[var(--color-signal-strong)] hover:text-[var(--color-signal)]"
             >
-              {ctaNav.label} <span aria-hidden>→</span>
+              {ctaNav.label} →
             </Link>
-            <a href={`mailto:${siteConfig.email}`} className="mt-3 block text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
-              {siteConfig.email}
-            </a>
           </div>
 
           <div className="flex gap-10">

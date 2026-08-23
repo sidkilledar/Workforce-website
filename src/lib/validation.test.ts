@@ -5,9 +5,8 @@ const validPayload = {
   ...demoRequestDefaultValues,
   name: "Jamie Rivera",
   email: "jamie@example.com",
+  phone: "555-123-4567",
   company: "Rivera Restaurant Group",
-  role: "Director of Operations",
-  currentSystems: "Scheduling, POS, and team chat",
   consent: true,
 };
 
@@ -25,6 +24,16 @@ describe("demoRequestSchema", () => {
   it("rejects a missing name", () => {
     const result = demoRequestSchema.safeParse({ ...validPayload, name: "" });
     expect(result.success).toBe(false);
+  });
+
+  it("rejects a phone number with letters", () => {
+    const result = demoRequestSchema.safeParse({ ...validPayload, phone: "call-me-maybe" });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts an empty optional phone number", () => {
+    const result = demoRequestSchema.safeParse({ ...validPayload, phone: "" });
+    expect(result.success).toBe(true);
   });
 
   it("requires consent to be true", () => {

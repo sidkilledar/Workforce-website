@@ -17,9 +17,7 @@ beforeEach(() => {
 async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/full name/i), "Jamie Rivera");
   await user.type(screen.getByLabelText(/work email/i), "jamie@example.com");
-  await user.type(screen.getByLabelText(/^company \*$/i), "Rivera Restaurant Group");
-  await user.type(screen.getByLabelText(/role or job title/i), "Director of Operations");
-  await user.type(screen.getByLabelText(/systems currently involved/i), "Scheduling, POS, and team chat");
+  await user.type(screen.getByLabelText("Company"), "Rivera Restaurant Group");
   await user.click(screen.getByLabelText(/i agree to be contacted/i));
 }
 

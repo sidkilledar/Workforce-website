@@ -39,13 +39,12 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
   const rows: [string, string][] = [
     ["Name", data.name],
     ["Work email", data.email],
+    ["Phone", data.phone || "Not provided"],
     ["Company", data.company],
-    ["Role", data.role],
     ["Industry", industryLabel(data.industry)],
     ["Locations", data.locations],
     ["Hourly employees", data.hourlyEmployees],
     ["Biggest friction", frictionWorkflowLabel(data.frictionWorkflow)],
-    ["Current systems", data.currentSystems],
   ];
 
   const rowsHtml = rows

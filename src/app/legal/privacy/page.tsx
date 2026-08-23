@@ -19,9 +19,9 @@ export default function PrivacyPage() {
       <LegalSection title="Information we collect">
         <p>
           When you request a demo, we collect the information you provide: your name,
-          work email, company, role or job title, industry, number of locations,
-          approximate hourly workforce size, current systems, the workflow creating
-          the most friction, and any message you choose to include.
+          work email, optional phone number, company, industry, number of locations,
+          approximate hourly workforce size, the workflow creating the most friction,
+          and any message you choose to include.
         </p>
         <p>
           Our hosting and security systems may automatically receive basic technical

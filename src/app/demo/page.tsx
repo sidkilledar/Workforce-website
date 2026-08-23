@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { buildMetadata } from "@/lib/metadata";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { DemoForm } from "@/components/site/DemoForm";
-import { customerProof, pilotImpact, siteConfig } from "@/lib/site-config";
+import { customerProof, pilotImpact } from "@/lib/site-config";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Book a Demo",
+  title: "Request a Demo",
   description:
     "See how WorkforceOS connects your systems, brings the operation into one dashboard, and lets AI coordinate daily work within the authority rules you control. Tell us about your operation and we'll follow up to schedule a walkthrough.",
   path: "/demo",
 });
 
 const nextSteps = [
-  { title: "We review the context", description: "Your industry, team size, and highest-friction workflow shape the walkthrough." },
-  { title: "We find a time", description: "A member of the WorkforceOS team follows up to schedule the conversation." },
-  { title: "We map the workflow", description: "You see the signal, AI response, manager boundary, and likely integration path together." },
+  { title: "We review the workflow", description: "Your team, current systems, and coordination burden shape the conversation." },
+  { title: "We confirm compatibility", description: "We identify the systems and operational constraints involved before proposing a pilot." },
+  { title: "We map a starting point", description: "You see the information flow, manager boundary, and practical first workflow together." },
 ];
 
 export default function DemoPage() {
@@ -25,27 +24,14 @@ export default function DemoPage() {
 
   return (
     <>
-      <div className="border-b border-[var(--color-border)] px-6 py-5 lg:px-8">
-        <Link
-          href="/"
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          {siteConfig.name}
-        </Link>
-      </div>
-
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16">
         <div>
           <Reveal className="max-w-xl">
             <h1 className="font-display text-balance text-4xl font-semibold leading-[1.06] tracking-[-0.03em] text-[var(--color-text-primary)] sm:text-5xl">
-              Bring one difficult workflow. Leave knowing how WorkforceOS would run it.
+              Bring us the workflow consuming your managers&apos; time.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-[var(--color-text-secondary)]">
-              Tell us where managers lose time today. We&apos;ll prepare a walkthrough around your systems, approval needs,
-              and the operational outcome you want—not a generic product tour.
+              We will map how it works today, confirm the systems involved, and show where WorkforceOS could reduce coordination without removing manager control.
             </p>
           </Reveal>
 

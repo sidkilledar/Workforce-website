@@ -86,7 +86,7 @@ export function DemoForm() {
       if (response.status === 429) {
         setStatus("error");
         setServerMessage(
-          payload?.message ?? "You've submitted a few requests already — please try again shortly.",
+          payload?.message ?? "You've submitted a few requests already. Please try again shortly.",
         );
         trackEvent("demo_form_submit_error", { reason: "rate_limited" });
         return;
@@ -135,7 +135,7 @@ export function DemoForm() {
           Request received
         </h2>
         <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)]">
-          Thanks — we&apos;ve got your request and sent a confirmation to{" "}
+          Thanks. We&apos;ve got your request and sent a confirmation to{" "}
           <span className="text-[var(--color-text-primary)]">{values.email}</span>. Our team will reach out
           shortly to find a time that works.
         </p>
@@ -160,7 +160,7 @@ export function DemoForm() {
         <fieldset className="space-y-6">
           <legend className="label-mono text-[var(--color-signal-strong)]">About You</legend>
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Full name" htmlFor="name" error={errors.name}>
+            <Field label="Full name *" htmlFor="name" error={errors.name}>
               <input
                 id="name"
                 name="name"
@@ -174,7 +174,7 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Work email" htmlFor="email" error={errors.email}>
+            <Field label="Work email *" htmlFor="email" error={errors.email}>
               <input
                 id="email"
                 name="email"
@@ -189,7 +189,7 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Company" htmlFor="company" error={errors.company} className="sm:col-span-2">
+            <Field label="Company *" htmlFor="company" error={errors.company}>
               <input
                 id="company"
                 name="company"
@@ -202,13 +202,27 @@ export function DemoForm() {
                 aria-describedby={errors.company ? "company-error" : undefined}
               />
             </Field>
+
+            <Field label="Role or job title *" htmlFor="role" error={errors.role}>
+              <input
+                id="role"
+                name="role"
+                required
+                autoComplete="organization-title"
+                className={inputClasses}
+                value={values.role}
+                onChange={(event) => updateField("role", event.target.value)}
+                aria-invalid={Boolean(errors.role)}
+                aria-describedby={errors.role ? "role-error" : undefined}
+              />
+            </Field>
           </div>
         </fieldset>
 
         <fieldset className="space-y-6">
           <legend className="label-mono text-[var(--color-signal-strong)]">About Your Operation</legend>
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Industry" htmlFor="industry" error={errors.industry}>
+            <Field label="Industry *" htmlFor="industry" error={errors.industry}>
               <select
                 id="industry"
                 name="industry"
@@ -226,7 +240,7 @@ export function DemoForm() {
               </select>
             </Field>
 
-            <Field label="Number of locations" htmlFor="locations" error={errors.locations}>
+            <Field label="Number of locations *" htmlFor="locations" error={errors.locations}>
               <select
                 id="locations"
                 name="locations"
@@ -245,7 +259,7 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="Approximate hourly employees"
+              label="Approximate hourly employees *"
               htmlFor="hourlyEmployees"
               error={errors.hourlyEmployees}
             >
@@ -270,7 +284,7 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="What creates the most friction?"
+              label="What creates the most friction? *"
               htmlFor="frictionWorkflow"
               error={errors.frictionWorkflow}
             >
@@ -294,6 +308,20 @@ export function DemoForm() {
               </select>
             </Field>
           </div>
+
+          <Field label="Systems currently involved *" htmlFor="currentSystems" error={errors.currentSystems}>
+            <input
+              id="currentSystems"
+              name="currentSystems"
+              required
+              className={inputClasses}
+              placeholder="For example: scheduling, POS, team chat, spreadsheets"
+              value={values.currentSystems}
+              onChange={(event) => updateField("currentSystems", event.target.value)}
+              aria-invalid={Boolean(errors.currentSystems)}
+              aria-describedby={errors.currentSystems ? "currentSystems-error" : undefined}
+            />
+          </Field>
 
           <Field label="Optional message" htmlFor="message" error={errors.message}>
             <textarea
@@ -341,13 +369,13 @@ export function DemoForm() {
           </label>
         </div>
         {errors.consent && (
-          <p id="consent-error" className="text-sm text-red-600">
+          <p id="consent-error" className="text-sm text-[var(--color-signal-strong)]">
             {errors.consent}
           </p>
         )}
 
         {status === "error" && serverMessage && (
-          <p role="alert" className="rounded-[3px] bg-red-50 px-4 py-3 text-sm text-red-700">
+          <p role="alert" className="rounded-[3px] bg-[var(--color-signal-soft)] px-4 py-3 text-sm text-[var(--color-signal-strong)]">
             {serverMessage}
           </p>
         )}
@@ -357,7 +385,7 @@ export function DemoForm() {
         </Button>
 
         <p className="text-center text-xs text-[var(--color-text-muted)]">
-          We use this information to prepare and schedule your walkthrough. Review our Privacy Policy for details.
+          Fields marked * are required. We use this information to prepare and schedule your walkthrough.
         </p>
       </form>
     </div>
@@ -384,7 +412,7 @@ function Field({
       </label>
       <div className="mt-2">{children}</div>
       {error && (
-        <p id={`${htmlFor}-error`} className="mt-1.5 text-sm text-red-600">
+        <p id={`${htmlFor}-error`} className="mt-1.5 text-sm text-[var(--color-signal-strong)]">
           {error}
         </p>
       )}

@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         status: "rate_limited",
-        message: "You've submitted a few requests already — please try again shortly.",
+        message: "You've submitted a few requests already. Please try again shortly.",
       },
       { status: 429, headers: { "Retry-After": String(rateLimit.retryAfterSeconds) } },
     );

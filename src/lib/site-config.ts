@@ -61,7 +61,6 @@ export const navAnchors: NavLink[] = [
   { label: "Platform", href: "#command-center" },
   { label: "Operations", href: "#pillars" },
   { label: "AI Control", href: "#authority" },
-  { label: "Integrations", href: "#integration" },
 ];
 
 export const ctaNav: NavLink = { label: "Book a Demo", href: "/demo" };

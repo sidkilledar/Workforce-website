@@ -67,7 +67,7 @@ Tokens (`globals.css` `:root`): `--ease-out`, `--ease-in-out`, `--duration-press
 
 Reveal variants (`Reveal` component, `variant` prop): `soft` (opacity + translateY(16px), 500ms), `clip` (heading clip-path wipe, 650ms), `state` (opacity + translateY(8px), 220ms), `none` (immediately visible). Scroll-triggered reveals go through `useInView` (one-shot, latches true); continuous/ambient effects go through `useAmbientActive` (live — pauses offscreen, tab-hidden, or reduced-motion) — both in `src/lib/motion.ts`.
 
-The homepage uses two distinct scroll treatments: the five operating pillars form a compact sticky stack, and `DayInOperation` is the single pinned narrative. Everything else reveals on normal scroll. The hero's command-center animation is the primary attention moment and runs once before settling.
+The hero's command-center animation is the primary attention moment and runs once before settling. The remaining sections use restrained entrance and state transitions without pinned narrative scrolling.
 
 Reduced motion (`globals.css` media query) removes translation, scaling, path travel, and continuous pulses, but keeps a ~180ms opacity transition so state changes still register as feedback rather than an instant snap. No content is ever hidden by an animation that fails to run — every "undrawn"/"untraveled" base state renders fully visible by default; the animation is additive.
 
@@ -75,19 +75,16 @@ Reduced motion (`globals.css` media query) removes translation, scaling, path tr
 
 **Public routes:** `/` (landing), `/demo` (booking), `/legal/privacy`, `/legal/terms` — that's the complete route surface. `/product`, `/pricing`, `/about`, and `/industries*` permanently redirect (`next.config.ts`) to landing-page anchors or `/demo`; their page files and the components used only by them (`OperationsPanel`, `CapabilityVisual`, `IndustryDetail`, `PageHero`) have been removed rather than left as dead code behind a redirect.
 
-**Primary nav (anchors on the landing page):** Platform, Operations, AI Control, Integrations, plus Book a Demo.
+**Primary nav (anchors on the landing page):** Platform, Operations, AI Control, plus Book a Demo.
 
 ## Landing page sections (in order)
 
 1. Hero — concise platform promise plus a one-shot animated operations command center.
 2. Active pilots — compact factual proof directly below the hero.
-3. Patchwork problem — why disconnected systems leave managers reconciling the operation manually.
-4. Integration — a compact category-level explanation of how WorkforceOS connects to the current operation.
-5. Operating pillars — five sticky, progressively stacked capability chapters with only the information needed to evaluate each pillar.
-6. Day in the operation — one five-step pinned story showing sales, labor, inventory, tasks, communication, and approvals working together.
-7. AI authority — Inform, Recommend, and Execute boundaries controlled by the customer.
-8. Audience applications — catering, restaurant groups, and campus sports and recreation.
-9. Final CTA — Book a Demo and return managers to the floor.
+3. Patchwork problem — a single before/after explanation of why disconnected systems leave managers reconciling the operation manually.
+4. Connected operations — the one detailed product explanation, covering the five operational questions in an interactive dashboard.
+5. AI authority and implementation — Inform, Recommend, and Execute boundaries plus a practical rollout path.
+6. Audience and final CTA — names the three shift-based operating contexts and moves directly into a tailored demo invitation.
 
 ## Content rules
 

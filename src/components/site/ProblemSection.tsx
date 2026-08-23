@@ -20,21 +20,9 @@ const fragmentOffsets = [
 ];
 
 const workforceStream = [
-  { title: "Connected signal", detail: "Every source lands in one place as it happens." },
-  { title: "Operational context", detail: "Read against how this operation actually runs." },
-  { title: "Explained recommendation", detail: "A specific action, with the reasoning attached." },
-  { title: "Manager approval — when required", detail: "Sensitive actions wait for a person to say go." },
-  { title: "Action & outcome recorded", detail: "What happened is logged, not left to memory." },
-];
-
-// The manager questions every one of the six disconnected systems is really
-// standing in for — grounds the diagram in real usage, not an abstraction.
-const managerQuestions = [
-  "Who is working?",
-  "How is service tracking?",
-  "What are we running low on?",
-  "What still needs to be done?",
-  "What needs my approval?",
+  { title: "One operational view", detail: "Signals from the tools already in use arrive together." },
+  { title: "One clear next step", detail: "The relevant context becomes a specific response." },
+  { title: "One shared record", detail: "The team sees what changed and what happens next." },
 ];
 
 export function ProblemSection() {
@@ -160,19 +148,6 @@ export function ProblemSection() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 sm:mt-10 sm:flex-row sm:items-center sm:gap-5">
-          <p className="label-mono flex-shrink-0 text-[var(--color-text-muted)]">What a manager is really asking</p>
-          <ul className="flex flex-wrap gap-1.5">
-            {managerQuestions.map((question) => (
-              <li
-                key={question}
-                className="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-secondary)]"
-              >
-                {question}
-              </li>
-            ))}
-          </ul>
-        </div>
       </Container>
     </Section>
   );

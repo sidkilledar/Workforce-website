@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/site/Hero";
 import { ProblemSection } from "@/components/site/ProblemSection";
-import { IntegrationSection } from "@/components/site/IntegrationSection";
 import { ConnectedOperationsShowcase } from "@/components/site/ConnectedOperationsShowcase";
-import { DayTimeline } from "@/components/site/DayTimeline";
 import { AuthoritySection } from "@/components/site/AuthoritySection";
-import { AudienceSegments } from "@/components/site/AudienceSegments";
 import { CustomerTrustStrip } from "@/components/site/CustomerTrustStrip";
 import { FinalCta } from "@/components/site/FinalCta";
 import { buildMetadata } from "@/lib/metadata";
@@ -23,11 +20,8 @@ export default function Home() {
       <Hero />
       <CustomerTrustStrip />
       <ProblemSection />
-      <IntegrationSection />
       <ConnectedOperationsShowcase />
-      <DayTimeline />
       <AuthoritySection />
-      <AudienceSegments />
       <FinalCta />
     </>
   );

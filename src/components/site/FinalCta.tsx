@@ -2,27 +2,35 @@
 
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { pilotImpact, sectionIds } from "@/lib/site-config";
+import { audienceSegments, sectionIds } from "@/lib/site-config";
 import { trackEvent } from "@/lib/analytics";
 
 const demoOutcomes = [
-  "Map one high-friction workflow from signal to resolution",
-  "See where manager approval belongs and what can be automated",
-  "Identify which existing systems would provide the operating context",
+  "Walk through the workflow as it runs today",
+  "Identify the first practical place to connect WorkforceOS",
+  "Leave with a clear pilot starting point",
 ];
 
 export function FinalCta() {
   return (
     <section id={sectionIds.finalCta} className="bg-[var(--color-canvas-dark)] py-16 sm:py-20">
       <Container className="max-w-[1200px]">
+        <div className="mb-12 border-b border-[var(--color-border-on-dark)] pb-6">
+          <p className="text-sm text-[var(--color-text-on-dark-muted)]">Built for shift-based teams in</p>
+          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-[var(--color-text-on-dark-primary)]">
+            {audienceSegments.map((segment) => (
+              <li key={segment.slug}>{segment.name}</li>
+            ))}
+          </ul>
+        </div>
+
         <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16">
           <div>
             <h2 className="font-display max-w-3xl text-balance text-4xl font-semibold tracking-[-0.03em] text-[var(--color-text-on-dark-primary)] sm:text-5xl lg:text-6xl">
               Bring us the workflow your managers spend too much time chasing.
             </h2>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-              We&apos;ll show you how WorkforceOS could connect the signal, prepare the response, and keep the right decision
-              with your manager—using the operation you already run.
+              Tell us where the day breaks down. We&apos;ll prepare the walkthrough around that real workflow.
             </p>
             <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
               <Button
@@ -53,11 +61,6 @@ export function FinalCta() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[var(--color-border-on-dark)] pt-5 text-xs text-[var(--color-text-on-dark-muted)]">
-          <span>{pilotImpact.organizations} active customer pilots</span>
-          <span>{pilotImpact.frontlineUsers} frontline users across their teams</span>
-          <span>Existing systems considered during implementation</span>
-        </div>
       </Container>
     </section>
   );

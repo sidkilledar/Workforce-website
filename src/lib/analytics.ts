@@ -1,5 +1,6 @@
 export type AnalyticsEventName =
   | "demo_cta_click"
+  | "hero_preview_approval"
   | "demo_form_start"
   | "demo_form_submit_success"
   | "demo_form_submit_error";

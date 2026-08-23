@@ -15,7 +15,9 @@
 
   --color-text-primary: #17130f;
   --color-text-secondary: rgba(23, 19, 16, 0.66);
-  --color-text-muted: rgba(23, 19, 16, 0.46);
+  /* 60% ink clears WCAG AA for the many 10–13px operational labels that
+     use this token on paper surfaces (~4.56:1 against the main canvas). */
+  --color-text-muted: rgba(23, 19, 16, 0.6);
 
   /* One signal color, used deliberately and sparingly: primary CTAs, live/
      active diagram states, the loop's resolved pulse. Everything else in the
@@ -233,15 +235,15 @@ body {
   .animate-reveal-clip,
   .animate-reveal-state,
   .animate-confirm-in,
-  .animate-slip-route {
+  .animate-signal-fragment,
+  .animate-stream-node {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
     clip-path: none !important;
   }
 
-  .animate-signal-pulse,
-  .animate-converge {
+  .animate-signal-pulse {
     animation: none !important;
   }
 
@@ -368,26 +370,40 @@ body {
   animation: confirm-in 240ms var(--ease-out) both;
 }
 
-/* Problem-section event slips: appear scattered (per-item --slip-x/--slip-r),
-   hold briefly, then route into one ordered stream — transform only, so the
-   items never leave normal document flow. */
-@keyframes slip-route {
-  0% {
+/* Problem-section "before" rail: each disconnected source appears at a
+   scattered offset (per-item --frag-x/--frag-r) and settles onto the rail —
+   transform/opacity only, so items never leave normal document flow. */
+@keyframes signal-fragment-in {
+  from {
     opacity: 0;
-    transform: translateX(var(--slip-x, 0)) rotate(var(--slip-r, 0deg));
+    transform: translateX(var(--frag-x, 0)) rotate(var(--frag-r, 0deg));
   }
-  35% {
-    opacity: 1;
-    transform: translateX(var(--slip-x, 0)) rotate(var(--slip-r, 0deg));
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateX(0) rotate(0deg);
   }
 }
 
-.animate-slip-route {
-  animation: slip-route 900ms var(--ease-out) both;
+.animate-signal-fragment {
+  animation: signal-fragment-in 650ms var(--ease-out) both;
+}
+
+/* Problem-section "after" stream: each WorkforceOS stage settles upward,
+   staggered to start once the fragmented sources above have resolved —
+   reading as the scattered signals routing into one ordered stream. */
+@keyframes stream-node-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stream-node {
+  animation: stream-node-in 650ms var(--ease-out) both;
 }
 
 /* A connector line between chapter fields (Trigger → Action → Outcome):
@@ -507,28 +523,6 @@ details[open]::details-content {
     visibility 0s linear 0s;
 }
 
-/* Converging chips for the final CTA sequence: elements start at a scattered
-   offset (set per-element via --tx/--ty/--tr custom properties) and settle
-   into place once revealed. */
-@keyframes converge {
-  0% {
-    opacity: 0;
-    transform: translate(var(--tx, 0), var(--ty, 0)) rotate(var(--tr, 0deg)) scale(0.85);
-  }
-  55% {
-    opacity: 1;
-    transform: translate(calc(var(--tx, 0) * 0.12), calc(var(--ty, 0) * 0.12)) rotate(0deg) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(0, 0) rotate(0deg) scale(0.4);
-  }
-}
-
-.animate-converge {
-  animation: converge 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 /* Connected Operations Showcase — dashboard workspace/AI-panel crossfade.
    The outgoing content just gets a plain inline opacity style (see
    useCrossfadeSwap); the incoming content is a freshly-keyed DOM node, so
@@ -641,4 +635,3 @@ details[open]::details-content {
     opacity: 0.28;
   }
 }
-

@@ -1,81 +1,179 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { patchworkSources, sectionIds } from "@/lib/site-config";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
-import { LoopDiagram } from "@/components/site/LoopDiagram";
+import { cn } from "@/lib/cn";
 import { useInView } from "@/lib/motion";
 
-const offsets = [
-  { rotate: "-2deg", x: "-18px" },
-  { rotate: "1.5deg", x: "14px" },
-  { rotate: "-1deg", x: "-10px" },
-  { rotate: "2deg", x: "16px" },
-  { rotate: "-1.5deg", x: "12px" },
-  { rotate: "1deg", x: "-14px" },
+// Scattered starting offsets for the "before" rail — small enough to read as
+// disconnected slips of paper, not a layout shift.
+const fragmentOffsets = [
+  { rotate: "-1.25deg", x: "-16px" },
+  { rotate: "1deg", x: "13px" },
+  { rotate: "-1deg", x: "-11px" },
+  { rotate: "1.5deg", x: "15px" },
+  { rotate: "-0.75deg", x: "-9px" },
+  { rotate: "1deg", x: "11px" },
+];
+
+const workforceStream = [
+  { title: "Connected signal", detail: "Every source lands in one place as it happens." },
+  { title: "Operational context", detail: "Read against how this operation actually runs." },
+  { title: "Explained recommendation", detail: "A specific action, with the reasoning attached." },
+  { title: "Manager approval — when required", detail: "Sensitive actions wait for a person to say go." },
+  { title: "Action & outcome recorded", detail: "What happened is logged, not left to memory." },
+];
+
+// The manager questions every one of the six disconnected systems is really
+// standing in for — grounds the diagram in real usage, not an abstraction.
+const managerQuestions = [
+  "Who is working?",
+  "How is service tracking?",
+  "What are we running low on?",
+  "What still needs to be done?",
+  "What needs my approval?",
 ];
 
 export function ProblemSection() {
   const [ref, inView] = useInView<HTMLDivElement>();
+
+  // Fragments settle first; the stream builds shortly after, so the single
+  // entrance animation reads as one thing routing into the other.
+  const fragmentDelay = (index: number) => index * 55;
+  const resultDelay = fragmentOffsets.length * 55 + 40;
+  const streamStart = resultDelay + 260;
+  const streamDelay = (index: number) => streamStart + index * 70;
 
   return (
     <Section id={sectionIds.problem} className="bg-[var(--color-canvas-raised)]">
       <Container>
         <Reveal className="mx-auto max-w-2xl text-center">
           <p className="label-mono text-[var(--color-signal-strong)]">The Patchwork Problem</p>
-          <h2 className="font-display mt-4 text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-            Your operation is split across six systems that don&apos;t talk.
+          <h2 className="font-display mt-4 text-[1.75rem] font-semibold leading-[1.18] tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+            Your systems track the work.
+            <br className="hidden sm:block" /> Your manager still has to connect it.
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            Sales change. Staffing slips. Inventory runs low. The tools report
-            each event separately, leaving the manager to connect them by hand.
+            Each tool below is accurate on its own. Turning six separate pictures into one decision is still a manual, mental job — every shift.
           </p>
         </Reveal>
 
-        <div ref={ref} className="mt-16 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div
+          ref={ref}
+          className="relative mt-10 grid gap-6 sm:mt-12 lg:grid-cols-[1fr_auto_1fr] lg:items-start lg:gap-6"
+        >
+          {/* Before — disconnected operation */}
           <div>
-            <p className="label-mono text-[var(--color-text-muted)]">Reconciled manually</p>
-            <div className="relative mt-6 grid min-h-[260px] auto-rows-min grid-cols-2 items-start gap-3 rounded-[3px] border border-dashed border-[var(--color-border-strong)] bg-[var(--color-canvas)] p-5 sm:p-6">
+            <p className="label-mono text-[var(--color-text-muted)]">Before — disconnected operation</p>
+            <ol className="relative mt-5 border-l border-dashed border-[var(--color-border-strong)] pl-5">
               {patchworkSources.map((item, index) => (
-                <div
-                  key={item.source}
-                  className={cnSlip(inView)}
-                  style={
-                    {
-                      "--slip-x": offsets[index]!.x,
-                      "--slip-r": offsets[index]!.rotate,
-                      animationDelay: inView ? `${index * 70}ms` : undefined,
-                    } as React.CSSProperties
-                  }
-                >
-                  <p className="ticket-number">{item.source}</p>
-                  <p className="mt-1 text-sm font-medium text-[var(--color-text-primary)]">{item.label}</p>
-                </div>
+                <li key={item.source} className="relative py-2 first:pt-0">
+                  <span
+                    aria-hidden
+                    className="absolute top-[13px] -left-[25px] h-[7px] w-[7px] rounded-full bg-[var(--color-canvas-raised)] ring-1 ring-[var(--color-border-strong)]"
+                  />
+                  <div
+                    className={inView ? "animate-signal-fragment" : "opacity-0"}
+                    style={
+                      {
+                        "--frag-x": fragmentOffsets[index]!.x,
+                        "--frag-r": fragmentOffsets[index]!.rotate,
+                        animationDelay: inView ? `${fragmentDelay(index)}ms` : undefined,
+                      } as CSSProperties
+                    }
+                  >
+                    <p className="ticket-number">{item.source}</p>
+                    <p className="mt-0.5 text-sm font-medium text-[var(--color-text-primary)]">{item.label}</p>
+                  </div>
+                </li>
               ))}
-            </div>
-            <p className="mt-4 text-sm leading-relaxed text-[var(--color-text-muted)]">
-              Six systems, six separate pictures — and the manager is the
-              only one holding all of them at once.
-            </p>
+              <li className="relative mt-1 border-t border-dashed border-[var(--color-border-strong)] py-3">
+                <span
+                  aria-hidden
+                  className="absolute top-[21px] -left-[25px] h-[7px] w-[7px] rounded-full bg-[var(--color-signal-strong)]"
+                />
+                <div
+                  className={cn(
+                    "flex items-baseline gap-2",
+                    inView ? "animate-signal-fragment" : "opacity-0",
+                  )}
+                  style={{ animationDelay: inView ? `${resultDelay}ms` : undefined } as CSSProperties}
+                >
+                  <p className="label-mono flex-shrink-0 text-[var(--color-signal-strong)]">Result</p>
+                  <p className="text-sm font-semibold text-[var(--color-text-primary)]">
+                    The manager reconciles all six, by hand.
+                  </p>
+                </div>
+              </li>
+            </ol>
           </div>
 
-          <Reveal delay={120}>
-            <p className="label-mono text-[var(--color-signal-strong)]">Connected by WorkforceOS</p>
-            <div className="mt-6 flex min-h-[260px] flex-col items-center justify-center gap-5 rounded-[3px] bg-[var(--color-canvas-dark)] p-8 text-center">
-              <LoopDiagram mode="loop-section" size={200} />
-              <p className="max-w-[260px] text-[15px] leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-                Every signal lands in one operating picture — connected,
-                understood, and acted on together.
-              </p>
+          {/* Divider */}
+          <div aria-hidden className="flex items-center justify-center py-1">
+            <span className="flex h-9 w-9 flex-shrink-0 rotate-90 items-center justify-center rounded-full border border-[var(--color-border-strong)] bg-[var(--color-canvas-elevated)] text-[var(--color-signal-strong)] lg:mt-24 lg:rotate-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </div>
+
+          {/* After — WorkforceOS */}
+          <div>
+            <p className="label-mono text-[var(--color-signal-strong)]">After — WorkforceOS</p>
+            <div className="mt-5 rounded-[3px] bg-[var(--color-canvas-dark)] px-5 py-4 sm:px-6">
+              <ol>
+                {workforceStream.map((stage, index) => (
+                  <li key={stage.title}>
+                    <div
+                      className={cn(
+                        "flex items-start gap-3 py-2.5",
+                        inView ? "animate-stream-node" : "opacity-0",
+                      )}
+                      style={{ animationDelay: inView ? `${streamDelay(index)}ms` : undefined } as CSSProperties}
+                    >
+                      <span className="label-mono mt-0.5 flex-shrink-0 text-[var(--color-text-on-dark-muted)]">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-[var(--color-text-on-dark-primary)]">{stage.title}</p>
+                        <p className="mt-0.5 text-[13px] leading-snug text-[var(--color-text-on-dark-secondary)]">
+                          {stage.detail}
+                        </p>
+                      </div>
+                      {index === workforceStream.length - 1 && (
+                        <span
+                          aria-hidden
+                          className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--color-status-resolved)]"
+                        />
+                      )}
+                    </div>
+                    {index < workforceStream.length - 1 && (
+                      <div className="ml-[9px] h-3 w-px bg-[var(--color-border-on-dark)]" aria-hidden />
+                    )}
+                  </li>
+                ))}
+              </ol>
             </div>
-          </Reveal>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-3 border-t border-[var(--color-border)] pt-6 sm:mt-10 sm:flex-row sm:items-center sm:gap-5">
+          <p className="label-mono flex-shrink-0 text-[var(--color-text-muted)]">What a manager is really asking</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {managerQuestions.map((question) => (
+              <li
+                key={question}
+                className="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-xs font-medium text-[var(--color-text-secondary)]"
+              >
+                {question}
+              </li>
+            ))}
+          </ul>
         </div>
       </Container>
     </Section>
   );
-}
-
-function cnSlip(inView: boolean) {
-  return `ticket-slip px-4 pb-3 pt-4 ${inView ? "animate-slip-route" : "opacity-0"}`;
 }

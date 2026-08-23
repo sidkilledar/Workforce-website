@@ -1,51 +1,50 @@
-import Image from "next/image";
-import { customerProof, pilotCustomers, sectionIds } from "@/lib/site-config";
+import { pilotImpact, sectionIds } from "@/lib/site-config";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 
-/**
- * Approved logos render once they land in `customerProof` — flex-wrap +
- * justify-center handles anywhere from 3 to 8 without awkward empty space.
- * Until then, named pilots stand in as plain text (a fact, not a
- * testimonial) rather than a vague "in testing" placeholder.
- */
 export function CustomerTrustStrip() {
   return (
-    <Section id={sectionIds.pilots} className="border-b border-[var(--color-border)] py-10 sm:py-12">
+    <Section id={sectionIds.pilots} className="border-b border-[var(--color-border)] py-12 sm:py-16">
       <Container>
-        <Reveal className="flex flex-col items-center justify-between gap-5 sm:flex-row">
-          <div>
-            <p className="label-mono text-[var(--color-signal-strong)]">Active Pilots</p>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-[var(--color-text-secondary)]">
-              {customerProof.length > 0
-                ? "Trusted by operators running WorkforceOS."
-                : "WorkforceOS is being shaped with frontline teams in catering and campus recreation."}
+        <Reveal className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start lg:gap-14">
+          <div className="max-w-sm">
+            <p className="font-display text-3xl font-semibold tracking-[-0.025em] text-[var(--color-text-primary)] sm:text-4xl">
+              Built with real operations, not hypothetical workflows.
             </p>
+            <p className="mt-4 text-sm leading-relaxed text-[var(--color-text-secondary)]">
+              Two customer pilots bring WorkforceOS into the daily work of more than 1,000 frontline users across their teams.
+            </p>
+
+            <dl className="mt-6 flex gap-8 border-t border-[var(--color-border)] pt-5">
+              <div>
+                <dt className="text-xs text-[var(--color-text-muted)]">Customer pilots</dt>
+                <dd className="mt-1 text-2xl font-semibold tabular-nums text-[var(--color-text-primary)]">
+                  {pilotImpact.organizations}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-[var(--color-text-muted)]">Frontline users</dt>
+                <dd className="mt-1 text-2xl font-semibold tabular-nums text-[var(--color-text-primary)]">
+                  {pilotImpact.frontlineUsers}
+                </dd>
+              </div>
+            </dl>
           </div>
 
-          {customerProof.length > 0 ? (
-            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
-              {customerProof.map((customer) => (
-                <Image
-                  key={customer.name}
-                  src={customer.logoSrc}
-                  alt={customer.name}
-                  width={140}
-                  height={40}
-                  className="opacity-60 grayscale"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {pilotCustomers.map((name) => (
-                <span key={name} className="ticket-slip px-4 py-2 text-sm font-medium text-[var(--color-text-primary)]">
-                  {name}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">
+            {pilotImpact.customers.map((customer) => (
+              <article key={customer.name} className="grid gap-3 py-6 sm:grid-cols-[180px_1fr] sm:gap-8">
+                <div>
+                  <h2 className="text-base font-semibold text-[var(--color-text-primary)]">{customer.name}</h2>
+                  <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-muted)]">{customer.context}</p>
+                </div>
+                <p className="max-w-[58ch] text-base leading-relaxed text-[var(--color-text-secondary)]">
+                  {customer.result}
+                </p>
+              </article>
+            ))}
+          </div>
         </Reveal>
       </Container>
     </Section>

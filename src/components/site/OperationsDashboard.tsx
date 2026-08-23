@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useCrossfadeSwap } from "@/lib/motion";
 import type {
   CommunicationWorkspace,
@@ -42,21 +41,16 @@ const rowDelay = (index: number) => index * 45;
  */
 export function OperationsDashboard({ areas, selectedIndex }: { areas: OperationalArea[]; selectedIndex: number }) {
   const { displayed: area, fading } = useCrossfadeSwap(areas[selectedIndex]!);
-  // Derived, not synced: "Just now" whenever the settled index hasn't
-  // caught up with the current selection yet; the effect only performs the
-  // actual (callback-based) delayed state update.
-  const [settledIndex, setSettledIndex] = useState<number | null>(null);
-  const syncLabel = settledIndex === selectedIndex ? "2 min ago" : "Just now";
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => setSettledIndex(selectedIndex), 2200);
-    return () => window.clearTimeout(timer);
-  }, [selectedIndex]);
 
   const fadeStyle = fading ? { opacity: 0.35, transition: "opacity 140ms var(--ease-out)" } : undefined;
 
   return (
-    <div className="overflow-hidden rounded-[4px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark)] paper-stack-dark">
+    <div
+      id="operation-panel"
+      role="tabpanel"
+      aria-labelledby={`operation-tab-${areas[selectedIndex]!.slug}`}
+      className="overflow-hidden rounded-[4px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark)] paper-stack-dark"
+    >
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-[var(--color-border-on-dark)] px-4 py-3 sm:px-6">
         <div className="flex items-center gap-3">
           <span className="font-display text-sm font-semibold text-[var(--color-text-on-dark-primary)]">WorkforceOS</span>
@@ -67,7 +61,7 @@ export function OperationsDashboard({ areas, selectedIndex }: { areas: Operation
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-status-resolved)]" aria-hidden />
             Live
           </span>
-          <span className="label-mono text-[var(--color-text-on-dark-muted)]">Synced {syncLabel}</span>
+          <span className="label-mono text-[var(--color-text-on-dark-muted)]">Connected view ready</span>
         </div>
       </div>
 

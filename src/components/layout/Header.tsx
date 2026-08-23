@@ -95,12 +95,12 @@ export function Header() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-8">
         <Link
           href="/"
-          className="font-display text-lg font-semibold tracking-tight text-[var(--color-text-primary)]"
+          className="font-display flex min-h-11 items-center text-lg font-semibold tracking-tight text-[var(--color-text-primary)]"
         >
           {siteConfig.name}
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {navAnchors.map((link) => (
             <Link
               key={link.href}
@@ -118,7 +118,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <Button
             href={ctaNav.href}
             size="md"
@@ -132,7 +132,7 @@ export function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-text-primary)] md:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-text-primary)] lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -163,7 +163,7 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          "mobile-menu border-t border-[var(--color-border)] bg-[var(--color-canvas)] px-6 py-6 md:hidden",
+          "mobile-menu border-t border-[var(--color-border)] bg-[var(--color-canvas)] px-6 py-6 lg:hidden",
           mobileOpen && "is-open",
         )}
         inert={!mobileOpen ? true : undefined}

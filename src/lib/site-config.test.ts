@@ -47,7 +47,7 @@ describe("operationalAreas", () => {
 
   it("every area has all required text fields, non-empty", () => {
     for (const area of operationalAreas) {
-      for (const field of ["name", "summary", "signal", "context", "recommendation", "reason", "outcome"] as const) {
+      for (const field of ["name", "question", "summary", "signal", "context", "recommendation", "reason", "outcome"] as const) {
         expect(area[field].trim().length, `${area.slug}.${field}`).toBeGreaterThan(0);
       }
       expect(area.connectedSystems.length, `${area.slug}.connectedSystems`).toBeGreaterThan(0);

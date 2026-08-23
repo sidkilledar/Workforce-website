@@ -1,110 +1,64 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Atmosphere } from "@/components/ui/Atmosphere";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { sectionIds } from "@/lib/site-config";
+import { pilotImpact, sectionIds } from "@/lib/site-config";
 import { trackEvent } from "@/lib/analytics";
 
-// Echoes the hero's four-part promise, converging into one wordmark.
-const chips: { label: string; tx: string; ty: string; tr: string }[] = [
-  { label: "Connect", tx: "-160px", ty: "-70px", tr: "-8deg" },
-  { label: "Understand", tx: "150px", ty: "-90px", tr: "6deg" },
-  { label: "Act", tx: "-140px", ty: "80px", tr: "5deg" },
-  { label: "Improve", tx: "160px", ty: "70px", tr: "-6deg" },
+const demoOutcomes = [
+  "Map one high-friction workflow from signal to resolution",
+  "See where manager approval belongs and what can be automated",
+  "Identify which existing systems would provide the operating context",
 ];
 
 export function FinalCta() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      id={sectionIds.finalCta}
-      ref={ref}
-      className="relative overflow-hidden pt-24"
-      style={{ background: "var(--color-canvas-dark)" }}
-    >
-      <Atmosphere variant="dark" className="opacity-70" />
-      <Container className="relative pb-16">
-        <div className="relative mx-auto flex h-24 max-w-3xl items-center justify-center">
-          {chips.map((chip, index) => (
-            <span
-              key={chip.label}
-              className={visible ? "animate-converge absolute" : "absolute opacity-0"}
-              style={
-                {
-                  "--tx": chip.tx,
-                  "--ty": chip.ty,
-                  "--tr": chip.tr,
-                  animationDelay: `${index * 90}ms`,
-                } as React.CSSProperties
-              }
-            >
-              <span className="ticket-slip label-mono inline-flex items-center gap-1.5 px-3 py-1.5 text-[var(--color-text-secondary)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-signal)]" />
-                {chip.label}
-              </span>
-            </span>
-          ))}
-          <span
-            className={
-              visible
-                ? "animate-fade-up font-display text-2xl font-semibold text-[var(--color-text-on-dark-primary)]"
-                : "opacity-0"
-            }
-            style={{ animationDelay: "950ms" }}
-          >
-            WorkforceOS
-          </span>
+    <section id={sectionIds.finalCta} className="bg-[var(--color-canvas-dark)] py-16 sm:py-20">
+      <Container className="max-w-[1200px]">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16">
+          <div>
+            <h2 className="font-display max-w-3xl text-balance text-4xl font-semibold tracking-[-0.03em] text-[var(--color-text-on-dark-primary)] sm:text-5xl lg:text-6xl">
+              Bring us the workflow your managers spend too much time chasing.
+            </h2>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-text-on-dark-secondary)]">
+              We&apos;ll show you how WorkforceOS could connect the signal, prepare the response, and keep the right decision
+              with your manager—using the operation you already run.
+            </p>
+            <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+              <Button
+                href="/demo"
+                size="lg"
+                variant="primary"
+                arrow
+                onClick={() => trackEvent("demo_cta_click", { location: "final_cta" })}
+              >
+                Book a Demo
+              </Button>
+              <p className="text-sm text-[var(--color-text-on-dark-muted)]">A tailored walkthrough, not a generic sales deck.</p>
+            </div>
+          </div>
+
+          <div className="border-y border-[var(--color-border-on-dark)] py-6">
+            <p className="text-sm font-medium text-[var(--color-text-on-dark-primary)]">What you&apos;ll leave understanding</p>
+            <ul className="mt-5 space-y-4">
+              {demoOutcomes.map((outcome) => (
+                <li key={outcome} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--color-text-on-dark-secondary)]">
+                  <svg aria-hidden width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5 flex-shrink-0 text-[var(--color-status-resolved)]">
+                    <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {outcome}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[var(--color-border-on-dark)] pt-5 text-xs text-[var(--color-text-on-dark-muted)]">
+          <span>{pilotImpact.organizations} active customer pilots</span>
+          <span>{pilotImpact.frontlineUsers} frontline users across their teams</span>
+          <span>Existing systems considered during implementation</span>
         </div>
       </Container>
-
-      {/* signal-strong, not the brighter signal — white/near-white text on
-          bright signal only reaches ~3.1:1, under WCAG AA 4.5:1 for the
-          paragraph below (18px normal weight doesn't qualify as "large text"). */}
-      <div className="relative bg-[var(--color-signal-strong)] py-16 sm:py-20">
-        <Container className="relative flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-          <div>
-            <h2 className="font-display max-w-xl text-3xl font-medium tracking-tight text-[#fbf8f1] sm:text-5xl">
-              Get your managers back on the floor.
-            </h2>
-            <p className="mt-4 max-w-lg text-lg text-[#fbf8f1]/85">
-              The demo starts with your systems and your highest-friction
-              workflow — not a generic tour. We won&apos;t promise a fully
-              configured environment on the first call, but you&apos;ll see
-              exactly how it&apos;d fit your operation.
-            </p>
-          </div>
-          <Button
-            href="/demo"
-            size="lg"
-            variant="light"
-            arrow
-            className="shrink-0"
-            onClick={() => trackEvent("demo_cta_click", { location: "final_cta" })}
-          >
-            Book a Demo
-          </Button>
-        </Container>
-      </div>
     </section>
   );
 }

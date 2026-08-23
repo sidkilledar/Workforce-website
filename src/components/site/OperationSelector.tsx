@@ -63,7 +63,7 @@ export function OperationSelector({
               role="tab"
               id={`operation-tab-${area.slug}`}
               aria-selected={selected}
-              aria-controls={`operation-panel-${area.slug}`}
+              aria-controls="operation-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => onSelect(index)}
               onKeyDown={(event) => handleKeyDown(event, index)}
@@ -81,9 +81,6 @@ export function OperationSelector({
                   transition: "transform 200ms var(--ease-out)",
                 }}
               />
-              <span className={cn("label-mono flex-shrink-0", selected ? "text-[var(--color-signal-soft)]" : "text-[var(--color-text-muted)]")}>
-                {area.index}
-              </span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span
@@ -92,7 +89,7 @@ export function OperationSelector({
                       selected ? "text-[var(--color-text-on-dark-primary)]" : "text-[var(--color-text-primary)]",
                     )}
                   >
-                    {area.name}
+                    {area.question}
                   </span>
                   <span
                     aria-hidden
@@ -106,7 +103,7 @@ export function OperationSelector({
                     selected ? "text-[var(--color-text-on-dark-secondary)]" : "text-[var(--color-text-secondary)]",
                   )}
                 >
-                  {area.summary}
+                  {area.name} · {area.summary}
                 </p>
               </div>
               <svg
@@ -139,10 +136,11 @@ export function OperationSelector({
             className="group border-b border-[var(--color-border)] first:border-t"
           >
             <summary className="flex min-h-11 cursor-pointer list-none items-center gap-4 py-4 marker:content-none">
-              <span className="label-mono flex-shrink-0 text-[var(--color-signal-strong)]">{area.index}</span>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-[var(--color-text-primary)]">{area.name}</p>
-                <p className="mt-0.5 text-[13px] leading-snug text-[var(--color-text-secondary)]">{area.summary}</p>
+                <p className="text-sm font-semibold text-[var(--color-text-primary)]">{area.question}</p>
+                <p className="mt-0.5 text-[13px] leading-snug text-[var(--color-text-secondary)]">
+                  {area.name} · {area.summary}
+                </p>
               </div>
               <svg
                 aria-hidden

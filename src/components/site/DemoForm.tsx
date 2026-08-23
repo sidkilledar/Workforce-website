@@ -164,6 +164,7 @@ export function DemoForm() {
               <input
                 id="name"
                 name="name"
+                required
                 autoComplete="name"
                 className={inputClasses}
                 value={values.name}
@@ -178,6 +179,7 @@ export function DemoForm() {
                 id="email"
                 name="email"
                 type="email"
+                required
                 autoComplete="email"
                 className={inputClasses}
                 value={values.email}
@@ -187,24 +189,11 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Phone number (optional)" htmlFor="phone" error={errors.phone}>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                autoComplete="tel"
-                className={inputClasses}
-                value={values.phone}
-                onChange={(event) => updateField("phone", event.target.value)}
-                aria-invalid={Boolean(errors.phone)}
-                aria-describedby={errors.phone ? "phone-error" : undefined}
-              />
-            </Field>
-
-            <Field label="Company" htmlFor="company" error={errors.company}>
+            <Field label="Company" htmlFor="company" error={errors.company} className="sm:col-span-2">
               <input
                 id="company"
                 name="company"
+                required
                 autoComplete="organization"
                 className={inputClasses}
                 value={values.company}
@@ -336,6 +325,7 @@ export function DemoForm() {
             id="consent"
             name="consent"
             type="checkbox"
+            required
             className="mt-1 h-4 w-4 rounded border-[var(--color-border)] bg-[var(--color-canvas-elevated)] accent-[var(--color-signal)]"
             checked={values.consent}
             onChange={(event) => updateField("consent", event.target.checked)}
@@ -367,8 +357,7 @@ export function DemoForm() {
         </Button>
 
         <p className="text-center text-xs text-[var(--color-text-muted)]">
-          We use this information to prepare and schedule your demo. We do not sell it;
-          service providers may process it for hosting, email delivery, and analytics.
+          We use this information to prepare and schedule your walkthrough. Review our Privacy Policy for details.
         </p>
       </form>
     </div>

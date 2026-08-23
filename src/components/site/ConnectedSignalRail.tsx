@@ -73,11 +73,11 @@ export function ConnectedSignalRail({
               <circle
                 cx={x}
                 cy={NODE_Y}
-                r={active ? 8 : 6}
+                r="7"
                 fill={active ? "var(--color-signal)" : "#1f1a13"}
                 stroke={active ? "var(--color-signal)" : "rgba(245,239,226,0.4)"}
                 strokeWidth="1.25"
-                style={{ transition: "r 240ms var(--ease-out), fill 240ms var(--ease-out)" }}
+                style={{ transition: "fill 240ms var(--ease-out), stroke 240ms var(--ease-out)" }}
               />
               <text
                 x={x}

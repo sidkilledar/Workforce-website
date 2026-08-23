@@ -12,7 +12,7 @@ One-liner: "WorkforceOS is the AI ops manager for shift-based teams — it sched
 
 Primary conversion: **Book a Demo**. Everything on the landing page points there.
 
-Audience: businesses whose workforce is mostly students or hourly staff — caterers staffing events, restaurant groups, and campus sports & recreation departments. Active pilots: **Olive & Vine** and **UC Davis Rec Sports**, named plainly wherever the site references active pilots (`pilotCustomers`). Distinct from `customerProof` (quote + logo + attribution), which stays empty until either pilot approves something specific for publication.
+Audience: businesses whose workforce is mostly students or hourly staff — caterers staffing events, restaurant groups, and campus sports & recreation departments. Active customer pilots: **Olive & Vine** and **UC Davis Rec Sports**, supporting **1,000+ frontline users across their teams**. This means two customer organizations and more than 1,000 users — never 1,000 customers. Olive & Vine reports saving 10–15 operations hours each week. UC Davis Rec Sports reports easier scheduling, communication, and emergency coverage, while WorkforceOS learns how recurring events are staffed from shift history. Distinct from `customerProof` (quote + logo + attribution), which stays empty until either pilot approves a direct quotation or logo for publication.
 
 ## The four confirmed capabilities (the complete present-day offer)
 
@@ -91,7 +91,7 @@ Reduced motion (`globals.css` media query) removes translation, scaling, path tr
 
 ## Content rules
 
-- No fabricated quotes, logos, metrics, integrations, or certifications. `customerProof` stays empty until Olive & Vine or UC Davis Rec Sports approve something specific for publication.
+- No fabricated quotes, logos, metrics, integrations, or certifications. Approved factual pilot claims are limited to: two customer pilots, 1,000+ frontline users across their teams, Olive & Vine saving 10–15 operations hours each week, and UC Davis Rec Sports seeing easier scheduling, communication, and emergency coverage while the product learns recurring event staffing from shift history. `customerProof` stays empty until Olive & Vine or UC Davis Rec Sports approves a direct quotation or logo for publication.
 - Pilot names (`pilotCustomers`) may be stated plainly as a fact anywhere on the site — distinct from `customerProof`, no quote/logo required.
 - The scenario walkthrough is explicitly labeled illustrative; every step carries a `textEquivalent` for the branch that doesn't rely on visual layout to convey which outcome it is.
 - Labor, sales/POS insights, inventory, tasks, communication, and approvals are the five approved operating areas.

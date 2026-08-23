@@ -18,23 +18,22 @@ export function DayTimeline() {
   const [ref, active] = useInView<HTMLDivElement>({ threshold: 0.25 });
 
   return (
-    <Section id={sectionIds.dayInOperation} className="bg-[var(--color-canvas-raised)]">
+    <Section id={sectionIds.dayInOperation} className="bg-[var(--color-canvas-raised)] py-16 sm:py-20">
       <Container>
-        <Reveal className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
-          <p className="label-mono text-[var(--color-signal-strong)]">A Day With WorkforceOS</p>
-          <h2 className="font-display mt-4 text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-            From morning briefing to close, the operation stays connected.
+        <Reveal className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+            A full day, without five systems to chase.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            An illustrative view of how WorkforceOS helps a manager move
-            through the day with fewer systems to check and fewer
-            exceptions to chase.
+          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+            From the opening briefing to the closing record, WorkforceOS keeps the signal, response, and manager decision
+            connected.
           </p>
+          <p className="mt-3 text-xs text-[var(--color-text-muted)]">Illustrative scenario · Not live customer data</p>
         </Reveal>
 
         <div ref={ref}>
           {/* Desktop: three-column editorial sequence with a connecting rule. */}
-          <div className="relative hidden md:grid md:grid-cols-3 md:gap-10 lg:gap-14">
+          <ol aria-label="Illustrative day with WorkforceOS" className="relative hidden md:grid md:grid-cols-3 md:gap-10 lg:gap-14">
             <div
               aria-hidden
               className={cn(
@@ -45,10 +44,10 @@ export function DayTimeline() {
             {dayTimeline.map((moment, index) => (
               <TimelineMoment key={moment.time} moment={moment} index={index} emphasized={index === 1} active={active} />
             ))}
-          </div>
+          </ol>
 
           {/* Mobile: vertical timeline, time markers left, content right. */}
-          <div className="relative flex flex-col gap-10 md:hidden">
+          <ol aria-label="Illustrative day with WorkforceOS" className="relative flex flex-col gap-10 md:hidden">
             <div
               aria-hidden
               className={cn(
@@ -59,7 +58,7 @@ export function DayTimeline() {
             {dayTimeline.map((moment, index) => (
               <TimelineMoment key={moment.time} moment={moment} index={index} active={active} />
             ))}
-          </div>
+          </ol>
         </div>
       </Container>
     </Section>

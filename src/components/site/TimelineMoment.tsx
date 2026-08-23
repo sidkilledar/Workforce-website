@@ -1,6 +1,4 @@
-"use client";
-
-import { useState, type CSSProperties } from "react";
+import type { CSSProperties } from "react";
 import { cn } from "@/lib/cn";
 import { authorityLevels, type DayTimelineMoment } from "@/lib/site-config";
 
@@ -14,9 +12,8 @@ const glyphByIndex = [
 ];
 
 /**
- * One moment in the three-step day timeline. The connected-system labels
- * highlight on hover — desktop, fine-pointer only — but nothing essential
- * depends on that hover; everything is plain text underneath it.
+ * One moment in the three-step day timeline. Everything is visible in the
+ * static state; the one-shot entrance only clarifies sequence.
  */
 export function TimelineMoment({
   moment,
@@ -32,19 +29,15 @@ export function TimelineMoment({
   active: boolean;
   className?: string;
 }) {
-  const [hovered, setHovered] = useState(false);
   const authority = authorityLevels.find((level) => level.key === moment.authorityMode)!;
   const delay: CSSProperties = { transitionDelay: `${index * 70}ms` };
 
   return (
-    <div
+    <li
       className={cn(
         "timeline-moment relative flex flex-row items-start gap-4 md:flex-col md:items-stretch md:gap-3",
-        emphasized && "md:scale-[1.03]",
         className,
       )}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <div
         className={cn("flex flex-shrink-0 flex-col items-center gap-1.5 md:flex-row md:gap-3 animate-timeline-marker", active && "is-active")}
@@ -63,7 +56,7 @@ export function TimelineMoment({
             </g>
           </svg>
         </span>
-        <p className="ticket-number">{moment.time}</p>
+        <time className="ticket-number tabular-nums">{moment.time}</time>
       </div>
 
       <div className={cn("flex min-w-0 flex-1 flex-col gap-3 animate-timeline-content", active && "is-active")} style={delay}>
@@ -74,11 +67,7 @@ export function TimelineMoment({
           {moment.connectedSystems.map((system) => (
             <span
               key={system}
-              className="label-mono rounded-full border px-2.5 py-1 transition-colors duration-200"
-              style={{
-                borderColor: hovered ? "var(--color-signal-strong)" : "var(--color-border)",
-                color: hovered ? "var(--color-signal-strong)" : "var(--color-text-muted)",
-              }}
+              className="label-mono rounded-full border border-[var(--color-border)] px-2.5 py-1 text-[var(--color-text-muted)]"
             >
               {system}
             </span>
@@ -94,6 +83,6 @@ export function TimelineMoment({
           <p className="text-sm leading-relaxed text-[var(--color-text-primary)]">{moment.outcome}</p>
         </div>
       </div>
-    </div>
+    </li>
   );
 }

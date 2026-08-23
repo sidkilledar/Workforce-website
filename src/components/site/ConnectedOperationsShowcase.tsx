@@ -19,17 +19,15 @@ export function ConnectedOperationsShowcase() {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   return (
-    <section id={sectionIds.pillars} className="bg-[var(--color-canvas)] py-20 sm:py-24">
+    <section id={sectionIds.pillars} className="bg-[var(--color-canvas)] py-16 sm:py-20">
       <Container className="max-w-[1280px]">
-        <Reveal className="mx-auto mb-12 max-w-2xl text-center sm:mb-16">
-          <p className="label-mono text-[var(--color-signal-strong)]">One Connected Operation</p>
-          <h2 className="font-display mt-4 text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
-            Everything a manager needs to run the day.
+        <Reveal className="mx-auto mb-10 max-w-3xl text-center sm:mb-12">
+          <h2 className="font-display text-balance text-3xl font-semibold tracking-tight text-[var(--color-text-primary)] sm:text-4xl">
+            Five operational questions. One place to answer them.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            WorkforceOS connects labor, sales, inventory, tasks, and team
-            communication — then helps coordinate the next action within
-            rules your team controls.
+          <p className="mx-auto mt-4 max-w-2xl text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+            See the signal, understand why it matters, and let WorkforceOS prepare or carry out the next step within the
+            authority rules your team controls.
           </p>
         </Reveal>
 

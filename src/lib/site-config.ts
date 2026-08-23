@@ -31,6 +31,24 @@ export const siteConfig = {
 // site references active pilots.
 export const pilotCustomers = ["Olive & Vine", "UC Davis Rec Sports"] as const;
 
+export const pilotImpact = {
+  organizations: 2,
+  frontlineUsers: "1,000+",
+  customers: [
+    {
+      name: "Olive & Vine",
+      context: "Catering and event operations",
+      result: "Saves the operations team 10–15 hours each week.",
+    },
+    {
+      name: "UC Davis Rec Sports",
+      context: "Student-powered campus operations",
+      result:
+        "Makes scheduling, team communication, and emergency coverage easier while learning how recurring events are staffed from shift history.",
+    },
+  ],
+} as const;
+
 export type NavLink = {
   label: string;
   href: string;
@@ -199,13 +217,13 @@ export const implementationSteps: ImplementationStep[] = [
   },
   {
     number: "04",
-    title: "Build the unified manager view",
-    description: "Labor, sales, inventory, tasks, and communication come together into one operating picture.",
+    title: "Launch selected workflows",
+    description: "Begin with the workflows that create the most daily coordination work instead of changing everything at once.",
   },
   {
     number: "05",
-    title: "Improve from operating history",
-    description: "As WorkforceOS runs, recommendations get sharpened by what's actually happened in this operation.",
+    title: "Expand with operating history",
+    description: "Add more workflows as the team gets comfortable and WorkforceOS learns what repeats in this operation.",
   },
 ];
 
@@ -341,6 +359,8 @@ export type OperationalArea = {
   slug: "labor" | "sales" | "inventory" | "tasks" | "communication";
   index: string;
   name: string;
+  /** Plain-language question a manager is trying to answer. */
+  question: string;
   /** One-line signal summary shown in the selector row. */
   summary: string;
   railNode: ConnectedSystemKey;
@@ -364,6 +384,7 @@ export const operationalAreas: OperationalArea[] = [
     slug: "labor",
     index: "01",
     name: "Labor & Staffing",
+    question: "Who is working?",
     summary: "Availability, shifts, call-outs, and coverage",
     railNode: "schedule",
     connectedSystems: ["Schedule", "Team channel"],
@@ -388,6 +409,7 @@ export const operationalAreas: OperationalArea[] = [
     slug: "sales",
     index: "02",
     name: "Sales & POS",
+    question: "How is service tracking?",
     summary: "Demand signals alongside scheduled labor",
     railNode: "pos",
     connectedSystems: ["POS", "Schedule"],
@@ -418,6 +440,7 @@ export const operationalAreas: OperationalArea[] = [
     slug: "inventory",
     index: "03",
     name: "Inventory",
+    question: "What are we running low on?",
     summary: "Thresholds, prep requirements, and shortages",
     railNode: "inventory",
     connectedSystems: ["Inventory", "Tasks"],
@@ -439,6 +462,7 @@ export const operationalAreas: OperationalArea[] = [
     slug: "tasks",
     index: "04",
     name: "Tasks",
+    question: "What still needs to get done?",
     summary: "Ownership, deadlines, and unfinished work",
     railNode: "tasks",
     connectedSystems: ["Tasks", "Schedule"],
@@ -467,6 +491,7 @@ export const operationalAreas: OperationalArea[] = [
     slug: "communication",
     index: "05",
     name: "Communication & Approvals",
+    question: "What needs my approval?",
     summary: "Updates, decisions, and authority boundaries",
     railNode: "channel",
     connectedSystems: ["Team channel", "Schedule"],
@@ -701,6 +726,8 @@ export type AudienceSegment = {
   slug: string;
   name: string;
   situation: string;
+  /** Five concrete, recognizable traits of this operation's daily work — not generic industry-marketing language. */
+  traits: string[];
   /** A short, specific workflow sequence — replaces a generic fade-up card with something that reads as this segment's actual day. */
   workflow: string[];
 };
@@ -711,24 +738,63 @@ export type AudienceSegment = {
 export const audienceSegments: AudienceSegment[] = [
   {
     slug: "catering",
-    name: "Caterers staffing events",
+    name: "Catering and events",
     situation:
-      "Event headcount changes, prep and inventory needs shift with every booking, and staffing has to flex with it — not on a fixed weekly schedule.",
-    workflow: ["Event headcount changes", "Prep & inventory adjust", "Flexible roster notified"],
+      "Every booking resets the operation — headcount, prep, and the roster all move together, not on a fixed weekly schedule.",
+    traits: [
+      "Event-based staffing",
+      "Headcount changes",
+      "Prep and inventory adjustments",
+      "Last-minute replacement",
+      "Event closeout",
+    ],
+    workflow: [
+      "Event changes",
+      "Staffing and prep update",
+      "Available team identified",
+      "Manager approves exceptions",
+      "Affected team notified",
+    ],
   },
   {
     slug: "restaurant-groups",
     name: "Restaurant groups",
     situation:
-      "Sales signals, labor, coverage, and inventory exceptions all move independently across locations, and opening/closing execution needs to stay consistent.",
-    workflow: ["Sales & labor connected", "Coverage checked cross-location", "Opening/closing tracked"],
+      "Sales, labor, and inventory move independently across locations, and opening and closing still have to run the same way every time.",
+    traits: [
+      "POS and labor context",
+      "Call-outs and coverage",
+      "Multi-location visibility",
+      "Inventory and prep tasks",
+      "Opening and closing consistency",
+    ],
+    workflow: [
+      "Sales signal changes",
+      "Staffing reviewed",
+      "Coverage or task response prepared",
+      "Manager approves when required",
+      "Location record updated",
+    ],
   },
   {
     slug: "campus-sports",
-    name: "Campus sports & recreation",
+    name: "Campus sports and recreation",
     situation:
-      "Student availability changes every quarter, event staffing and facilities tasks pile up together, and supervisor approvals need to keep pace.",
-    workflow: ["Student availability updates", "Event & facilities tasks coordinated", "Supervisor approves"],
+      "Student availability resets every quarter, and event or facility needs — including the emergency kind — still need a fast, approved response.",
+    traits: [
+      "Student availability",
+      "Emergency scheduling",
+      "Recurring event staffing",
+      "Facility and program tasks",
+      "Supervisor communication and approvals",
+    ],
+    workflow: [
+      "Event or facility need appears",
+      "Shift history provides context",
+      "Emergency coverage prepared",
+      "Supervisor approves",
+      "Students and affected teams notified",
+    ],
   },
 ];
 

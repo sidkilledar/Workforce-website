@@ -1,9 +1,26 @@
+const DEFAULT_SITE_URL = "https://www.workforceos.com";
+
+// Validates that the env var is actually a well-formed absolute URL rather
+// than just checking truthiness — a blank, whitespace-only, or otherwise
+// malformed value (any of which Vercel project settings can produce) falls
+// back to the default instead of reaching `new URL(path, siteConfig.url)`
+// downstream and crashing static generation with ERR_INVALID_URL.
+function resolveSiteUrl(): string {
+  const candidate = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!candidate) return DEFAULT_SITE_URL;
+  try {
+    return new URL(candidate).toString().replace(/\/$/, "");
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
 export const siteConfig = {
   name: "WorkforceOS",
   tagline: "The AI operations command center for frontline businesses.",
   description:
     "WorkforceOS connects the systems you already use, brings the operation into one manager dashboard, turns data into insights, and lets AI coordinate daily work within authority rules you control — so managers can spend less time behind a screen and more time on the floor.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.workforceos.com",
+  url: resolveSiteUrl(),
   ogImage: "/opengraph-image",
   email: "hello@workforceos.com",
 } as const;

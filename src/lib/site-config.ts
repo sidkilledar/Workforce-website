@@ -25,9 +25,8 @@ export type NavLink = {
 export const navAnchors: NavLink[] = [
   { label: "Platform", href: "#command-center" },
   { label: "Operations", href: "#pillars" },
-  { label: "How AI Works", href: "#cycle" },
+  { label: "AI Control", href: "#authority" },
   { label: "Integrations", href: "#integration" },
-  { label: "Active Pilots", href: "#pilots" },
 ];
 
 export const ctaNav: NavLink = { label: "Book a Demo", href: "/demo" };
@@ -260,92 +259,214 @@ export const dashboardModules: DashboardModule[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// The five operating pillars — the complete present-day offer.
+// Connected operations showcase — one command-center view, five operational
+// areas a manager can switch between (replaces the old five-pillar cards).
+// Every state explains the same four things: signal, context, the AI
+// recommendation/action, and the resulting outcome.
 // ---------------------------------------------------------------------------
 
-export type OperatingPillar = {
-  slug: string;
-  ticketNumber: string;
-  title: string;
-  /** The operational signal that starts this pillar's loop. */
-  signals: string;
-  /** What WorkforceOS reads or already knows to act. */
-  connectedData: string;
-  /** What AI concludes from that signal, before it does anything. */
-  interpretation: string;
-  /** What WorkforceOS actually does. */
-  aiActions: string;
-  /** What the manager retains authority over. */
-  managerControl: string;
-  /** The resulting operational state once it's handled. */
-  outcome: string;
-  /** A single illustrative, audience-specific example — not a customer's data. */
-  example: string;
+export type ConnectedSystemKey = "schedule" | "pos" | "inventory" | "tasks" | "channel";
+
+export const connectedSystemNodes: { key: ConnectedSystemKey; label: string }[] = [
+  { key: "schedule", label: "Schedule" },
+  { key: "pos", label: "POS" },
+  { key: "inventory", label: "Inventory" },
+  { key: "tasks", label: "Tasks" },
+  { key: "channel", label: "Team channel" },
+];
+
+export type WorkerAvailability = { name: string; status: "available" | "unavailable" | "tentative" };
+
+export type LaborWorkspace = {
+  kind: "labor";
+  coverageSummary: string;
+  gapShift: { label: string; time: string; detail: string };
+  availability: WorkerAvailability[];
 };
 
-export const operatingPillars: OperatingPillar[] = [
+export type SalesWorkspace = {
+  kind: "sales";
+  demand: { label: string; value: number }[];
+  scheduledLabor: { label: string; value: number }[];
+  mismatch: string;
+};
+
+export type InventoryWorkspace = {
+  kind: "inventory";
+  item: string;
+  threshold: string;
+  requiredAction: string;
+  createdTask: { title: string; assignee: string; due: string };
+};
+
+export type TaskQueueItem = { title: string; owner: string; due: string; status: "on-track" | "at-risk" | "reassigned" };
+
+export type TasksWorkspace = {
+  kind: "tasks";
+  queue: TaskQueueItem[];
+  reassignedTask: { title: string; from: string; to: string; relatedEvent: string };
+};
+
+export type CommunicationWorkspace = {
+  kind: "communication";
+  affected: string;
+  history: { label: string; time: string }[];
+};
+
+export type OperationalWorkspace =
+  | LaborWorkspace
+  | SalesWorkspace
+  | InventoryWorkspace
+  | TasksWorkspace
+  | CommunicationWorkspace;
+
+export type OperationalArea = {
+  slug: "labor" | "sales" | "inventory" | "tasks" | "communication";
+  index: string;
+  name: string;
+  /** One-line signal summary shown in the selector row. */
+  summary: string;
+  railNode: ConnectedSystemKey;
+  connectedSystems: string[];
+  /** What WorkforceOS sees. */
+  signal: string;
+  /** Why it matters. */
+  context: string;
+  /** Plain-language AI recommendation. */
+  recommendation: string;
+  /** Supporting reason for the recommendation. */
+  reason: string;
+  authorityMode: AuthorityMode;
+  /** What changes for the manager. */
+  outcome: string;
+  workspace: OperationalWorkspace;
+};
+
+export const operationalAreas: OperationalArea[] = [
   {
     slug: "labor",
-    ticketNumber: "#041",
-    title: "Labor and staffing",
-    signals: "Availability, schedules, open shifts, call-outs, no-shows, and headcount changes.",
-    connectedData: "Submitted availability, the current schedule, and how similar exceptions were resolved before.",
-    interpretation: "Whether this is a normal fluctuation or a coverage gap that needs a response before the shift starts.",
-    aiActions:
-      "Prepares schedules, identifies the right response to an exception, and coordinates backfill, reassignment, or notification — or requests approval.",
-    managerControl: "Managers review schedules before publishing and set which labor actions need their approval.",
-    outcome: "Fewer unresolved labor issues and less manual coordination.",
-    example:
-      "A call-out backfills automatically from available staff; a bigger headcount change instead waits for a manager's approval.",
+    index: "01",
+    name: "Labor & Staffing",
+    summary: "Availability, shifts, call-outs, and coverage",
+    railNode: "schedule",
+    connectedSystems: ["Schedule", "Team channel"],
+    signal: "One dinner shift is short a closer after a last-minute call-out.",
+    context: "Coverage gaps are hardest to recover from once service has started.",
+    recommendation: "Extend an available closer's shift by two hours.",
+    reason: "Based on submitted availability and how similar gaps were handled before.",
+    authorityMode: "recommend",
+    outcome: "Coverage is restored once the manager approves.",
+    workspace: {
+      kind: "labor",
+      coverageSummary: "7 of 8 shifts covered for Thursday dinner.",
+      gapShift: { label: "Dinner service", time: "5:00–9:00 PM", detail: "One closer position open after a call-out" },
+      availability: [
+        { name: "J. Alvarez", status: "available" },
+        { name: "M. Chen", status: "tentative" },
+        { name: "R. Patel", status: "unavailable" },
+      ],
+    },
   },
   {
     slug: "sales",
-    ticketNumber: "#042",
-    title: "Sales and POS insights",
-    signals: "Sales and transaction activity from the point-of-sale system, where that integration is configured.",
-    connectedData: "POS activity alongside the schedule and staffing plan for the same period.",
-    interpretation: "Whether staffing on the floor lines up with what's actually selling right now.",
-    aiActions: "Surfaces how demand, staffing, and execution relate, and flags unusual changes with a contextual summary.",
-    managerControl: "Managers decide which sales signals are worth acting on — WorkforceOS surfaces them, it doesn't decide for them.",
-    outcome: "A clearer read on how staffing lines up with demand, without pulling a separate report.",
-    example: "Dinner sales run higher than a typical Thursday; the AI briefing notes it alongside that night's staffing level.",
+    index: "02",
+    name: "Sales & POS",
+    summary: "Demand signals alongside scheduled labor",
+    railNode: "pos",
+    connectedSystems: ["POS", "Schedule"],
+    signal: "Dinner covers are trending above a typical Thursday.",
+    context: "The schedule was set before tonight's demand signal came in.",
+    recommendation: "Review staffing for the 5–9 PM dinner block.",
+    reason: "Scheduled labor hasn't yet been adjusted for tonight's covers.",
+    authorityMode: "inform",
+    outcome: "The manager decides whether to adjust staffing before service.",
+    workspace: {
+      kind: "sales",
+      demand: [
+        { label: "Mon", value: 38 },
+        { label: "Tue", value: 34 },
+        { label: "Wed", value: 41 },
+        { label: "Thu", value: 58 },
+      ],
+      scheduledLabor: [
+        { label: "Mon", value: 36 },
+        { label: "Tue", value: 33 },
+        { label: "Wed", value: 40 },
+        { label: "Thu", value: 40 },
+      ],
+      mismatch: "Thursday's demand signal is running well above scheduled labor for the first time this week.",
+    },
   },
   {
     slug: "inventory",
-    ticketNumber: "#043",
-    title: "Inventory operations",
-    signals: "Inventory counts, low-stock conditions, and prep or transfer needs, where that data is connected.",
-    connectedData: "Current inventory state alongside the tasks and shifts that depend on it.",
-    interpretation: "Whether the shortfall affects tonight's service or can wait for the next scheduled count.",
-    aiActions: "Coordinates counts, low-stock follow-up, transfers, or prep needs — or escalates to a manager when configured.",
-    managerControl: "Managers set which inventory exceptions route to them versus resolve automatically.",
-    outcome: "Inventory exceptions get followed up on instead of discovered mid-shift.",
-    example: "A low-stock count triggers a prep task for the closing shift instead of surfacing at the start of service tomorrow.",
+    index: "03",
+    name: "Inventory",
+    summary: "Thresholds, prep requirements, and shortages",
+    railNode: "inventory",
+    connectedSystems: ["Inventory", "Tasks"],
+    signal: "A prep item has dropped below its low-stock threshold.",
+    context: "This item is needed for tonight's closing prep.",
+    recommendation: "Create a prep task for the closing team.",
+    reason: "Configured authority allows routine prep tasks to be created automatically.",
+    authorityMode: "execute",
+    outcome: "The task appears on the closing team's list — no manager step needed.",
+    workspace: {
+      kind: "inventory",
+      item: "Diced tomatoes",
+      threshold: "Below par for tonight's prep",
+      requiredAction: "Restock or substitute before closing prep begins.",
+      createdTask: { title: "Restock diced tomatoes", assignee: "Closing team", due: "Tonight, 9:00 PM" },
+    },
   },
   {
     slug: "tasks",
-    ticketNumber: "#044",
-    title: "Tasks and daily execution",
-    signals: "Opening, closing, prep, event, and location-specific work that needs to get done.",
-    connectedData: "The relevant shift, role, and location for each task.",
-    interpretation: "Whether a task is on track, at risk of running past the shift, or already overdue.",
-    aiActions: "Creates and assigns tasks by team, role, location, or shift, and tracks completion.",
-    managerControl: "Managers set the escalation rules for unresolved work — what gets flagged, and to whom.",
-    outcome: "Task completion is tracked and unresolved work is escalated instead of falling through.",
-    example: "An unfinished closing checklist item escalates to the on-duty manager instead of being found the next morning.",
+    index: "04",
+    name: "Tasks",
+    summary: "Ownership, deadlines, and unfinished work",
+    railNode: "tasks",
+    connectedSystems: ["Tasks", "Schedule"],
+    signal: "An opening checklist item is still unfinished heading into dinner.",
+    context: "The task's original owner has since clocked out.",
+    recommendation: "Reassign the task to an available closer.",
+    reason: "Connected to tonight's dinner shift and the closing team's schedule.",
+    authorityMode: "execute",
+    outcome: "The task moves forward without the manager tracking it down personally.",
+    workspace: {
+      kind: "tasks",
+      queue: [
+        { title: "Restock service station", owner: "A. Brooks", due: "4:00 PM", status: "on-track" },
+        { title: "Confirm walk-in temps", owner: "Unassigned", due: "4:30 PM", status: "at-risk" },
+        { title: "Prep closing checklist", owner: "D. Nguyen", due: "9:00 PM", status: "reassigned" },
+      ],
+      reassignedTask: {
+        title: "Confirm walk-in temps",
+        from: "J. Alvarez (clocked out)",
+        to: "D. Nguyen",
+        relatedEvent: "Dinner shift, 5–9 PM",
+      },
+    },
   },
   {
     slug: "communication",
-    ticketNumber: "#045",
-    title: "Team communication and approvals",
-    signals: "Messages, notifications, and decisions tied to schedules, tasks, and inventory events.",
-    connectedData: "The schedule, task, or inventory event a message actually relates to.",
-    interpretation: "Who actually needs to see this, and whether it's an FYI or a decision waiting on someone.",
-    aiActions:
-      "Routes notifications to the relevant people and attaches the context, proposed action, and consequence before a manager approves.",
-    managerControl: "Managers see the full context before approving — nothing executes on their behalf without it being visible.",
-    outcome: "The right people get the right update once, instead of a manager repeating themselves across channels.",
-    example: "A reassignment request shows the manager who's affected and what changes before they approve it — not just a yes/no prompt.",
+    index: "05",
+    name: "Communication & Approvals",
+    summary: "Updates, decisions, and authority boundaries",
+    railNode: "channel",
+    connectedSystems: ["Team channel", "Schedule"],
+    signal: "A same-day shift swap is waiting on manager sign-off.",
+    context: "Two staff members proposed the swap directly with each other.",
+    recommendation: "Approve the swap between two eligible staff members.",
+    reason: "Both staff members are eligible for the shift being swapped.",
+    authorityMode: "recommend",
+    outcome: "Approved in one tap, with the context already attached.",
+    workspace: {
+      kind: "communication",
+      affected: "J. Alvarez and M. Chen — Thursday closing shift",
+      history: [
+        { label: "Prep list sent to the closing team", time: "5:05 PM" },
+        { label: "Shift swap approved", time: "6:20 PM" },
+      ],
+    },
   },
 ];
 
@@ -446,86 +567,48 @@ export const operatingCycleStages: OperatingCycleStage[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// A Day in the Operation — the site's one pinned scroll narrative.
+// A day running on WorkforceOS — three moments, not a pinned scroll story.
 // ---------------------------------------------------------------------------
 
 export type AuthorityMode = "inform" | "recommend" | "execute";
 
-export type DayInOperationEvent = {
+export type DayTimelineMoment = {
   time: string;
-  source: string;
-  event: string;
-  aiAction: string;
+  title: string;
+  description: string;
+  connectedSystems: string[];
   authorityMode: AuthorityMode;
-  result: string;
+  outcome: string;
 };
 
-// A single illustrative day, showing cross-functional coordination rather
-// than one isolated call-out. Not a real customer's operating data.
-export const dayInOperation: DayInOperationEvent[] = [
+// A single illustrative day, showing that the five operational areas work
+// together rather than in isolation. Not a real customer's operating data.
+export const dayTimeline: DayTimelineMoment[] = [
   {
     time: "7:15 AM",
-    source: "AI briefing",
-    event: "Morning briefing generated for the manager on duty.",
-    aiAction: "Summarizes overnight changes, today's schedule, and anything already flagged.",
+    title: "Start with one operational briefing.",
+    description:
+      "WorkforceOS summarizes schedule changes, open tasks, staffing risks, and overnight updates before the manager reaches the floor.",
+    connectedSystems: ["Schedule", "Tasks", "Team updates"],
     authorityMode: "inform",
-    result: "Manager starts the day with one briefing instead of five apps.",
-  },
-  {
-    time: "11:40 AM",
-    source: "POS",
-    event: "Lunch covers trending above forecasted demand for a private event.",
-    aiAction: "Flags the sales signal alongside the current staffing level for the shift.",
-    authorityMode: "inform",
-    result: "Manager sees the demand change before it becomes a coverage problem.",
+    outcome: "The manager starts with one briefing instead of checking multiple systems.",
   },
   {
     time: "11:52 AM",
-    source: "Labor",
-    event: "Staffing looks tight for the rest of service.",
-    aiAction: "Identifies available staff and prepares a shift extension for approval.",
+    title: "See the issue and the response together.",
+    description:
+      "A sales signal and the current staffing plan indicate that coverage needs attention. WorkforceOS prepares the configured response and explains why.",
+    connectedSystems: ["POS", "Labor", "Communication"],
     authorityMode: "recommend",
-    result: "Manager approves; the extension is confirmed and the schedule updates.",
-  },
-  {
-    time: "2:10 PM",
-    source: "Inventory",
-    event: "A prep item drops below its low-stock threshold.",
-    aiAction: "Creates a prep task for the afternoon team automatically.",
-    authorityMode: "execute",
-    result: "Task appears on the afternoon team's list — no manager step needed.",
-  },
-  {
-    time: "4:30 PM",
-    source: "Tasks",
-    event: "An opening-shift task is still incomplete heading into the dinner rush.",
-    aiAction: "Reassigns the task to an available closer and notifies both team members.",
-    authorityMode: "execute",
-    result: "The task moves forward without the manager tracking it down personally.",
-  },
-  {
-    time: "5:05 PM",
-    source: "Communication",
-    event: "The closing team needs the updated prep list before service.",
-    aiAction: "Sends the update to the closing team, attached to tonight's schedule.",
-    authorityMode: "execute",
-    result: "Everyone closing tonight has the same list, in the same place as the schedule.",
-  },
-  {
-    time: "6:20 PM",
-    source: "Approval",
-    event: "A same-day schedule swap is requested between two staff members.",
-    aiAction: "Prepares the swap with both staff members' eligibility, and requests manager approval.",
-    authorityMode: "recommend",
-    result: "Manager approves in one tap, with the context already attached.",
+    outcome: "The manager can approve the response without manually reconciling sales, availability, and messages.",
   },
   {
     time: "10:45 PM",
-    source: "End of shift",
-    event: "Service ends for the day.",
-    aiAction: "Compiles a resolved end-of-shift summary — what happened, what was handled, what's still open.",
+    title: "End with a record, not a mental checklist.",
+    description: "WorkforceOS compiles what changed, what was resolved, and what still needs attention tomorrow.",
+    connectedSystems: ["Tasks", "Staffing", "Approvals"],
     authorityMode: "inform",
-    result: "Manager closes the day with a record, not a mental list of loose ends.",
+    outcome: "The day ends with a clear operational record.",
   },
 ];
 

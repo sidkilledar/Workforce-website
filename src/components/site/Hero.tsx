@@ -16,17 +16,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const headlineLines = ["Your operation, running", "from one place."];
 
-const promise = [
-  { label: "Connect", icon: "M2 5 H14 M14 5 L11 2 M14 5 L11 8 M18 13 H6 M6 13 L9 10 M6 13 L9 16" },
-  { label: "Understand", icon: "M3 11a7 7 0 1 1 2.1 5M3 11v5M3 11h5" },
-  { label: "Act", icon: "M2 3 H14 V17 H2 Z M2 8 H14 M6 3 V17" },
-  { label: "Improve", icon: "M10 2a8 8 0 1 0 0.01 0 M6 10l2.5 2.5L14 7" },
-];
-
 // The hero's command-center preview: sales signal → labor/briefing →
 // inventory exception → AI recommendation → approval. A dedicated slice of
 // dashboardModules, sequenced once on entry, then settled — never looping.
-const previewSlugs = ["sales", "labor", "inventory", "recommendation", "approval"];
+const previewSlugs = ["sales", "labor", "inventory", "task", "recommendation", "approval"];
 const previewModules = previewSlugs.map((slug) => dashboardModules.find((module) => module.slug === slug)!);
 
 export function Hero() {
@@ -69,17 +62,17 @@ export function Hero() {
     <section
       ref={sectionRef}
       id={sectionIds.hero}
-      className="relative overflow-hidden bg-[var(--color-canvas-dark)] pb-20 pt-20 sm:pb-28 sm:pt-24"
+      className="relative overflow-hidden bg-[var(--color-canvas-dark)] pb-16 pt-16 sm:pb-24 sm:pt-20"
     >
       <div ref={bgPlaneRef} aria-hidden className="bg-grid-dark pointer-events-none absolute inset-0 opacity-70 [filter:blur(1.5px)]" />
 
-      <Container className="relative flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:gap-14">
-        <div className="max-w-2xl text-center lg:text-left">
+      <Container className="relative grid items-center gap-14 lg:grid-cols-[minmax(0,0.82fr)_minmax(520px,1.18fr)] lg:gap-12">
+        <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
           <Badge className="animate-reveal-soft text-[var(--color-text-on-dark-secondary)]">
             AI Operations Command Center
           </Badge>
 
-          <h1 className="font-display mt-6 text-4xl font-semibold leading-[1.06] tracking-tight text-[var(--color-text-on-dark-primary)] sm:text-6xl lg:text-[3.4rem]">
+          <h1 className="font-display mt-6 text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--color-text-on-dark-primary)] sm:text-6xl lg:text-[4.15rem]">
             {headlineLines.map((line, index) => (
               <span key={line} className="block overflow-hidden">
                 <span className="animate-reveal-clip block" style={{ animationDelay: `${index * 140}ms` }}>
@@ -90,32 +83,16 @@ export function Hero() {
           </h1>
 
           <p
-            className="animate-reveal-soft mx-auto mt-6 max-w-xl text-balance text-lg leading-relaxed text-[var(--color-text-on-dark-secondary)] sm:text-xl lg:mx-0"
+            className="animate-reveal-soft mx-auto mt-6 max-w-[54ch] text-balance text-lg leading-relaxed text-[var(--color-text-on-dark-secondary)] sm:text-xl lg:mx-0"
             style={{ animationDelay: "360ms" }}
           >
-            WorkforceOS connects the systems you already use, brings the
-            operation into one manager command center, and lets AI
-            coordinate the day within authority rules you control.
+            Connect the systems you already use. See what needs attention.
+            Let AI coordinate the response within rules you control.
           </p>
 
-          <ul className="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 lg:justify-start">
-            {promise.map((item, index) => (
-              <li
-                key={item.label}
-                className="animate-reveal-soft flex items-center gap-2 text-sm font-medium text-[var(--color-text-on-dark-secondary)]"
-                style={{ animationDelay: `${480 + index * 60}ms` }}
-              >
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden>
-                  <path d={item.icon} stroke="var(--color-signal)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                {item.label}
-              </li>
-            ))}
-          </ul>
-
           <div
-            className="animate-reveal-soft mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
-            style={{ animationDelay: "740ms" }}
+            className="animate-reveal-soft mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start"
+            style={{ animationDelay: "500ms" }}
           >
             <Button
               href="/demo"
@@ -127,14 +104,14 @@ export function Hero() {
             >
               Book a Demo
             </Button>
-            <Button href={`#${sectionIds.commandCenter}`} variant="secondary" size="lg">
-              Explore the Platform
+            <Button href={`#${sectionIds.pillars}`} variant="secondary" size="lg">
+              See What It Runs
             </Button>
           </div>
 
           <p
-            className="animate-reveal-soft mt-6 text-sm text-[var(--color-text-on-dark-muted)]"
-            style={{ animationDelay: "800ms" }}
+            className="animate-reveal-soft mt-6 max-w-[58ch] text-sm text-[var(--color-text-on-dark-muted)]"
+            style={{ animationDelay: "580ms" }}
           >
             Spend less time behind a screen. Stay on the floor. Built for
             caterers, restaurant groups, and campus sports &amp; recreation
@@ -142,7 +119,8 @@ export function Hero() {
           </p>
         </div>
 
-        <div ref={midPlaneRef} className="w-full max-w-sm flex-shrink-0">
+        <div id={sectionIds.commandCenter} ref={midPlaneRef} className="relative mx-auto w-full max-w-2xl scroll-mt-24">
+          <div aria-hidden className="absolute -inset-8 bg-[var(--color-signal)] opacity-[0.07] blur-3xl" />
           <CommandCenterPreview fgPlaneRef={fgPlaneRef} />
         </div>
       </Container>
@@ -202,16 +180,30 @@ function CommandCenterPreview({ fgPlaneRef }: { fgPlaneRef: RefObject<HTMLDivEle
   );
 
   return (
-    <div ref={panelRef} className="paper-stack-dark rounded-[3px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark-raised)] p-5">
-      <p className="label-mono text-[var(--color-signal-soft)]">Live Operational Summary</p>
-      <div ref={fgPlaneRef} className="mt-4 flex flex-col gap-2.5">
+    <div
+      ref={panelRef}
+      className="paper-stack-dark relative rounded-[3px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark-raised)] p-4 shadow-[0_34px_90px_-36px_rgba(0,0,0,0.75)] sm:p-6"
+    >
+      <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border-on-dark)] pb-4">
+        <div>
+          <p className="label-mono text-[var(--color-signal-soft)]">Thursday · All Locations</p>
+          <p className="mt-1 text-sm text-[var(--color-text-on-dark-primary)]">Operations command center</p>
+        </div>
+        <span className="label-mono flex items-center gap-2 text-[var(--color-status-resolved)]">
+          <span className="h-2 w-2 rounded-full bg-[var(--color-status-resolved)]" />
+          Live
+        </span>
+      </div>
+
+      <div ref={fgPlaneRef} className="mt-4 grid gap-3 sm:grid-cols-2">
         {previewModules.map((module) => {
           const isApproval = module.slug === "approval";
+          const isWide = module.slug === "recommendation" || isApproval;
           return (
             <div
               key={module.slug}
               data-slug={module.slug}
-              className="preview-row rounded-[3px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark)] px-3 py-2.5"
+              className={`preview-row rounded-[3px] border border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark)] px-4 py-3 ${isWide ? "sm:col-span-2" : ""}`}
             >
               <div className="flex items-center justify-between gap-2">
                 <p className="label-mono text-[var(--color-text-on-dark-muted)]">{module.label}</p>
@@ -224,12 +216,15 @@ function CommandCenterPreview({ fgPlaneRef }: { fgPlaneRef: RefObject<HTMLDivEle
                   />
                 )}
               </div>
-              <p className="mt-1 text-[13px] leading-snug text-[var(--color-text-on-dark-primary)]">{module.state}</p>
+              <p className="mt-1.5 text-[13px] leading-relaxed text-[var(--color-text-on-dark-primary)]">{module.state}</p>
             </div>
           );
         })}
       </div>
-      <p className="label-mono mt-4 text-[var(--color-text-on-dark-muted)]">Illustrative data</p>
+      <div className="mt-4 flex items-center justify-between gap-4 border-t border-[var(--color-border-on-dark)] pt-4">
+        <p className="label-mono text-[var(--color-text-on-dark-muted)]">Illustrative operations view</p>
+        <p className="label-mono text-[var(--color-signal-soft)]">AI briefing ready</p>
+      </div>
     </div>
   );
 }

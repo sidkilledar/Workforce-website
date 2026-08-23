@@ -255,6 +255,27 @@ body {
     transition: opacity 180ms ease !important;
   }
 
+  .dashboard-enter,
+  .dashboard-enter-panel {
+    transition: opacity 180ms ease !important;
+    transform: none !important;
+  }
+
+  .signal-rail-path {
+    transition: opacity 180ms ease !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .signal-rail-pulse {
+    animation: none !important;
+  }
+
+  .animate-timeline-marker,
+  .animate-timeline-content {
+    transition: opacity 180ms ease !important;
+    transform: none !important;
+  }
+
   .mobile-menu {
     transform: none !important;
     clip-path: none !important;
@@ -393,6 +414,35 @@ body {
   transform: scaleY(1);
 }
 
+/* Day-timeline marker: a settle (opacity + scale 0.95→1), never a pop-in
+   from scale(0). */
+.animate-timeline-marker {
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity var(--duration-entrance) var(--ease-out),
+    transform var(--duration-entrance) var(--ease-out);
+}
+
+.animate-timeline-marker.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Day-timeline supporting content: opacity + a short upward settle. */
+.animate-timeline-content {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--duration-entrance) var(--ease-out),
+    transform var(--duration-entrance) var(--ease-out);
+}
+
+.animate-timeline-content.is-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Native <details> disclosure — opacity only (no height/grid-rows), letting
    content-visibility's discrete transition handle the show/hide timing so
    the browser's own accessible open/close semantics stay untouched. Degrades
@@ -477,6 +527,59 @@ details[open]::details-content {
 
 .animate-converge {
   animation: converge 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Connected Operations Showcase — dashboard workspace/AI-panel crossfade.
+   The outgoing content just gets a plain inline opacity style (see
+   useCrossfadeSwap); the incoming content is a freshly-keyed DOM node, so
+   its one-shot entrance is driven by @starting-style rather than a
+   restarting keyframe — safe to re-trigger on rapid tab changes. */
+.dashboard-enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+@starting-style {
+  .dashboard-enter {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Same entrance, plus the subtle scale reserved for the central AI action
+   panel only. */
+.dashboard-enter-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+@starting-style {
+  .dashboard-enter-panel {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+/* Operation selector: chevron/border motion only for hover-capable, precise
+   pointers — never on touch, and never a whole-row scale. */
+.operation-tab-chevron {
+  transition: transform 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .operation-tab:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .operation-tab:hover .operation-tab-chevron {
+    transform: translateX(4px);
+  }
 }
 
 /* The operating-loop hub: a steady resolved pulse rather than a loop of

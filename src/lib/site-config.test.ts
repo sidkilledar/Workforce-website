@@ -3,12 +3,12 @@ import {
   aiAssistantExamples,
   audienceSegments,
   authorityLevels,
-  dayInOperation,
+  dayTimeline,
   implementationControl,
   insightExamples,
   integrationCategories,
   operatingCycleStages,
-  operatingPillars,
+  operationalAreas,
   patchworkSources,
 } from "@/lib/site-config";
 
@@ -36,39 +36,55 @@ function assertNoUnsupportedClaims(text: string, context: string) {
   }
 }
 
-describe("operatingPillars", () => {
-  it("has exactly the five confirmed pillars", () => {
-    expect(operatingPillars.map((pillar) => pillar.slug)).toEqual(["labor", "sales", "inventory", "tasks", "communication"]);
+describe("operationalAreas", () => {
+  it("has exactly the five confirmed areas, in order", () => {
+    expect(operationalAreas.map((area) => area.slug)).toEqual(["labor", "sales", "inventory", "tasks", "communication"]);
   });
 
-  it("every pillar has all seven required fields, non-empty", () => {
-    for (const pillar of operatingPillars) {
-      for (const field of ["title", "signals", "connectedData", "aiActions", "managerControl", "outcome", "example"] as const) {
-        expect(pillar[field].trim().length, `${pillar.slug}.${field}`).toBeGreaterThan(0);
+  it("indexes areas 01 through 05", () => {
+    expect(operationalAreas.map((area) => area.index)).toEqual(["01", "02", "03", "04", "05"]);
+  });
+
+  it("every area has all required text fields, non-empty", () => {
+    for (const area of operationalAreas) {
+      for (const field of ["name", "summary", "signal", "context", "recommendation", "reason", "outcome"] as const) {
+        expect(area[field].trim().length, `${area.slug}.${field}`).toBeGreaterThan(0);
       }
+      expect(area.connectedSystems.length, `${area.slug}.connectedSystems`).toBeGreaterThan(0);
+    }
+  });
+
+  it("has a valid authority mode for every area", () => {
+    for (const area of operationalAreas) {
+      expect(["inform", "recommend", "execute"]).toContain(area.authorityMode);
     }
   });
 
   it("stays within the approved claim boundaries", () => {
-    for (const pillar of operatingPillars) {
-      const combined = [pillar.signals, pillar.connectedData, pillar.aiActions, pillar.managerControl, pillar.outcome, pillar.example].join(
-        " ",
-      );
-      assertNoUnsupportedClaims(combined, `operatingPillars.${pillar.slug}`);
+    for (const area of operationalAreas) {
+      const combined = [area.signal, area.context, area.recommendation, area.reason, area.outcome].join(" ");
+      assertNoUnsupportedClaims(combined, `operationalAreas.${area.slug}`);
     }
   });
 
-  it("limits exception handling in the labor pillar to backfill, reassignment, notification, or approval", () => {
-    const labor = operatingPillars.find((pillar) => pillar.slug === "labor");
+  it("limits labor's exception handling to backfill, reassignment, notification, or approval", () => {
+    const labor = operationalAreas.find((area) => area.slug === "labor");
     expect(labor).toBeDefined();
-    const text = `${labor!.aiActions} ${labor!.managerControl}`.toLowerCase();
-    expect(text).toMatch(/backfill|reassign|notif|approval/);
+    const text = `${labor!.recommendation} ${labor!.reason} ${labor!.outcome}`.toLowerCase();
+    expect(text).toMatch(/backfill|reassign|shift|approv|coverage/);
   });
 
-  it("frames sales insight as surfacing, not autonomous forecasting", () => {
-    const sales = operatingPillars.find((pillar) => pillar.slug === "sales");
+  it("frames sales as an inform-level signal, not autonomous forecasting or a decision made for the manager", () => {
+    const sales = operationalAreas.find((area) => area.slug === "sales");
     expect(sales).toBeDefined();
-    expect(sales!.managerControl.toLowerCase()).toContain("manager");
+    expect(sales!.authorityMode).toBe("inform");
+    expect(sales!.outcome.toLowerCase()).toContain("manager");
+  });
+
+  it("workspace kind matches the area slug it belongs to", () => {
+    for (const area of operationalAreas) {
+      expect(area.workspace.kind, area.slug).toBe(area.slug);
+    }
   });
 });
 
@@ -86,18 +102,30 @@ describe("operatingCycleStages", () => {
   });
 });
 
-describe("dayInOperation", () => {
-  it("has more than one event and covers more than one source (cross-functional, not one call-out)", () => {
-    expect(dayInOperation.length).toBeGreaterThan(4);
-    const sources = new Set(dayInOperation.map((event) => event.source));
-    expect(sources.size).toBeGreaterThan(3);
+describe("dayTimeline", () => {
+  it("has exactly three moments (start, respond, close)", () => {
+    expect(dayTimeline.length).toBe(3);
   });
 
-  it("every event has a non-empty result and a valid authority mode", () => {
-    for (const event of dayInOperation) {
-      expect(event.result.trim().length, `${event.time} result`).toBeGreaterThan(0);
-      expect(["inform", "recommend", "execute"]).toContain(event.authorityMode);
+  it("covers more than three distinct connected systems across the day (cross-functional, not one call-out)", () => {
+    const systems = new Set(dayTimeline.flatMap((moment) => moment.connectedSystems));
+    expect(systems.size).toBeGreaterThan(3);
+  });
+
+  it("every moment has a non-empty outcome and a valid authority mode", () => {
+    for (const moment of dayTimeline) {
+      expect(moment.outcome.trim().length, `${moment.time} outcome`).toBeGreaterThan(0);
+      expect(["inform", "recommend", "execute"]).toContain(moment.authorityMode);
     }
+  });
+
+  it("keeps the whole timeline concise (roughly 150 words or fewer across titles and descriptions)", () => {
+    const wordCount = dayTimeline
+      .map((moment) => `${moment.title} ${moment.description}`)
+      .join(" ")
+      .split(/\s+/)
+      .filter(Boolean).length;
+    expect(wordCount).toBeLessThanOrEqual(150);
   });
 });
 

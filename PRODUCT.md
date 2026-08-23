@@ -67,7 +67,7 @@ Tokens (`globals.css` `:root`): `--ease-out`, `--ease-in-out`, `--duration-press
 
 Reveal variants (`Reveal` component, `variant` prop): `soft` (opacity + translateY(16px), 500ms), `clip` (heading clip-path wipe, 650ms), `state` (opacity + translateY(8px), 220ms), `none` (immediately visible). Scroll-triggered reveals go through `useInView` (one-shot, latches true); continuous/ambient effects go through `useAmbientActive` (live — pauses offscreen, tab-hidden, or reduced-motion) — both in `src/lib/motion.ts`.
 
-At most one pinned scroll narrative on the page: the Operating Loop section (`ScrollStory`). Everything else (Problem, Scenario, Capability Chapters, Audience Workflows) reveals on normal scroll via `useInView`/`Reveal` — no pinning. Only transforms, opacity, clip-path, and SVG stroke properties are animated; the one pragmatic exception is the FAQ's native `<details>` disclosure, which animates opacity only via `::details-content` (a browser-native mechanism, not a custom accordion) so keyboard/screen-reader semantics stay untouched.
+The homepage uses two distinct scroll treatments: the five operating pillars form a compact sticky stack, and `DayInOperation` is the single pinned narrative. Everything else reveals on normal scroll. The hero's command-center animation is the primary attention moment and runs once before settling.
 
 Reduced motion (`globals.css` media query) removes translation, scaling, path travel, and continuous pulses, but keeps a ~180ms opacity transition so state changes still register as feedback rather than an instant snap. No content is ever hidden by an animation that fails to run — every "undrawn"/"untraveled" base state renders fully visible by default; the animation is additive.
 
@@ -75,24 +75,25 @@ Reduced motion (`globals.css` media query) removes translation, scaling, path tr
 
 **Public routes:** `/` (landing), `/demo` (booking), `/legal/privacy`, `/legal/terms` — that's the complete route surface. `/product`, `/pricing`, `/about`, and `/industries*` permanently redirect (`next.config.ts`) to landing-page anchors or `/demo`; their page files and the components used only by them (`OperationsPanel`, `CapabilityVisual`, `IndustryDetail`, `PageHero`) have been removed rather than left as dead code behind a redirect.
 
-**Primary nav (anchors on the landing page):** How It Works, What It Handles, Active Pilots, Who It's For, plus Book a Demo.
+**Primary nav (anchors on the landing page):** Platform, Operations, AI Control, Integrations, plus Book a Demo.
 
 ## Landing page sections (in order)
 
-1. Hero — the four-part promise (Schedule, Learn, Resolve, Communicate) plus the one-shot operating-loop animation.
-2. Active pilots (`CustomerTrustStrip`) — named plainly (`pilotCustomers`); logos render only once `customerProof` has real entries.
-3. The broken workflow (`ProblemSection`) — one call-out duplicated across scheduling app / Slack-Discord / text / email, routing into one loop.
-4. Operating loop (`OperatingLoop`) — Sense → Plan → Act → Verify, the signature scroll-driven section.
-5. What it handles (`CapabilityStories`) — four full narrative chapters, not a feature grid.
-6. Scenario walkthrough (`ScenarioWalkthrough`) — grouped into the same four stages, with an automatic-vs-approval-required branch at Verify.
-7. Who it's for (`AudienceSegments`) — three segments, each with a small workflow diagram.
-8. Implementation and control (`ImplementationControl`) — native-`<details>` FAQ.
-9. Final CTA (`FinalCta`) — Book a Demo, restated outcome.
+1. Hero — concise platform promise plus a one-shot animated operations command center.
+2. Active pilots — compact factual proof directly below the hero.
+3. Patchwork problem — why disconnected systems leave managers reconciling the operation manually.
+4. Integration — a compact category-level explanation of how WorkforceOS connects to the current operation.
+5. Operating pillars — five sticky, progressively stacked capability chapters with only the information needed to evaluate each pillar.
+6. Day in the operation — one five-step pinned story showing sales, labor, inventory, tasks, communication, and approvals working together.
+7. AI authority — Inform, Recommend, and Execute boundaries controlled by the customer.
+8. Audience applications — catering, restaurant groups, and campus sports and recreation.
+9. Final CTA — Book a Demo and return managers to the floor.
 
 ## Content rules
 
 - No fabricated quotes, logos, metrics, integrations, or certifications. `customerProof` stays empty until Olive & Vine or UC Davis Rec Sports approve something specific for publication.
 - Pilot names (`pilotCustomers`) may be stated plainly as a fact anywhere on the site — distinct from `customerProof`, no quote/logo required.
 - The scenario walkthrough is explicitly labeled illustrative; every step carries a `textEquivalent` for the branch that doesn't rely on visual layout to convey which outcome it is.
-- No forecasting, labor-optimization, certification, task-management, or predictive-accuracy claims anywhere — `site-config.test.ts` guards this for the capability/scenario/FAQ content.
-- Integration claims only appear if technically confirmed (none are, currently — omit).
+- Labor, sales/POS insights, inventory, tasks, communication, and approvals are the five approved operating areas.
+- Integration claims stay category-level and qualified by the customer's existing systems; no unverified vendor compatibility or logos.
+- Labor savings remain qualitative until measured evidence is approved.

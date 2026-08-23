@@ -28,17 +28,15 @@ export function ProblemSection() {
             Your operation is split across six systems that don&apos;t talk.
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            It&apos;s not just that there are a lot of tools. It&apos;s that
-            none of them understand how their signals relate to each other —
-            so a manager has to be the one who connects sales to staffing to
-            inventory to tasks, every day, by hand.
+            Sales change. Staffing slips. Inventory runs low. The tools report
+            each event separately, leaving the manager to connect them by hand.
           </p>
         </Reveal>
 
         <div ref={ref} className="mt-16 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
             <p className="label-mono text-[var(--color-text-muted)]">Reconciled manually</p>
-            <div className="relative mt-6 grid min-h-[320px] auto-rows-min grid-cols-2 items-start gap-3 rounded-[3px] border border-dashed border-[var(--color-border-strong)] bg-[var(--color-canvas)] p-5 sm:p-6">
+            <div className="relative mt-6 grid min-h-[260px] auto-rows-min grid-cols-2 items-start gap-3 rounded-[3px] border border-dashed border-[var(--color-border-strong)] bg-[var(--color-canvas)] p-5 sm:p-6">
               {patchworkSources.map((item, index) => (
                 <div
                   key={item.source}
@@ -64,7 +62,7 @@ export function ProblemSection() {
 
           <Reveal delay={120}>
             <p className="label-mono text-[var(--color-signal-strong)]">Connected by WorkforceOS</p>
-            <div className="mt-6 flex min-h-[320px] flex-col items-center justify-center gap-6 rounded-[3px] bg-[var(--color-canvas-dark)] p-8 text-center">
+            <div className="mt-6 flex min-h-[260px] flex-col items-center justify-center gap-5 rounded-[3px] bg-[var(--color-canvas-dark)] p-8 text-center">
               <LoopDiagram mode="loop-section" size={200} />
               <p className="max-w-[260px] text-[15px] leading-relaxed text-[var(--color-text-on-dark-secondary)]">
                 Every signal lands in one operating picture — connected,

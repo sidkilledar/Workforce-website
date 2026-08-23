@@ -147,7 +147,7 @@ export function LoopDiagram({
                 style={{
                   stroke: active ? "var(--color-signal)" : "rgba(245,239,226,0.55)",
                   strokeWidth: active ? 2.5 : 1.5,
-                  transition: `stroke var(--duration-state) var(--ease-out), stroke-width var(--duration-state) var(--ease-out)`,
+                  transition: `stroke var(--duration-state) var(--ease-out)`,
                 }}
               />
               <text

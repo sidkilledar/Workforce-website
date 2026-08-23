@@ -99,6 +99,39 @@ export const gsapEase = {
   dramatic: "expo.out",
 } as const;
 
+/**
+ * Drives an interruptible "fade out old, swap, fade in new" content change
+ * without keyframes: `fading` goes true immediately so the caller can dim
+ * the *current* content via a plain opacity style; after `outMs` the value
+ * swaps and `fading` clears. Because the swapped-in value is meant to be
+ * rendered under a fresh `key` (see the `.dashboard-enter` CSS classes),
+ * its own entrance transition is driven by `@starting-style`, not this hook.
+ * Re-triggering mid-fade (the user picks another value before the timeout
+ * fires) clears the pending timeout and restarts cleanly — interruptible by
+ * construction, not by special-casing.
+ */
+export function useCrossfadeSwap<T>(value: T, outMs = 140): { displayed: T; fading: boolean } {
+  const reducedMotion = usePrefersReducedMotion();
+  const [displayed, setDisplayed] = useState(value);
+  const timeoutRef = useRef<number | undefined>(undefined);
+  // Derived directly from the value/displayed mismatch — no separate state
+  // (and so no synchronous setState-in-effect) needed just to flag it.
+  const fading = !reducedMotion && value !== displayed;
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    if (value === displayed) return;
+    window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => {
+      setDisplayed(value);
+    }, outMs);
+    return () => window.clearTimeout(timeoutRef.current);
+  }, [value, displayed, reducedMotion, outMs]);
+
+  if (reducedMotion) return { displayed: value, fading: false };
+  return { displayed, fading };
+}
+
 /** Live signal for whether the document tab is currently visible — gate any continuous/ambient GSAP loop (grain drift, ambient pulses) on this so nothing animates in a backgrounded tab. */
 export function useDocumentVisible(): boolean {
   return useSyncExternalStore(

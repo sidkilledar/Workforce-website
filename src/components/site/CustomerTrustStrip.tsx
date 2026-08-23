@@ -12,39 +12,41 @@ import { Reveal } from "@/components/ui/Reveal";
  */
 export function CustomerTrustStrip() {
   return (
-    <Section id={sectionIds.pilots} className="py-16 sm:py-20">
+    <Section id={sectionIds.pilots} className="border-b border-[var(--color-border)] py-10 sm:py-12">
       <Container>
-        <Reveal className="text-center">
-          <p className="label-mono text-[var(--color-signal-strong)]">Active Pilots</p>
-          <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
-            {customerProof.length > 0
-              ? "Trusted by operators running WorkforceOS."
-              : "WorkforceOS is being shaped with frontline teams in catering and campus recreation."}
-          </p>
-        </Reveal>
+        <Reveal className="flex flex-col items-center justify-between gap-5 sm:flex-row">
+          <div>
+            <p className="label-mono text-[var(--color-signal-strong)]">Active Pilots</p>
+            <p className="mt-2 max-w-lg text-sm leading-relaxed text-[var(--color-text-secondary)]">
+              {customerProof.length > 0
+                ? "Trusted by operators running WorkforceOS."
+                : "WorkforceOS is being shaped with frontline teams in catering and campus recreation."}
+            </p>
+          </div>
 
-        {customerProof.length > 0 ? (
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-12 gap-y-6">
-            {customerProof.map((customer) => (
-              <Image
-                key={customer.name}
-                src={customer.logoSrc}
-                alt={customer.name}
-                width={140}
-                height={40}
-                className="opacity-60 grayscale"
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            {pilotCustomers.map((name) => (
-              <span key={name} className="ticket-slip px-4 py-2 text-sm font-medium text-[var(--color-text-primary)]">
-                {name}
-              </span>
-            ))}
-          </div>
-        )}
+          {customerProof.length > 0 ? (
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
+              {customerProof.map((customer) => (
+                <Image
+                  key={customer.name}
+                  src={customer.logoSrc}
+                  alt={customer.name}
+                  width={140}
+                  height={40}
+                  className="opacity-60 grayscale"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {pilotCustomers.map((name) => (
+                <span key={name} className="ticket-slip px-4 py-2 text-sm font-medium text-[var(--color-text-primary)]">
+                  {name}
+                </span>
+              ))}
+            </div>
+          )}
+        </Reveal>
       </Container>
     </Section>
   );

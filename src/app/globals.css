@@ -243,8 +243,12 @@ body {
     clip-path: none !important;
   }
 
-  .animate-signal-pulse {
+  .animate-signal-pulse,
+  .animate-converge,
+  .animate-fade-up {
     animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   .animate-connector-grow,
@@ -521,6 +525,28 @@ details[open]::details-content {
     transform var(--duration-ui) var(--ease-out),
     clip-path var(--duration-ui) var(--ease-out),
     visibility 0s linear 0s;
+}
+
+/* Final CTA: four operating signals converge into the WorkforceOS wordmark.
+   The sequence plays once on entry and only animates compositor properties. */
+@keyframes converge {
+  0% {
+    opacity: 0;
+    transform: var(--converge-from) scale(0.92);
+  }
+  52% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0deg) scale(0.94);
+  }
+}
+
+.animate-converge {
+  animation: converge 1.2s var(--ease-out) both;
+  will-change: transform, opacity;
 }
 
 /* Connected Operations Showcase — dashboard workspace/AI-panel crossfade.

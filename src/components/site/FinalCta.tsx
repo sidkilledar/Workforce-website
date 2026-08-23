@@ -1,9 +1,18 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { audienceSegments, sectionIds } from "@/lib/site-config";
 import { trackEvent } from "@/lib/analytics";
+import { useInView } from "@/lib/motion";
+
+const convergenceSignals = [
+  { label: "Connect", transform: "translate(-160px, -64px) rotate(-8deg)" },
+  { label: "Understand", transform: "translate(150px, -74px) rotate(6deg)" },
+  { label: "Act", transform: "translate(-136px, 70px) rotate(5deg)" },
+  { label: "Improve", transform: "translate(154px, 62px) rotate(-6deg)" },
+] as const;
 
 const demoOutcomes = [
   "Walk through the workflow as it runs today",
@@ -12,9 +21,37 @@ const demoOutcomes = [
 ];
 
 export function FinalCta() {
+  const [sectionRef, visible] = useInView<HTMLElement>();
+
   return (
-    <section id={sectionIds.finalCta} className="bg-[var(--color-canvas-dark)] py-16 sm:py-20">
+    <section ref={sectionRef} id={sectionIds.finalCta} className="overflow-hidden bg-[var(--color-canvas-dark)] py-16 sm:py-20">
       <Container className="max-w-[1200px]">
+        <div className="relative mx-auto mb-14 flex h-32 max-w-3xl items-center justify-center" aria-hidden>
+          {convergenceSignals.map((signal, index) => (
+            <span
+              key={signal.label}
+              className={visible ? "animate-converge absolute" : "absolute opacity-0"}
+              style={
+                {
+                  "--converge-from": signal.transform,
+                  animationDelay: `${index * 80}ms`,
+                } as CSSProperties
+              }
+            >
+              <span className="ticket-slip label-mono inline-flex items-center gap-2 px-3 py-1.5 text-[var(--color-text-secondary)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-signal)]" />
+                {signal.label}
+              </span>
+            </span>
+          ))}
+          <span
+            className={visible ? "animate-fade-up font-display text-3xl font-semibold text-[var(--color-text-on-dark-primary)]" : "opacity-0"}
+            style={{ animationDelay: "900ms" }}
+          >
+            WorkforceOS
+          </span>
+        </div>
+
         <div className="mb-12 border-b border-[var(--color-border-on-dark)] pb-6">
           <p className="text-sm text-[var(--color-text-on-dark-muted)]">Built for shift-based teams in</p>
           <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-[var(--color-text-on-dark-primary)]">

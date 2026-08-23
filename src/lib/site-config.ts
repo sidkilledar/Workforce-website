@@ -3,7 +3,7 @@ export const siteConfig = {
   tagline: "The AI operations command center for frontline businesses.",
   description:
     "WorkforceOS connects the systems you already use, brings the operation into one manager dashboard, turns data into insights, and lets AI coordinate daily work within authority rules you control — so managers can spend less time behind a screen and more time on the floor.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.workforceos.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.workforceos.com",
   ogImage: "/opengraph-image",
   email: "hello@workforceos.com",
 } as const;

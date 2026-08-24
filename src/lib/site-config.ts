@@ -17,9 +17,9 @@ function resolveSiteUrl(): string {
 
 export const siteConfig = {
   name: "WorkforceOS",
-  tagline: "The AI operations command center for frontline businesses.",
+  tagline: "Give managers back the hours lost coordinating daily work.",
   description:
-    "WorkforceOS connects the systems you already use, brings the operation into one manager dashboard, turns data into insights, and lets AI coordinate daily work within authority rules you control — so managers can spend less time behind a screen and more time on the floor.",
+    "WorkforceOS brings staffing, sales, inventory, tasks, and team communication into one operating view, then prepares the next step within authority rules your team controls.",
   url: resolveSiteUrl(),
   ogImage: "/opengraph-image",
   email: "hello@workforceos.com",
@@ -58,17 +58,28 @@ export type NavLink = {
 // below. Used from any route as `/#id` (Header prefixes the leading `/` when
 // not already on the homepage) so the same links work from `/demo` too.
 export const navAnchors: NavLink[] = [
-  { label: "Platform", href: "#command-center" },
-  { label: "Operations", href: "#pillars" },
-  { label: "AI Control", href: "#authority" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Use Cases", href: "#use-cases" },
+  { label: "Integrations", href: "#integrations" },
+  { label: "AI Control", href: "#ai-control" },
+  { label: "Results", href: "#customer-results" },
 ];
 
-export const ctaNav: NavLink = { label: "Book a Demo", href: "/demo" };
+export const ctaNav: NavLink = { label: "Request a Demo", href: "/demo" };
 
 // Deliberately narrow: the redesigned footer keeps only what's live —
 // legal pages and the one conversion path — per the brief's instruction not
 // to expose the unfinished /product, /pricing, and /industries routes.
 export const footerNav: { title: string; links: NavLink[] }[] = [
+  {
+    title: "Explore",
+    links: [
+      { label: "How It Works", href: "/#how-it-works" },
+      { label: "Use Cases", href: "/#use-cases" },
+      { label: "Integrations", href: "/#integrations" },
+      { label: "AI Control", href: "/#ai-control" },
+    ],
+  },
   {
     title: "Legal",
     links: [
@@ -106,8 +117,8 @@ export type CtaLocation =
   | "demo_page";
 
 export const ctaCopy = {
-  primary: "Book a Demo",
-  secondary: "See the Command Center",
+  primary: "Request a Demo",
+  secondary: "See a Workflow",
 } as const;
 
 export type Announcement = {

@@ -22,19 +22,16 @@ export const demoRequestSchema = z.object({
     .trim()
     .min(1, "Enter your work email.")
     .email("Enter a valid email address."),
-  phone: z
-    .string()
-    .trim()
-    .max(32, "Phone number is too long.")
-    .refine(
-      (value) => value === "" || (/^[0-9()+\-.\s]+$/.test(value) && value.length >= 7),
-      "Enter a valid phone number or leave it blank.",
-    ),
   company: z
     .string()
     .trim()
     .min(2, "Enter your company name.")
     .max(160, "Company name is too long."),
+  role: z
+    .string()
+    .trim()
+    .min(2, "Enter your role or job title.")
+    .max(120, "Role is too long."),
   industry: z.enum(industrySlugs, {
     message: "Select the closest match for your industry.",
   }),
@@ -47,6 +44,11 @@ export const demoRequestSchema = z.object({
   frictionWorkflow: z.enum(frictionWorkflowValues, {
     message: "Select the workflow creating the most friction.",
   }),
+  currentSystems: z
+    .string()
+    .trim()
+    .min(2, "Tell us which systems are involved.")
+    .max(500, "System details are too long."),
   message: z
     .string()
     .trim()
@@ -67,12 +69,13 @@ export type DemoRequestInput = z.infer<typeof demoRequestSchema>;
 export const demoRequestDefaultValues: DemoRequestInput = {
   name: "",
   email: "",
-  phone: "",
   company: "",
+  role: "",
   industry: demoIndustries[0].value as DemoRequestInput["industry"],
   locations: locationBands[0],
   hourlyEmployees: hourlyEmployeeBands[0],
   frictionWorkflow: frictionWorkflows[0].value,
+  currentSystems: "",
   message: "",
   consent: false,
   company_website: "",

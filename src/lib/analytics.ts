@@ -1,6 +1,10 @@
 export type AnalyticsEventName =
   | "demo_cta_click"
   | "hero_preview_approval"
+  | "workflow_engagement"
+  | "integration_engagement"
+  | "customer_proof_engagement"
+  | "industry_cta_click"
   | "demo_form_start"
   | "demo_form_submit_success"
   | "demo_form_submit_error";

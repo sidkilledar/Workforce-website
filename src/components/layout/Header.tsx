@@ -21,7 +21,6 @@ function resolveAnchorHref(href: string, pathname: string) {
 export function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const [activeHref, setActiveHref] = useState<string | null>(null);
@@ -30,13 +29,6 @@ export function Header() {
     setLastPathname(pathname);
     setMobileOpen(false);
   }
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (!mobileOpen) return;
@@ -85,12 +77,7 @@ export function Header() {
 
   return (
     <header
-      className={cn(
-        "sticky top-0 z-50 border-b transition-[background-color,box-shadow] duration-300",
-        scrolled || mobileOpen
-          ? "border-[var(--color-border)] bg-[var(--color-canvas)]/95 shadow-[0_1px_0_rgba(23,19,16,0.03),0_8px_24px_-16px_rgba(23,19,16,0.14)] backdrop-blur-lg"
-          : "border-transparent bg-[var(--color-canvas)]/60 backdrop-blur-sm",
-      )}
+      className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-canvas)]/95 shadow-[0_8px_24px_-20px_rgba(20,25,30,0.3)] backdrop-blur-lg"
     >
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-8">
         <Link
@@ -100,7 +87,7 @@ export function Header() {
           {siteConfig.name}
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex xl:gap-7">
           {navAnchors.map((link) => (
             <Link
               key={link.href}
@@ -132,27 +119,17 @@ export function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-full text-[var(--color-text-primary)] lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--color-border)] text-[var(--color-text-primary)] lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
           onClick={() => setMobileOpen((open) => !open)}
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
             {mobileOpen ? (
-              <path
-                d="M6 6l12 12M18 6L6 18"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
+              <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             ) : (
-              <path
-                d="M4 7h16M4 12h16M4 17h16"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-              />
+              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             )}
           </svg>
         </button>
@@ -192,6 +169,9 @@ export function Header() {
         >
           {ctaNav.label}
         </Button>
+        <a href={`mailto:${siteConfig.email}`} className="mt-5 block px-3 text-sm text-[var(--color-text-secondary)]">
+          {siteConfig.email}
+        </a>
       </div>
     </header>
   );

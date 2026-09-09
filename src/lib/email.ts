@@ -45,8 +45,11 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
     ["Locations", data.locations],
     ["Hourly employees", data.hourlyEmployees],
     ["Biggest friction", frictionWorkflowLabel(data.frictionWorkflow)],
-    ["Current systems", data.currentSystems],
   ];
+
+  if (data.currentTools) {
+    rows.push(["Tools involved today", data.currentTools]);
+  }
 
   const rowsHtml = rows
     .map(
@@ -67,6 +70,13 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
         <h2 style="margin-bottom:4px;">New demo request</h2>
         <p style="color:#666;margin-top:0;">Submitted via the WorkforceOS website.</p>
         <table style="border-collapse:collapse;width:100%;">${rowsHtml}</table>
+        ${
+          data.workflowExample
+            ? `<p style="margin-top:16px;"><strong>Recent example</strong><br />${escapeHtml(
+                data.workflowExample,
+              ).replace(/\n/g, "<br />")}</p>`
+            : ""
+        }
         ${
           data.message
             ? `<p style="margin-top:16px;"><strong>Message</strong><br />${escapeHtml(

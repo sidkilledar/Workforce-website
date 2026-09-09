@@ -42,13 +42,22 @@ export const demoRequestSchema = z.object({
     message: "Select the approximate number of hourly employees.",
   }),
   frictionWorkflow: z.enum(frictionWorkflowValues, {
-    message: "Select the workflow creating the most friction.",
+    message: "Select the workflow that consumes the most manager time.",
   }),
-  currentSystems: z
+  // Optional context: supported integrations aren't publicly confirmed yet,
+  // so this stays free text rather than a fixed system list.
+  currentTools: z
     .string()
     .trim()
-    .min(2, "Tell us which systems are involved.")
-    .max(500, "System details are too long."),
+    .max(300, "Keep this under 300 characters.")
+    .optional()
+    .or(z.literal("")),
+  workflowExample: z
+    .string()
+    .trim()
+    .max(600, "Keep this under 600 characters.")
+    .optional()
+    .or(z.literal("")),
   message: z
     .string()
     .trim()
@@ -75,7 +84,8 @@ export const demoRequestDefaultValues: DemoRequestInput = {
   locations: locationBands[0],
   hourlyEmployees: hourlyEmployeeBands[0],
   frictionWorkflow: frictionWorkflows[0].value,
-  currentSystems: "",
+  currentTools: "",
+  workflowExample: "",
   message: "",
   consent: false,
   company_website: "",

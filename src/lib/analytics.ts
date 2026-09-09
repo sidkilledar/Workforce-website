@@ -1,13 +1,12 @@
 export type AnalyticsEventName =
   | "demo_cta_click"
-  | "hero_preview_approval"
-  | "workflow_engagement"
-  | "integration_engagement"
-  | "customer_proof_engagement"
-  | "industry_cta_click"
+  | "hero_workflow_interaction"
+  | "capability_tab_select"
+  | "authority_mode_select"
   | "demo_form_start"
-  | "demo_form_submit_success"
-  | "demo_form_submit_error";
+  | "demo_form_complete"
+  | "demo_form_submit_error"
+  | "demo_friction_workflow_select";
 
 type AnalyticsProperties = Record<string, string | number | boolean | undefined>;
 

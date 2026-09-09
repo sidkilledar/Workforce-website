@@ -89,7 +89,7 @@
   --color-border-on-dark: var(--color-border-on-dark);
 
   --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-geist-sans);
+  --font-display: var(--font-fraunces);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -119,8 +119,10 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-display), Arial, Helvetica, sans-serif;
-  letter-spacing: -0.035em;
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
+  font-feature-settings: "ss02" 1;
 }
 
 .label-mono {
@@ -298,6 +300,12 @@ body {
 
   .animate-timeline-marker,
   .animate-timeline-content {
+    transition: opacity 180ms ease !important;
+    transform: none !important;
+  }
+
+  .authority-panel-enter-forward,
+  .authority-panel-enter-back {
     transition: opacity 180ms ease !important;
     transform: none !important;
   }
@@ -679,5 +687,43 @@ details[open]::details-content {
   100% {
     transform: scale(1);
     opacity: 0.28;
+  }
+}
+
+/* Authority track panel — direction-aware entrance for a freshly-keyed
+   panel (see dashboard-enter above for the same @starting-style technique).
+   Forward/back only changes which side the content settles in from, so
+   moving through Inform → Recommend → Execute reads differently than
+   moving back. */
+.authority-panel-enter-forward,
+.authority-panel-enter-back {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+@starting-style {
+  .authority-panel-enter-forward {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+
+  .authority-panel-enter-back {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+/* Reduced-motion / JS-selected fallback: a short crossfade, no direction. */
+.authority-panel-fade {
+  opacity: 1;
+  transition: opacity 180ms ease;
+}
+
+@starting-style {
+  .authority-panel-fade {
+    opacity: 0;
   }
 }

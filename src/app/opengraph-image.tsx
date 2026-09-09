@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "WorkforceOS — the AI operations command center for frontline businesses";
+export const alt = "WorkforceOS — AI operations for hourly, shift-based teams";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -23,15 +23,15 @@ export default function OpenGraphImage() {
         <div style={{ fontSize: 30, fontWeight: 700 }}>WorkforceOS</div>
         <div style={{ display: "flex", gap: 12, alignItems: "center", fontSize: 20 }}>
           <div style={{ width: 12, height: 12, borderRadius: 999, background: "#ff4e1f" }} />
-          Operations running
+          Systems connected
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 980 }}>
         <div style={{ fontSize: 68, lineHeight: 1.04, letterSpacing: -3, fontWeight: 700 }}>
-          Your operation, running from one place.
+          Run every shift without chasing every update.
         </div>
         <div style={{ fontSize: 29, lineHeight: 1.35, color: "#5d5750" }}>
-          Connect your systems, see one operating picture, and let AI coordinate within the rules you set.
+          WorkforceOS helps managers resolve call-outs, coverage gaps, and unfinished work before they disrupt the day.
         </div>
       </div>
       <div style={{ display: "flex", gap: 24, fontSize: 18, color: "#5d5750" }}>

@@ -105,7 +105,7 @@ export function DemoForm() {
       }
 
       setStatus("success");
-      trackEvent("demo_form_submit_success");
+      trackEvent("demo_form_complete");
     } catch {
       setStatus("error");
       setServerMessage("Something went wrong submitting your request. Please try again.");
@@ -284,7 +284,7 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="What creates the most friction? *"
+              label="Which workflow consumes the most manager time? *"
               htmlFor="frictionWorkflow"
               error={errors.frictionWorkflow}
             >
@@ -293,12 +293,11 @@ export function DemoForm() {
                 name="frictionWorkflow"
                 className={inputClasses}
                 value={values.frictionWorkflow}
-                onChange={(event) =>
-                  updateField(
-                    "frictionWorkflow",
-                    event.target.value as DemoRequestInput["frictionWorkflow"],
-                  )
-                }
+                onChange={(event) => {
+                  const value = event.target.value as DemoRequestInput["frictionWorkflow"];
+                  updateField("frictionWorkflow", value);
+                  trackEvent("demo_friction_workflow_select", { workflow: value });
+                }}
               >
                 {frictionWorkflows.map((workflow) => (
                   <option key={workflow.value} value={workflow.value}>
@@ -309,17 +308,35 @@ export function DemoForm() {
             </Field>
           </div>
 
-          <Field label="Systems currently involved *" htmlFor="currentSystems" error={errors.currentSystems}>
-            <input
-              id="currentSystems"
-              name="currentSystems"
-              required
+          <Field label="Describe a recent example" htmlFor="workflowExample" error={errors.workflowExample}>
+            <textarea
+              id="workflowExample"
+              name="workflowExample"
+              rows={3}
               className={inputClasses}
-              placeholder="For example: scheduling, POS, team chat, spreadsheets"
-              value={values.currentSystems}
-              onChange={(event) => updateField("currentSystems", event.target.value)}
-              aria-invalid={Boolean(errors.currentSystems)}
-              aria-describedby={errors.currentSystems ? "currentSystems-error" : undefined}
+              placeholder="For example: A closer calls out three hours before service, and the manager checks availability, messages several employees, updates the schedule, and confirms coverage manually."
+              value={values.workflowExample}
+              onChange={(event) => updateField("workflowExample", event.target.value)}
+              aria-invalid={Boolean(errors.workflowExample)}
+              aria-describedby={
+                errors.workflowExample ? "workflowExample-error workflowExample-helper" : "workflowExample-helper"
+              }
+            />
+            <p id="workflowExample-helper" className="mt-1.5 text-xs text-[var(--color-text-muted)]">
+              A few sentences are enough. Do not include sensitive employee information.
+            </p>
+          </Field>
+
+          <Field label="Which tools are involved today?" htmlFor="currentTools" error={errors.currentTools}>
+            <input
+              id="currentTools"
+              name="currentTools"
+              className={inputClasses}
+              placeholder="Scheduling software, spreadsheets, Slack, Discord, POS, inventory system, or other tools"
+              value={values.currentTools}
+              onChange={(event) => updateField("currentTools", event.target.value)}
+              aria-invalid={Boolean(errors.currentTools)}
+              aria-describedby={errors.currentTools ? "currentTools-error" : undefined}
             />
           </Field>
 

@@ -7,7 +7,6 @@ const validPayload = {
   email: "jamie@example.com",
   company: "Rivera Restaurant Group",
   role: "Director of Operations",
-  currentSystems: "Scheduling, POS, and team chat",
   consent: true,
 };
 
@@ -35,6 +34,25 @@ describe("demoRequestSchema", () => {
   it("accepts an empty optional message", () => {
     const result = demoRequestSchema.safeParse({ ...validPayload, message: "" });
     expect(result.success).toBe(true);
+  });
+
+  it("accepts a submission with no workflow example or current tools", () => {
+    const result = demoRequestSchema.safeParse({ ...validPayload, workflowExample: "", currentTools: "" });
+    expect(result.success).toBe(true);
+  });
+
+  it("accepts a submission with a workflow example and current tools", () => {
+    const result = demoRequestSchema.safeParse({
+      ...validPayload,
+      workflowExample: "A closer calls out three hours before service.",
+      currentTools: "Scheduling software, Slack, spreadsheets",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("rejects a workflow example over the length limit", () => {
+    const result = demoRequestSchema.safeParse({ ...validPayload, workflowExample: "a".repeat(601) });
+    expect(result.success).toBe(false);
   });
 
   it("still parses successfully when the honeypot field is filled", () => {

@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/product",
-        destination: "/#what-it-handles",
+        destination: "/#capabilities",
         permanent: true,
       },
       {
@@ -24,12 +24,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/industries",
-        destination: "/#who-its-for",
+        destination: "/#capabilities",
         permanent: true,
       },
       {
         source: "/industries/:path*",
-        destination: "/#who-its-for",
+        destination: "/#capabilities",
         permanent: true,
       },
     ];

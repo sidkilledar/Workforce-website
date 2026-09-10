@@ -349,7 +349,7 @@ export function HeroWorkflowDemo() {
                   onClick={toggleReview}
                   aria-expanded={reviewExpanded}
                   disabled={!ready || resolving}
-                  className="min-h-11 rounded-md border border-[var(--color-border)] px-4 text-sm font-medium text-[var(--color-text-secondary)] transition-colors duration-[var(--duration-hover)] hover:text-[var(--color-text-primary)] disabled:pointer-events-none disabled:opacity-50"
+                  className="min-h-11 rounded-md border border-[var(--color-border)] px-4 text-sm font-medium text-[var(--color-text-secondary)] transition-colors duration-[var(--duration-hover)] hover:text-[var(--color-text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-signal-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-canvas)] disabled:pointer-events-none disabled:opacity-50"
                 >
                   {heroWorkflow.reviewLabel}
                 </button>

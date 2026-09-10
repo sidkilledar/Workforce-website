@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
-  additionalConnectedSignals,
   audienceEnvironments,
   authorityModes,
   confirmedCapabilities,
+  connectedSystems,
   heroWorkflow,
   implementationControl,
   implementationSteps,
@@ -11,22 +11,12 @@ import {
   pilotImpact,
 } from "@/lib/site-config";
 
-// Claims the product does not make. Kept as a guard so future edits don't
-// quietly reintroduce forecasting/labor-optimization/certification/task-
-// management/predictive-accuracy/vendor-specific language into the approved
-// scope.
-const bannedTerms = [
-  "forecast",
-  "labor optimization",
-  "certification",
-  "certified",
-  "task management",
-  "guarantee",
-  "real-time",
-  "automated purchasing",
-  "supplier integration",
-  "loss prevention",
-];
+// Legal / compliance-exposure claims only. The product's operational scope is
+// deliberately broad now — forecasting, prediction, inventory, and POS/payroll
+// connection are all in-scope and described directly. This guard only keeps
+// out language that would create a regulatory or contractual liability
+// (guarantees, certifications, named compliance regimes).
+const bannedTerms = ["guarantee", "certification", "certified", "hipaa", "soc 2", "pci compliant"];
 
 function assertNoUnsupportedClaims(text: string, context: string) {
   const lower = text.toLowerCase();
@@ -81,12 +71,14 @@ describe("heroWorkflow", () => {
 });
 
 describe("confirmedCapabilities", () => {
-  it("has exactly the four confirmed capabilities, scheduling first", () => {
+  it("has exactly the six operating areas, scheduling first", () => {
     expect(confirmedCapabilities.map((capability) => capability.slug)).toEqual([
       "scheduling",
       "exceptions",
       "communication",
-      "patterns",
+      "forecasting",
+      "inventory",
+      "workflows",
     ]);
   });
 
@@ -97,11 +89,6 @@ describe("confirmedCapabilities", () => {
     }
   });
 
-  it("qualifies pattern recognition as non-predictive", () => {
-    const patterns = confirmedCapabilities.find((capability) => capability.slug === "patterns");
-    expect(patterns?.qualifier?.toLowerCase()).toContain("does not predict");
-  });
-
   it("stays within the approved claim boundaries", () => {
     for (const capability of confirmedCapabilities) {
       const combined = [capability.description, capability.example, capability.qualifier].filter(Boolean).join(" ");
@@ -110,10 +97,9 @@ describe("confirmedCapabilities", () => {
   });
 });
 
-describe("additionalConnectedSignals", () => {
-  it("labels POS/inventory/task signals as implementation-dependent, not confirmed modules", () => {
-    expect(additionalConnectedSignals.intro.toLowerCase()).toContain("depending on the systems");
-    expect(additionalConnectedSignals.signals.length).toBeGreaterThan(0);
+describe("connectedSystems", () => {
+  it("lists the systems WorkforceOS connects across", () => {
+    expect(connectedSystems.systems.length).toBeGreaterThan(0);
   });
 });
 

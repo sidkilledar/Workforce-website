@@ -6,22 +6,42 @@ This is the durable reference for the marketing site. It records the product ide
 
 ## Product identity
 
-WorkforceOS is the **AI ops manager for shift-based teams**. It replaces the usual patchwork — a scheduling app, Slack or Discord, and a stream of texts and emails — with one system that actually runs the day: it schedules staff around real availability, learns patterns from the operation's own history rather than a big upfront rules setup, and resolves exceptions (call-outs, no-shows, headcount changes) through backfill, reassignment, or notification — behind a configurable human-approval layer. Team messaging and notifications live where the schedule lives.
+WorkforceOS is an **operational intelligence platform for frontline businesses**. It connects the systems a business already uses — POS, scheduling, payroll, inventory, and communication tools — and brings the important information into one configurable manager dashboard. It helps managers handle scheduling, employee communication, labor forecasting, inventory tracking, operational workflows, and day-to-day exceptions from one place.
 
-One-liner: "WorkforceOS is the AI ops manager for shift-based teams — it schedules your staff, absorbs the daily chaos, and keeps managers in the loop instead of in the weeds."
+It does more than display data. It uses operational information to help managers understand what is happening, predict what is likely to happen next, identify what needs attention, and coordinate the appropriate response.
 
-Primary conversion: **Book a Demo**. Everything on the landing page points there.
+It is configurable around each organization's existing processes — roles, permissions, staffing rules, approval chains, terminology, dashboards, and workflows. Businesses decide which actions AI should **recommend**, which **require manager approval**, and which can **run automatically**.
 
-Audience: businesses whose workforce is mostly students or hourly staff — caterers staffing events, restaurant groups, and campus sports & recreation departments. Active customer pilots: **Olive & Vine** and **UC Davis Rec Sports**, supporting **1,000+ frontline users across their teams**. This means two customer organizations and more than 1,000 users — never 1,000 customers. Olive & Vine reports saving 10–15 operations hours each week. UC Davis Rec Sports reports easier scheduling, communication, and emergency coverage, while WorkforceOS learns how recurring events are staffed from shift history. Distinct from `customerProof` (quote + logo + attribution), which stays empty until either pilot approves a direct quotation or logo for publication.
+One-liner: "WorkforceOS is the intelligent operating layer across the systems a frontline business already runs — one place for managers to see, understand, predict, and act on the operation."
 
-## The four confirmed capabilities (the complete present-day offer)
+Primary conversion: **Request a Demo** → `/demo`. Everything on the landing page points there.
 
-1. **Scheduling & staffing** — builds and fills shifts around submitted availability. No forecasting, labor-optimization, or certification claims.
-2. **Learns your operation** — recognizes recurring patterns from operating history to lighten setup over time. No predictive-accuracy or autonomous-policy claims — it disclaims prediction explicitly ("recognizing what repeats, not predicting the future").
-3. **Handles exceptions automatically** — call-outs, no-shows, headcount changes resolve via backfill, reassignment, notification, or a request for approval. Nothing else.
-4. **One communication channel** — messages and notifications attach to the schedule event they relate to, instead of living in a separate app.
+Audience: frontline businesses whose workforce is mostly students or hourly staff — caterers staffing events, restaurant groups, and campus sports & recreation departments, plus hospitality, retail, and multi-location hourly teams generally. Active customer pilots: **Olive & Vine** and **UC Davis Rec Sports**, supporting **1,000+ frontline users across their teams**. This means two customer organizations and more than 1,000 users — never 1,000 customers. Olive & Vine reports saving 10–15 operations hours each week. UC Davis Rec Sports reports easier scheduling, communication, and emergency coverage, while WorkforceOS learns how recurring events are staffed from shift history. Distinct from `customerProof` (quote + logo + attribution), which stays empty until either pilot approves a direct quotation or logo for publication.
 
-Every capability chapter (`capabilityStories` in `site-config.ts`) carries all six fields: `trigger`, `inputs`, `action`, `managerControl`, `result`, `example`. `src/lib/site-config.test.ts` enforces field completeness and the claim boundaries above.
+## Capabilities
+
+### Six operating areas (`confirmedCapabilities` in `site-config.ts`, array order)
+
+1. **Scheduling & staffing** — build and fill shifts around submitted availability, roles, and qualifications, with one view of open roles, coverage, and assignments.
+2. **Day-to-day exceptions** — call-outs, no-shows, and headcount changes resolve through backfill, reassignment, notification, or an approval request.
+3. **Employee communication** — messages and notifications attach to the schedule event, task, or shift they relate to, so the team sees updates in context.
+4. **Labor forecasting** — projects labor demand per shift and role from sales history, staffing patterns, and the calendar, and flags likely staffing gaps.
+5. **Inventory tracking** — tracks stock levels across locations, raises low-stock and reorder alerts, and reads inventory against projected demand.
+6. **Operational workflows** — configurable sequences (coverage, opening/closing, approvals, escalations, event staffing) that run to the authority boundary you set.
+
+### Intelligence layer (`intelligenceLayer`)
+
+Connect → Understand → Predict → Act. WorkforceOS reads the operational picture across connected systems and turns it into what a manager needs: what's happening now, what's coming next, what needs attention, and what to do about it.
+
+### Configurability (`configurability`)
+
+Shaped to each operation: roles & permissions, staffing rules, approval chains, terminology, dashboards, workflows. One platform, not a separate build per location.
+
+### AI authority
+
+For every workflow the business chooses whether WorkforceOS **recommends** an action, **requires manager approval**, or runs it **automatically** and logs it. Managers can override anything; every action is recorded.
+
+`src/lib/site-config.test.ts` enforces the six-slug order, field completeness, and the (legal-only) claim boundaries.
 
 ## Visual identity — "living operations network"
 
@@ -31,24 +51,29 @@ A warm, tactile operations console: paper instead of gradient glass, ink instead
 
 | Token | Value | Use |
 |---|---|---|
-| `--color-canvas` | `#F1ECDE` | primary paper background |
-| `--color-canvas-raised` | `#E7DFC9` | recessed/well surfaces |
-| `--color-canvas-elevated` | `#FBF8F0` | elevated cards |
-| `--color-text-primary` | `#171310` | ink — headings, body |
+| `--color-canvas` | `#f1ece0` | primary paper background |
+| `--color-canvas-raised` | `#e8e0cd` | card borders / recessed surfaces |
+| `--color-canvas-elevated` | `#fcfaf5` | elevated cards, buttons |
+| `--color-canvas-features` | `#f6f1e9` | Features band, Proof band, BrowserMock panel |
+| `--color-text-primary` | `#17130f` | ink — headings, body |
 | `--color-text-secondary` | ink @ 66% | supporting copy |
-| `--color-text-muted` | ink @ 46% | captions, meta |
-| `--color-signal` | `#FF4E1F` | the one high-visibility accent — CTAs, live/active states, resolved pulses |
-| `--color-signal-strong` | `#E0430F` | hover/pressed, AA-contrast label text on paper |
-| `--color-signal-soft` | `#FFD9C4` | tint fills, badges |
-| `--color-status-resolved` | muted sage | utility only, never a brand color |
-| `--color-status-wait` | ink @ 40% | utility only |
-| `--color-canvas-dark` | `#15110C` | Hero / Operating Loop / Final CTA ink blocks |
+| `--color-text-muted` | ink @ 60% | captions, meta |
+| `--color-signal` | `#697d71` | sage — decorative / active states, rails, dots |
+| `--color-signal-strong` | `#3f5648` | AA text, links, icons and fills on paper |
+| `--color-signal-soft` | `#dbe3dc` | tint fills, badges |
+| `--color-canvas-dark` | `#23201a` | navbar, charcoal sections, footer |
+| `--color-canvas-dark-raised` | `#2d2a22` | raised surfaces on charcoal |
+| `--color-canvas-hero` | `#57685e` | Hero + Final CTA sage band |
+| `--color-text-on-dark-primary` | `rgba(252,250,245,0.98)` | headings on charcoal / sage |
+| `--color-text-on-dark-secondary` | `rgba(252,250,245,0.82)` | body on dark |
+| `--color-text-on-dark-muted` | `rgba(252,250,245,0.62)` | meta on dark |
+| `--color-border-on-dark` | `rgba(252,250,245,0.24)` | hairlines on dark |
 
 ### Type
 
-- **Display — Fraunces**: editorial, warm, used with restraint for headlines.
-- **Body — Geist Sans**: clean, quiet, carries the reading experience.
-- **Data/operational — Geist Mono**: timestamps, ticket numbers, status tags — the "dispatch ticket" motif.
+- **Display — Fraunces** (variable, `SOFT` 0 / `WONK` 1): editorial, warm, two-weight headings (light line + bold line).
+- **Body — Plus Jakarta Sans** (`--font-sans`): clean, quiet, carries the reading experience.
+- **Data/operational — JetBrains Mono** (`--font-mono`, `.label-mono`): timestamps, ticket numbers, status tags — the "dispatch ticket" motif.
 
 ### Signature element — "The Loop"
 
@@ -75,22 +100,27 @@ Reduced motion (`globals.css` media query) removes translation, scaling, path tr
 
 **Public routes:** `/` (landing), `/demo` (booking), `/legal/privacy`, `/legal/terms` — that's the complete route surface. `/product`, `/pricing`, `/about`, and `/industries*` permanently redirect (`next.config.ts`) to landing-page anchors or `/demo`; their page files and the components used only by them (`OperationsPanel`, `CapabilityVisual`, `IndustryDetail`, `PageHero`) have been removed rather than left as dead code behind a redirect.
 
-**Primary nav (anchors on the landing page):** Platform, Operations, AI Control, plus Book a Demo.
+**Primary nav (`navAnchors`):** Platform (`#capabilities`), How it works (`#how-it-works`), AI control (`#ai-control`), plus Request a Demo.
 
 ## Landing page sections (in order)
 
-1. Hero — concise platform promise plus a one-shot animated operations command center.
-2. Active pilots — compact factual proof directly below the hero.
-3. Patchwork problem — a single before/after explanation of why disconnected systems leave managers reconciling the operation manually.
-4. Connected operations — the one detailed product explanation, covering the five operational questions in an interactive dashboard.
-5. AI authority and implementation — Inform, Recommend, and Execute boundaries plus a practical rollout path.
-6. Audience and final CTA — names the three shift-based operating contexts and moves directly into a tailored demo invitation.
+1. Hero — the operational-intelligence promise plus an animated manager dashboard mock (`BrowserMock`).
+2. Pilot strip — aggregate factual proof (no names).
+3. Connected systems (`connectedSystems`) — the stack WorkforceOS sits across.
+4. Patchwork problem — why running the operation across disconnected apps costs managers time.
+5. Features — the six operating areas (`FeatureGrid`) plus the connected-systems chips.
+6. Intelligence layer (`intelligenceLayer`) — Connect → Understand → Predict → Act, the "more than a dashboard" differentiator.
+7. How it works — practical rollout path.
+8. Configure & AI control — `configurability` items plus Inform / Recommend / Execute authority.
+9. Proof — the two named pilots and their results (the only section with names).
+10. FAQ, then final CTA.
 
 ## Content rules
 
-- No fabricated quotes, logos, metrics, integrations, or certifications. Approved factual pilot claims are limited to: two customer pilots, 1,000+ frontline users across their teams, Olive & Vine saving 10–15 operations hours each week, and UC Davis Rec Sports seeing easier scheduling, communication, and emergency coverage while the product learns recurring event staffing from shift history. `customerProof` stays empty until Olive & Vine or UC Davis Rec Sports approves a direct quotation or logo for publication.
-- Pilot names (`pilotCustomers`) may be stated plainly as a fact anywhere on the site — distinct from `customerProof`, no quote/logo required.
-- The scenario walkthrough is explicitly labeled illustrative; every step carries a `textEquivalent` for the branch that doesn't rely on visual layout to convey which outcome it is.
-- Labor, sales/POS insights, inventory, tasks, communication, and approvals are the five approved operating areas.
-- Integration claims stay category-level and qualified by the customer's existing systems; no unverified vendor compatibility or logos.
-- Labor savings remain qualitative until measured evidence is approved.
+- No fabricated quotes, logos, metrics, or named vendor integrations. Approved factual pilot claims are limited to: two customer pilots, 1,000+ frontline users across their teams, Olive & Vine saving 10–15 operations hours each week, and UC Davis Rec Sports seeing easier scheduling, communication, and emergency coverage while the product learns recurring event staffing from shift history. `customerProof` stays empty until Olive & Vine or UC Davis Rec Sports approves a direct quotation or logo for publication.
+- Pilot NAMES and their per-customer RESULTS (including the "10–15 hours" figure) appear in **exactly one** rendered homepage section — the Proof section. The hero, announcement bar, and system strips use the aggregate only ("1,000+ frontline users", "2 active pilots").
+- Pilot names (`pilotCustomers`) may otherwise be stated plainly as a fact — distinct from `customerProof`, no quote/logo required.
+- The scenario walkthrough is explicitly labeled illustrative.
+- Scheduling, day-to-day exceptions, employee communication, labor forecasting, inventory tracking, and operational workflows are the six operating areas, described directly as platform capabilities.
+- Forecasting, prediction, inventory, and cross-system connection (POS, payroll) are all in scope and stated plainly. Keep the framing "configured around the systems you already run"; do not name specific vendor integrations or partner logos as live.
+- Short banned list (legal/compliance exposure only): "guarantee", "certification", "certified", "hipaa", "soc 2", "pci compliant".

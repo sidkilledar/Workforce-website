@@ -76,31 +76,30 @@ export function Header() {
   );
 
   return (
-    <header
-      className="sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-canvas)]/95 shadow-[0_8px_24px_-20px_rgba(20,25,30,0.3)] backdrop-blur-lg"
-    >
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-8">
+    <header className="sticky top-0 z-50 border-b border-border-on-dark bg-[var(--color-canvas-dark)]">
+      <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 lg:px-10">
         <Link
           href="/"
-          className="font-display flex min-h-11 items-center text-lg font-semibold tracking-tight text-[var(--color-text-primary)]"
+          className="font-display flex min-h-11 items-center text-xl font-bold tracking-tight text-[var(--color-text-on-dark-primary)]"
         >
           {siteConfig.name}
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-5 lg:flex xl:gap-7">
+        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
           {navAnchors.map((link) => (
             <Link
               key={link.href}
               href={resolveAnchorHref(link.href, pathname)}
               aria-current={activeHref === link.href ? "true" : undefined}
               className={cn(
-                "text-sm font-medium transition-colors duration-[var(--duration-ui)]",
+                "nav-link rounded-sm text-sm font-medium transition-colors duration-[var(--duration-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text-on-dark-primary)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-canvas-dark)]",
                 activeHref === link.href
-                  ? "text-[var(--color-signal-strong)]"
-                  : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+                  ? "text-[var(--color-text-on-dark-primary)]"
+                  : "text-[var(--color-text-on-dark-secondary)] hover:text-[var(--color-text-on-dark-primary)]",
               )}
             >
               {link.label}
+              <span className="nav-underline" aria-hidden />
             </Link>
           ))}
         </nav>
@@ -108,8 +107,8 @@ export function Header() {
         <div className="hidden lg:block">
           <Button
             href={ctaNav.href}
-            size="md"
-            arrow
+            variant="cta"
+            className="text-sm"
             onClick={() => trackEvent("demo_cta_click", { location: "header" })}
           >
             {ctaNav.label}
@@ -119,7 +118,7 @@ export function Header() {
         <button
           ref={menuButtonRef}
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--color-border)] text-[var(--color-text-primary)] lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-border-on-dark text-[var(--color-text-on-dark-primary)] lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -140,7 +139,7 @@ export function Header() {
       <div
         id="mobile-nav"
         className={cn(
-          "mobile-menu border-t border-[var(--color-border)] bg-[var(--color-canvas)] px-6 py-6 lg:hidden",
+          "mobile-menu border-t border-border-on-dark bg-[var(--color-canvas-dark)] px-6 py-6 lg:hidden",
           mobileOpen && "is-open",
         )}
         inert={!mobileOpen ? true : undefined}
@@ -151,7 +150,7 @@ export function Header() {
               key={link.href}
               href={resolveAnchorHref(link.href, pathname)}
               onClick={closeMobileMenu}
-              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--color-text-primary)] hover:bg-black/[0.03]"
+              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--color-text-on-dark-secondary)] hover:bg-white/[0.04] hover:text-[var(--color-text-on-dark-primary)]"
             >
               {link.label}
             </Link>
@@ -159,9 +158,8 @@ export function Header() {
         </nav>
         <Button
           href={ctaNav.href}
-          className="mt-4 w-full"
-          size="lg"
-          arrow
+          variant="cta"
+          className="mt-4 w-full text-sm"
           onClick={() => {
             trackEvent("demo_cta_click", { location: "mobile_menu" });
             closeMobileMenu();
@@ -169,7 +167,10 @@ export function Header() {
         >
           {ctaNav.label}
         </Button>
-        <a href={`mailto:${siteConfig.email}`} className="mt-5 block px-3 text-sm text-[var(--color-text-secondary)]">
+        <a
+          href={`mailto:${siteConfig.email}`}
+          className="mt-5 block px-3 text-sm text-[var(--color-text-on-dark-muted)]"
+        >
           {siteConfig.email}
         </a>
       </div>

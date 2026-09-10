@@ -107,11 +107,12 @@ export function AuthorityTabs() {
         })}
       </div>
 
-      <div className="relative mt-8 min-h-[168px] overflow-hidden">
+      <div className="relative mt-8 min-h-[132px] overflow-hidden">
         <div
           key={active.key}
           id="authority-panel"
           role="tabpanel"
+          tabIndex={0}
           aria-labelledby={`authority-tab-${active.key}`}
           className={reducedMotion ? "authority-panel-fade" : direction >= 0 ? "authority-panel-enter-forward" : "authority-panel-enter-back"}
         >

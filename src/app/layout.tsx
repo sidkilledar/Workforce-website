@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
@@ -9,14 +9,22 @@ import { GrainOverlay } from "@/components/motion/GrainOverlay";
 import { buildMetadata, organizationJsonLd, softwareApplicationJsonLd } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Plus Jakarta Sans is the green-layout body/UI face (Figma). Mapped to
+// --font-sans in globals.css @theme inline.
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// JetBrains Mono is the green-layout mono face (micro-labels, URLs, ids).
+// Mapped to --font-mono in globals.css @theme inline.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 const fraunces = Fraunces({
@@ -44,7 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[var(--color-canvas)]">
         <a

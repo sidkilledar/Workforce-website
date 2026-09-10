@@ -16,10 +16,10 @@ export function AnnouncementBar() {
   if (!announcement) return null;
 
   return (
-    <div className="bg-[var(--color-canvas-dark)] px-6 py-2.5 text-center">
+    <div className="border-b border-[var(--color-border-on-dark)] bg-[var(--color-canvas-dark)] px-6 py-2.5 text-center">
       <Link
         href={resolveAnchorHref(announcement.href, pathname)}
-        className="label-mono inline-flex items-center gap-2 text-[var(--color-text-on-dark-secondary)] transition-colors hover:text-[var(--color-text-on-dark-primary)]"
+        className="label-mono inline-flex items-center gap-2 text-[var(--color-text-on-dark-muted)] transition-colors duration-[var(--duration-hover)] hover:text-[var(--color-text-on-dark-primary)]"
       >
         <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--color-signal)]" aria-hidden />
         {announcement.message}

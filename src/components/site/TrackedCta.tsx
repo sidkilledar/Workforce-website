@@ -14,7 +14,7 @@ export function TrackedCta({
   children,
 }: {
   location: string;
-  variant?: "primary" | "light";
+  variant?: "primary" | "light" | "cta";
   children: string;
 }) {
   return (

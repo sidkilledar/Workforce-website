@@ -6,7 +6,11 @@
      the --color-*-on-dark tokens below instead of these. */
   --color-canvas: #f1ece0;
   --color-canvas-raised: #e8e0cd;
-  --color-canvas-elevated: #fbf8f1;
+  /* Nudged from #fbf8f1 to match the green-Figma card/button cream exactly. */
+  --color-canvas-elevated: #fcfaf5;
+  /* Warm band behind the Features grid, the Proof grid, and the BrowserMock
+     main panel — one shade below the paper canvas. */
+  --color-canvas-features: #f6f1e9;
 
   --color-surface: #fbf8f1;
   --color-surface-strong: #e8e0cd;
@@ -22,30 +26,37 @@
   /* One signal color, used deliberately and sparingly: primary CTAs, live/
      active diagram states, the loop's resolved pulse. Everything else in the
      system is ink, paper, and their tints — no second or third "accent." */
-  /* Darkened from an earlier #d63c12: that value was only ~4:1 against the
-     paper canvas and ~3.1:1 for white button text on a signal-strong fill —
-     both fail WCAG AA 4.5:1 for normal text. #b8330d clears both (~5.1:1 on
-     paper, ~6:1 with white text) while staying the same rust-orange hue. */
-  --color-signal: #ff4e1f;
-  --color-signal-strong: #b8330d;
-  --color-signal-soft: #ffd9c4;
+  /* Sage-green signal, matched to the "green layout" Figma variant (#697d71).
+     --color-signal is the decorative/active hue (rails, dots, live states).
+     --color-signal-strong is the darker shade used for text, links, icons and
+     button fills on the paper canvas — #3f5648 clears WCAG AA 4.5:1 on paper
+     and ~8:1 with white button text. */
+  --color-signal: #697d71;
+  --color-signal-strong: #3f5648;
+  --color-signal-soft: #dbe3dc;
 
   /* Small supporting utility hues for status only — never treated as brand
      colors, never used for emphasis or decoration. */
   --color-status-resolved: #4c7a5d;
   --color-status-wait: rgba(23, 19, 16, 0.4);
 
-  --shadow-glow-signal: 0 0 90px -26px rgba(255, 78, 31, 0.55);
+  --shadow-glow-signal: 0 0 90px -26px rgba(105, 125, 113, 0.6);
 
-  /* Retained-dark-section tokens: the Hero, Operating Loop, and FinalCta sit
-     on warm operational ink rather than the paper canvas above, so text and
-     cards inside them read against dark, not against --color-canvas. */
-  --color-canvas-dark: #15110c;
-  --color-canvas-dark-raised: #1f1a13;
-  --color-text-on-dark-primary: rgba(245, 239, 226, 0.97);
-  --color-text-on-dark-secondary: rgba(245, 239, 226, 0.78);
-  --color-text-on-dark-muted: rgba(245, 239, 226, 0.5);
-  --color-border-on-dark: rgba(245, 239, 226, 0.22);
+  /* Retained-dark-section tokens: the Operating Loop and other bold sections
+     sit on warm charcoal (#23201a, from the Figma) rather than the paper
+     canvas. The Hero and FinalCta use --color-canvas-hero (sage green) — the
+     defining surface of the green layout — and reuse the same on-dark text
+     tokens, which stay legible on both surfaces. */
+  --color-canvas-dark: #23201a;
+  --color-canvas-dark-raised: #2d2a22;
+  /* Sage band behind the Hero and FinalCta. Darkened from #697d71 so that
+     near-white body copy clears WCAG AA 4.5:1 on this surface (~5.9:1) — the
+     lighter Figma sage could not carry normal-size text at AA. */
+  --color-canvas-hero: #57685e;
+  --color-text-on-dark-primary: rgba(252, 250, 245, 0.98);
+  --color-text-on-dark-secondary: rgba(252, 250, 245, 0.82);
+  --color-text-on-dark-muted: rgba(252, 250, 245, 0.62);
+  --color-border-on-dark: rgba(252, 250, 245, 0.24);
 
   /* Motion foundation — named durations/easings, not isolated one-off
      keyframes. Every animated component should reference these rather than
@@ -65,6 +76,7 @@
   --color-canvas: var(--color-canvas);
   --color-canvas-raised: var(--color-canvas-raised);
   --color-canvas-elevated: var(--color-canvas-elevated);
+  --color-canvas-features: var(--color-canvas-features);
 
   --color-surface: var(--color-surface);
   --color-surface-strong: var(--color-surface-strong);
@@ -83,18 +95,27 @@
 
   --color-canvas-dark: var(--color-canvas-dark);
   --color-canvas-dark-raised: var(--color-canvas-dark-raised);
+  --color-canvas-hero: var(--color-canvas-hero);
   --color-text-on-dark-primary: var(--color-text-on-dark-primary);
   --color-text-on-dark-secondary: var(--color-text-on-dark-secondary);
   --color-text-on-dark-muted: var(--color-text-on-dark-muted);
   --color-border-on-dark: var(--color-border-on-dark);
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-plus-jakarta);
   --font-display: var(--font-fraunces);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jetbrains);
 }
 
-* {
-  border-color: var(--color-border);
+/* Wrapped in @layer base (matching Tailwind's own preflight) so that explicit
+   border-color utilities — border-canvas-raised, border-border-on-dark, etc. —
+   which live in @layer utilities still win. An unlayered `*` rule would beat
+   every layered utility regardless of specificity. */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
 }
 
 html {
@@ -121,8 +142,12 @@ body {
 .font-display {
   font-family: var(--font-display), Georgia, "Times New Roman", serif;
   font-optical-sizing: auto;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   font-feature-settings: "ss02" 1;
+  /* Green-Figma display axes: SOFT dialed out, WONK on — the quirky terminals
+     the layout uses on every heading and the wordmark. Per-heading tracking
+     (e.g. the hero H1's -0.025em) is set at the call site. */
+  font-variation-settings: "SOFT" 0, "WONK" 1;
 }
 
 .label-mono {
@@ -130,6 +155,36 @@ body {
   font-size: 0.6875rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+/* Nav-link underline sweep (green Figma navbar). A 1.5px sage rule that grows
+   from the left edge on hover/focus of the parent link, and stays full-width
+   when the link is the active section. Contract for consumers:
+   - the parent link (or wrapper) carries `.nav-link` and is position:relative
+   - the underline is a child element with `.nav-underline`
+   - active state is expressed on the parent as `aria-current="true"` or the
+     `.is-active` class
+   Width-only transition, so it's left running under reduced motion. */
+.nav-link {
+  position: relative;
+}
+
+.nav-underline {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1.5px;
+  width: 0;
+  background: var(--color-signal);
+  transition: width var(--duration-hover) var(--ease-out);
+  pointer-events: none;
+}
+
+.nav-link:hover .nav-underline,
+.nav-link:focus-visible .nav-underline,
+.nav-link[aria-current="true"] .nav-underline,
+.nav-link.is-active .nav-underline {
+  width: 100%;
 }
 
 /* Fine structural grid, used as an atmosphere layer behind hero/section

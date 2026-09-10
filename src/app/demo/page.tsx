@@ -9,15 +9,15 @@ import { customerProof, pilotImpact } from "@/lib/site-config";
 export const metadata: Metadata = buildMetadata({
   title: "Book a Demo",
   description:
-    "Tell us about your team, the systems you use, and one recurring scheduling, coverage, or communication problem. We'll use that context to prepare a tailored WorkforceOS walkthrough.",
+    "Tell us about your team, the systems you use, and one recurring problem — a coverage scramble, a stockout, a rush you didn't staff for. We'll prepare a WorkforceOS walkthrough on your workflow.",
   path: "/demo",
 });
 
 const nextSteps = [
-  { title: "We review your workflow", description: "Your team, current systems, and coordination burden shape the conversation." },
-  { title: "We confirm the relevant systems and approval needs", description: "We identify the systems and operational constraints involved before proposing a pilot." },
-  { title: "We schedule a tailored walkthrough", description: "You see the information flow, manager boundary, and practical first workflow together." },
-  { title: "If there is a fit, we define a focused pilot starting point", description: "Not every submission needs a full technical integration plan up front." },
+  { title: "We review your operation", description: "Your team, the systems you run, and where the coordination work piles up shape the conversation." },
+  { title: "We confirm the systems and approval needs", description: "We identify which systems and operational constraints are involved before proposing a pilot." },
+  { title: "We schedule a tailored walkthrough", description: "You see the information flow across your systems, the manager boundary, and a practical first workflow together." },
+  { title: "If there is a fit, we scope a focused pilot", description: "One workflow, one location — not a full integration plan up front." },
 ];
 
 export default function DemoPage() {
@@ -29,11 +29,11 @@ export default function DemoPage() {
         <div>
           <Reveal className="max-w-xl">
             <h1 className="font-display text-balance text-4xl font-semibold leading-[1.06] tracking-[-0.02em] text-[var(--color-text-primary)] sm:text-5xl">
-              Let&apos;s map one workflow your managers handle manually.
+              Show us one part of the operation you&apos;re running by hand.
             </h1>
             <p className="mt-5 text-base leading-relaxed text-[var(--color-text-secondary)]">
-              Tell us about your team, the systems you use, and one recurring scheduling, coverage, or communication
-              problem. We&apos;ll use that context to prepare a relevant conversation.
+              Tell us about your team, the systems you use, and one recurring problem — a coverage scramble, a
+              stockout, a rush you didn&apos;t staff for. We&apos;ll prepare a walkthrough on your workflow.
             </p>
           </Reveal>
 

@@ -40,13 +40,17 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
     ["Name", data.name],
     ["Work email", data.email],
     ["Company", data.company],
-    ["Role", data.role],
-    ["Industry", industryLabel(data.industry)],
-    ["Locations", data.locations],
-    ["Hourly employees", data.hourlyEmployees],
-    ["Biggest friction", frictionWorkflowLabel(data.frictionWorkflow)],
   ];
 
+  // Optional qualification fields — only included when the requester filled
+  // them in, since the form no longer requires any of them.
+  if (data.role) rows.push(["Role", data.role]);
+  if (data.industry) rows.push(["Industry", industryLabel(data.industry)]);
+  if (data.locations) rows.push(["Locations", data.locations]);
+  if (data.hourlyEmployees) rows.push(["Hourly employees", data.hourlyEmployees]);
+  if (data.frictionWorkflow) {
+    rows.push(["Biggest friction", frictionWorkflowLabel(data.frictionWorkflow)]);
+  }
   if (data.currentTools) {
     rows.push(["Tools involved today", data.currentTools]);
   }

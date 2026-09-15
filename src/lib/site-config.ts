@@ -19,7 +19,7 @@ export const siteConfig = {
   name: "WorkforceOS",
   tagline: "One place to see, understand, and run the whole operation.",
   description:
-    "WorkforceOS is an operational intelligence platform for frontline businesses. It connects the POS, scheduling, payroll, inventory, and communication systems you already use and turns them into one configurable manager dashboard — so managers can see what's happening, predict what's next, and coordinate the response from one place.",
+    "WorkforceOS is an operational intelligence platform for restaurants. It connects the POS, scheduling, payroll, inventory, and communication systems you already use and turns them into one configurable manager dashboard — built around scheduling and team communication, backed by labor forecasting and inventory — so managers can see what's happening, predict what's next, and coordinate the response from one place.",
   url: resolveSiteUrl(),
   ogImage: "/opengraph-image",
   email: "hello@workforceos.com",
@@ -31,7 +31,7 @@ export const siteConfig = {
 // section — the announcement bar and hero reference the aggregate figures
 // instead, per the messaging acceptance rule that names/results appear in
 // exactly one homepage section.
-export const pilotCustomers = ["Olive & Vine", "UC Davis Rec Sports"] as const;
+export const pilotCustomers = ["Olive & Vine", "Mylapore", "UC Davis Rec Sports"] as const;
 
 export type PilotCustomer = {
   name: string;
@@ -50,7 +50,7 @@ export type PilotCustomer = {
 // single-section pilot-fact guardrail. The `customers` array is retained only
 // because the site-config test asserts the names + a non-empty result here.
 export const pilotImpact = {
-  organizations: 2,
+  organizations: 3,
   frontlineUsers: "1,000+",
   customers: [
     {
@@ -59,6 +59,15 @@ export const pilotImpact = {
       result: "Saves the operations team 10–15 hours every week",
       noteLabel: "Supported workflow",
       note: "Scheduling, staffing, and daily coordination",
+    },
+    {
+      name: "Mylapore",
+      context: "12-location restaurant group",
+      // TODO(pilot): replace with the confirmed weekly hours figure, phrased
+      // like Olive & Vine's ("Saves ... 10–15 hours every week").
+      result: "Reports hours saved on scheduling and coverage each week, across all 12 locations",
+      noteLabel: "Supported workflow",
+      note: "Scheduling, coverage, WhatsApp shift updates, and labor forecasting",
     },
     {
       name: "UC Davis Rec Sports",
@@ -146,14 +155,14 @@ export type Announcement = {
 // links into the pilot proof section so the claim supports credibility there
 // instead of behaving like a second sales CTA competing with "Book a Demo".
 export const announcement: Announcement | null = {
-  message: "Being built with active pilots — 1,000+ frontline users across shift-based teams.",
-  href: `#${sectionIds.pilots}`,
+  message: "Now running in active restaurant pilots — see the results.",
+  href: `#${sectionIds.proof}`,
 };
 
 // LinkedIn presence isn't live yet — the footer renders this as a visible,
 // non-navigating placeholder rather than a real (unverified) URL.
 export const socialLinks = {
-  linkedinPlaceholder: true,
+  linkedinPlaceholder: false,
 } as const;
 
 export type AuthorityMode = "inform" | "recommend" | "execute";
@@ -389,11 +398,16 @@ export const confirmedCapabilities: ConfirmedCapability[] = [
 ];
 
 export const connectedSystems = {
-  label: "Connects the systems you already run on",
+  label: "Works with the tools you already run",
   intro:
-    "WorkforceOS sits across your existing stack and brings the signals that matter into one operating view — no rip-and-replace.",
+    "WorkforceOS reads from your existing stack — no rip-and-replace. How each system connects depends on what it exposes:",
+  tiers: [
+    { label: "Direct connections", detail: "Scheduling, POS, and communication tools with a supported API." },
+    { label: "Imports", detail: "Payroll, HR, and inventory data brought in by scheduled file or export." },
+    { label: "Scoped in a pilot", detail: "Custom and internal systems we assess and connect during onboarding." },
+  ],
   systems: ["POS & sales", "Scheduling & time", "Payroll & HR", "Inventory", "Communication", "Custom & internal tools"],
-  note: "Connected to what you already use. We configure the connections around your systems — no vendor lock-in, no partner logos to chase.",
+  note: "We publish a system as supported once a pilot is running on that connection — not before.",
 } as const;
 
 // ---------------------------------------------------------------------------
@@ -548,6 +562,7 @@ export type AudienceEnvironment = {
 
 export const audienceEnvironments: AudienceEnvironment[] = [
   { name: "Restaurants and catering", kind: "pilot", detail: "Olive & Vine" },
+  { name: "Multi-location restaurant groups", kind: "pilot", detail: "Mylapore" },
   { name: "Campus and recreation operations", kind: "pilot", detail: "UC Davis Rec Sports" },
   { name: "Hospitality", kind: "target" },
   { name: "Retail", kind: "target" },
@@ -586,6 +601,26 @@ export const implementationControl: ImplementationTopic[] = [
     question: "Does this take decisions away from our managers?",
     answer:
       "No. For every workflow you choose whether WorkforceOS only surfaces an issue, prepares a response for approval, or completes a routine action you've pre-approved — and a manager can override any of it. Every action is recorded.",
+  },
+  {
+    question: "Which systems does this actually connect to?",
+    answer:
+      "Scheduling, POS, and communication tools with a supported API connect directly. Payroll, HR, and inventory data come in by scheduled file or export. Custom and internal systems are assessed and connected during onboarding. We publish a system as supported once a pilot is running on that connection — not before.",
+  },
+  {
+    question: "What does this cost?",
+    answer:
+      "We haven't published a price list — cost is scoped with each pilot based on your locations and the workflow you start with. You'll hear a real number during the demo, before anything is signed.",
+  },
+  {
+    question: "Is our data safe, and who can see it?",
+    answer:
+      "Your operational data is used only to run your workflows — it isn't shared with other customers or sold. Access inside our team is limited to the people working on your account. We're early enough that we haven't completed a formal third-party security review yet, and we'll say so plainly if that comes up during a pilot conversation.",
+  },
+  {
+    question: "What happens if something breaks after we're live?",
+    answer:
+      "You reach the same people who built your pilot, not a ticket queue. At this stage that's a direct line, not a tiered support system — which also means we hear about problems fast.",
   },
 ];
 
@@ -641,17 +676,17 @@ export type HeroStat = { value: string; label: string };
 
 /** Section 1 — Hero (sage band). Headline renders light line then bold line. */
 export const heroContent = {
-  eyebrow: "Operational intelligence for frontline businesses",
-  headlineLight: "One place to see, understand,",
-  headlineBold: "and run the operation.",
+  eyebrow: "Operational intelligence for restaurants",
+  headlineLight: "See what needs attention.",
+  headlineBold: "Coordinate what happens next.",
   subhead:
-    "WorkforceOS connects the systems you already use — POS, scheduling, payroll, inventory, communication — and turns them into one configurable dashboard that helps managers understand what's happening, predict what's coming next, and coordinate the response.",
+    "WorkforceOS puts restaurant scheduling and team communication first, with labor forecasting and inventory built in — so managers can spot staffing gaps and coordinate the response, with control over every action.",
   primaryCta: "Request a Demo",
   secondaryCta: "See how it works",
   microline: "Connects your existing tools · Configurable to your rules · You set what AI can do",
   stats: [
     { value: "1,000+", label: "Frontline users on active pilots" },
-    { value: "2", label: "Active pilots" },
+    { value: "3", label: "Active pilots" },
     { value: "6", label: "Operating areas in one view" },
     { value: "1", label: "Operating layer across your apps" },
   ] satisfies HeroStat[],
@@ -702,13 +737,14 @@ export const heroDashboard = {
   },
   /** Icon rail, top to bottom; index 0 is active (sage rounded square). */
   iconRail: ["grid", "menu", "bar-chart", "layout-grid", "clock"],
-  ariaLabel: "WorkforceOS dashboard preview",
+  ariaLabel: "Illustrative WorkforceOS dashboard with sample data",
+  sampleDataLabel: "Illustrative — sample data",
 } as const;
 
 /** Section 2 — LogoBar / pilot strip (charcoal). Aggregate only, no names. */
 export const logoStrip = {
-  label: "Being built with active shift-based operations",
-  aggregate: "2 active pilots · 1,000+ frontline users · restaurants, catering & campus recreation",
+  label: "Being built with active restaurant operations",
+  aggregate: "3 active pilots · 1,000+ frontline users · restaurants, catering & campus recreation",
   tell: "Named pilots, not stock logos — see who below.",
 } as const;
 
@@ -716,14 +752,14 @@ export const logoStrip = {
  *  line. Cards render in `displayOrder` (persuasion leads with call-outs);
  *  the `confirmedCapabilities` array itself keeps its tested order. */
 export const featureSection = {
-  headingLight: "Everything a manager needs to run",
-  headingBold: "the operation — in one view.",
+  headingLight: "Restaurant operations intelligence,",
+  headingBold: "built around scheduling and communication.",
   intro:
-    "Scheduling, employee communication, labor forecasting, inventory, operational workflows, and day-to-day exceptions — handled from one configurable dashboard instead of a dozen disconnected apps.",
+    "Scheduling and team communication come first — backed by labor forecasting, inventory, operational workflows, and day-to-day exceptions, all in the same dashboard.",
   displayOrder: [
     "scheduling",
-    "exceptions",
     "communication",
+    "exceptions",
     "forecasting",
     "inventory",
     "workflows",
@@ -738,8 +774,8 @@ export const howItWorksSection = {
   headingLight: "A practical path to",
   headingBold: "your first workflow.",
   subhead:
-    "You connect the systems you already use, choose the dashboards and rules that fit your operation, and set the manager boundary. And if you're worried about AI: you decide where it stops.",
-  subheadEmphasis: "you decide where it stops.",
+    "You connect the systems you already use, choose the dashboards and rules that fit your operation, and set the manager boundary.",
+  subheadEmphasis: "set the manager boundary.",
 } as const;
 
 /** Section 6 — AI control (charcoal). Heading renders light line then bold line. */
@@ -761,7 +797,7 @@ export type ProofCard = {
  *  per-customer results, and the "10–15 hours" figure. Heading renders bold
  *  line then light line. Also drives / mirrors `pilotImpact.customers`. */
 export const proofSection = {
-  headingBold: "Two operations are",
+  headingBold: "Three operations are",
   headingLight: "already running on it.",
   intro:
     "WorkforceOS is being built with active pilots — more than 1,000 frontline users across their teams. Here's what each one reports.",
@@ -773,15 +809,22 @@ export const proofSection = {
       note: "Supported workflow — scheduling, staffing, and daily coordination",
     },
     {
+      name: "Mylapore",
+      context: "12-location restaurant group",
+      // TODO(pilot): replace with the confirmed weekly hours figure.
+      result: "Reports hours saved on scheduling and coverage each week, across all 12 locations",
+      note: "Supported workflow — scheduling, coverage, WhatsApp shift updates, and labor forecasting",
+    },
+    {
       name: "UC Davis Rec Sports",
       context: "Student-powered campus operations",
       result: "Reports easier scheduling, communication, and emergency coverage",
       note: "WorkforceOS learns how their recurring events are staffed from shift history",
     },
   ] satisfies ProofCard[],
-  aggregate: "2 active pilots · 1,000+ frontline users · restaurants, catering & campus recreation",
+  aggregate: "3 active pilots · 1,000+ frontline users · restaurants, catering & campus recreation",
   transparencyNote:
-    "We only publish what our pilots have told us directly. Named quotes and logos will appear here once Olive & Vine and UC Davis Rec Sports approve them — we won't put words in their mouths before then.",
+    "Each result is what the pilot reported to us. Approved quotes and logos from Olive & Vine, Mylapore, and UC Davis Rec Sports will be added here as they're cleared for publication.",
 } as const;
 
 /** Section 8 — FAQ (paper). List is `implementationControl`. */
@@ -805,10 +848,28 @@ export const finalCtaSection = {
     "No rip-and-replace. WorkforceOS is configured around the tools you already use, and starts with one workflow.",
 } as const;
 
+// ---------------------------------------------------------------------------
+// Company — who is building WorkforceOS. Kept factual and small: the pilots
+// are named in `proofSection`; this section is about the team and how it
+// works. Named bios and photos are added here once cleared — the same
+// publication rule applied to pilot quotes.
+// ---------------------------------------------------------------------------
+
+export const companySection = {
+  label: "Who's building this",
+  heading: "Built with operators, against real shifts.",
+  body: "WorkforceOS is developed alongside the three operations running on it today — a catering company, a 12-location restaurant group, and a campus recreation department. Changes ship against live pilot workflows every week, not a roadmap deck.",
+  points: [
+    { label: "Where it started", detail: "Coordinating student-staffed campus recreation shifts, catering events, and multi-site restaurant staffing." },
+    { label: "How the team works", detail: "Weekly build cycles with pilot managers, measured on manager hours saved." },
+    { label: "Team", detail: "Founder and engineering bios publish here as roles are filled." },
+  ],
+} as const;
+
 /** Section 10 — Footer (charcoal). `legalLine` is the sentence after the
  *  "© {year} WorkforceOS." prefix. */
 export const footerContent = {
-  descriptor: "An operational intelligence platform for frontline businesses.",
+  descriptor: "An operational intelligence platform for restaurants.",
   legalLine: "Built with active pilots in restaurants, catering, and campus recreation.",
   legalLinks: [
     { label: "Privacy", href: "/legal/privacy" },

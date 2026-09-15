@@ -158,7 +158,7 @@ export function DemoForm() {
     <div className="ticket-slip p-6 sm:p-10">
       <form ref={formRef} noValidate onSubmit={handleSubmit} className="space-y-8">
         <fieldset className="space-y-6">
-          <legend className="label-mono text-[var(--color-signal-strong)]">About You</legend>
+          <legend className="label-mono text-[var(--color-signal-strong)]">About you</legend>
           <div className="grid gap-6 sm:grid-cols-2">
             <Field label="Full name *" htmlFor="name" error={errors.name}>
               <input
@@ -189,7 +189,7 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Company *" htmlFor="company" error={errors.company}>
+            <Field label="Company *" htmlFor="company" error={errors.company} className="sm:col-span-2">
               <input
                 id="company"
                 name="company"
@@ -202,12 +202,21 @@ export function DemoForm() {
                 aria-describedby={errors.company ? "company-error" : undefined}
               />
             </Field>
+          </div>
+        </fieldset>
 
-            <Field label="Role or job title *" htmlFor="role" error={errors.role}>
+        <fieldset className="space-y-6">
+          <legend className="label-mono text-[var(--color-signal-strong)]">
+            About your operation <span className="text-[var(--color-text-muted)]">— optional</span>
+          </legend>
+          <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
+            Any of this helps us prepare a sharper walkthrough. Skip what you&apos;d rather cover on the call.
+          </p>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <Field label="Role or job title" htmlFor="role" error={errors.role}>
               <input
                 id="role"
                 name="role"
-                required
                 autoComplete="organization-title"
                 className={inputClasses}
                 value={values.role}
@@ -216,13 +225,8 @@ export function DemoForm() {
                 aria-describedby={errors.role ? "role-error" : undefined}
               />
             </Field>
-          </div>
-        </fieldset>
 
-        <fieldset className="space-y-6">
-          <legend className="label-mono text-[var(--color-signal-strong)]">About Your Operation</legend>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Industry *" htmlFor="industry" error={errors.industry}>
+            <Field label="Industry" htmlFor="industry" error={errors.industry}>
               <select
                 id="industry"
                 name="industry"
@@ -232,6 +236,7 @@ export function DemoForm() {
                   updateField("industry", event.target.value as DemoRequestInput["industry"])
                 }
               >
+                <option value="">Select an industry</option>
                 {demoIndustries.map((industry) => (
                   <option key={industry.value} value={industry.value}>
                     {industry.label}
@@ -240,7 +245,7 @@ export function DemoForm() {
               </select>
             </Field>
 
-            <Field label="Number of locations *" htmlFor="locations" error={errors.locations}>
+            <Field label="Number of locations" htmlFor="locations" error={errors.locations}>
               <select
                 id="locations"
                 name="locations"
@@ -250,6 +255,7 @@ export function DemoForm() {
                   updateField("locations", event.target.value as DemoRequestInput["locations"])
                 }
               >
+                <option value="">Select a range</option>
                 {locationBands.map((band) => (
                   <option key={band} value={band}>
                     {band}
@@ -259,7 +265,7 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="Approximate hourly employees *"
+              label="Approximate hourly employees"
               htmlFor="hourlyEmployees"
               error={errors.hourlyEmployees}
             >
@@ -275,6 +281,7 @@ export function DemoForm() {
                   )
                 }
               >
+                <option value="">Select a range</option>
                 {hourlyEmployeeBands.map((size) => (
                   <option key={size} value={size}>
                     {size}
@@ -284,9 +291,10 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="Which workflow consumes the most manager time? *"
+              label="Which workflow consumes the most manager time?"
               htmlFor="frictionWorkflow"
               error={errors.frictionWorkflow}
+              className="sm:col-span-2"
             >
               <select
                 id="frictionWorkflow"
@@ -296,9 +304,10 @@ export function DemoForm() {
                 onChange={(event) => {
                   const value = event.target.value as DemoRequestInput["frictionWorkflow"];
                   updateField("frictionWorkflow", value);
-                  trackEvent("demo_friction_workflow_select", { workflow: value });
+                  if (value) trackEvent("demo_friction_workflow_select", { workflow: value });
                 }}
               >
+                <option value="">Select a workflow</option>
                 {frictionWorkflows.map((workflow) => (
                   <option key={workflow.value} value={workflow.value}>
                     {workflow.label}

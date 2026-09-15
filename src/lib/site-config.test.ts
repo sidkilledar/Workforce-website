@@ -123,7 +123,11 @@ describe("implementationSteps", () => {
 describe("audienceEnvironments", () => {
   it("marks only the pilot-backed entries as pilots", () => {
     const pilots = audienceEnvironments.filter((environment) => environment.kind === "pilot");
-    expect(pilots.map((environment) => environment.detail)).toEqual(["Olive & Vine", "UC Davis Rec Sports"]);
+    expect(pilots.map((environment) => environment.detail)).toEqual([
+      "Olive & Vine",
+      "Mylapore",
+      "UC Davis Rec Sports",
+    ]);
   });
 
   it("labels every non-pilot entry as a target environment, not an existing customer", () => {
@@ -143,7 +147,11 @@ describe("patchworkSources", () => {
 
 describe("pilotImpact", () => {
   it("names the pilot customers and results in exactly this one place", () => {
-    expect(pilotImpact.customers.map((customer) => customer.name)).toEqual(["Olive & Vine", "UC Davis Rec Sports"]);
+    expect(pilotImpact.customers.map((customer) => customer.name)).toEqual([
+      "Olive & Vine",
+      "Mylapore",
+      "UC Davis Rec Sports",
+    ]);
     for (const customer of pilotImpact.customers) {
       expect(customer.result.trim().length, customer.name).toBeGreaterThan(0);
     }

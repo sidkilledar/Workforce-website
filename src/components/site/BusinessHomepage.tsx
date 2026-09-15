@@ -12,8 +12,6 @@ import { DashedRing, PlayCircle } from "@/components/site/featureIcons";
 import {
   aiControlSection,
   authorityTrustPoints,
-  configurability,
-  connectedSystems,
   ctaCopy,
   faqSection,
   featureSection,
@@ -22,8 +20,6 @@ import {
   howItWorksSection,
   implementationControl,
   implementationHonestyNote,
-  intelligenceLayer,
-  logoStrip,
   patchworkSources,
   proofSection,
   sectionIds,
@@ -33,14 +29,11 @@ export function BusinessHomepage() {
   return (
     <>
       <Hero />
-      <LogoStrip />
-      <ConnectedSystems />
+      <Proof />
       <Problem />
       <Features />
-      <IntelligenceLayer />
       <HowItWorks />
-      <ConfigureControl />
-      <Proof />
+      <AiControl />
       <Faq />
       <FinalCta />
     </>
@@ -64,7 +57,7 @@ function Hero() {
   return (
     <section
       id={sectionIds.hero}
-      className="relative overflow-hidden bg-[var(--color-canvas-hero)] pb-20 pt-28 sm:pt-32"
+      className="relative overflow-hidden bg-[var(--color-canvas-hero)] pb-14 pt-24 sm:pt-28"
     >
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-48 -top-52 size-[720px] rounded-full border border-white/25" />
@@ -85,7 +78,7 @@ function Hero() {
               {heroContent.eyebrow}
             </p>
             <h1
-              className="font-display mt-5 text-[clamp(2.75rem,6vw,4.5rem)] leading-[1.06] text-[var(--color-text-on-dark-primary)]"
+              className="font-display mt-4 text-[clamp(2.25rem,5.4vw,4.25rem)] leading-[1.08] text-[var(--color-text-on-dark-primary)]"
               style={{ letterSpacing: "-0.025em" }}
             >
               <span className="block overflow-hidden">
@@ -100,13 +93,13 @@ function Hero() {
               </span>
             </h1>
             <p
-              className="animate-reveal-soft mt-6 max-w-[42ch] text-lg leading-relaxed text-[var(--color-text-on-dark-primary)]"
+              className="animate-reveal-soft mt-5 max-w-[46ch] text-base leading-relaxed text-[var(--color-text-on-dark-primary)] sm:text-lg"
               style={{ animationDelay: "300ms" }}
             >
               {heroContent.subhead}
             </p>
             <div
-              className="animate-reveal-soft mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
+              className="animate-reveal-soft mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
               style={{ animationDelay: "420ms" }}
             >
               <TrackedCta location="hero" variant="cta">
@@ -122,78 +115,12 @@ function Hero() {
                 {heroContent.secondaryCta}
               </Link>
             </div>
-            <p
-              className="label-mono animate-reveal-soft mt-8 text-[var(--color-text-on-dark-primary)]"
-              style={{ animationDelay: "520ms" }}
-            >
-              {heroContent.microline}
-            </p>
           </div>
 
           <Reveal className="mx-auto w-full max-w-[560px] lg:mx-0 lg:justify-self-end">
             <BrowserMock />
           </Reveal>
         </div>
-
-        <Reveal delay={120} className="mt-20 border-t border-border-on-dark pt-10">
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-            {heroContent.stats.map((stat) => (
-              <div key={stat.label}>
-                <p className="font-display text-[2.25rem] font-bold leading-none text-[var(--color-text-on-dark-primary)]">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-sm text-[var(--color-text-on-dark-primary)]">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function LogoStrip() {
-  return (
-    <section id={sectionIds.pilots} className="scroll-mt-24 bg-[var(--color-canvas-dark)] py-14">
-      <Container>
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="label-mono text-[var(--color-text-on-dark-muted)]">{logoStrip.label}</p>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-            {logoStrip.aggregate}
-          </p>
-          <p className="mt-3 text-sm text-[var(--color-text-on-dark-muted)]">{logoStrip.tell}</p>
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function ConnectedSystems() {
-  return (
-    <section
-      id={sectionIds.connected}
-      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark-raised)] py-16"
-    >
-      <Container>
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="label-mono text-[var(--color-text-on-dark-muted)]">{connectedSystems.label}</p>
-          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-            {connectedSystems.intro}
-          </p>
-        </Reveal>
-        <Reveal delay={80} className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-2">
-          {connectedSystems.systems.map((system) => (
-            <span
-              key={system}
-              className="rounded-full border border-[var(--color-border-on-dark)] px-3.5 py-1.5 text-xs text-[var(--color-text-on-dark-secondary)]"
-            >
-              {system}
-            </span>
-          ))}
-        </Reveal>
-        <Reveal delay={120} className="mx-auto mt-6 max-w-2xl text-center">
-          <p className="text-xs leading-relaxed text-[var(--color-text-on-dark-muted)]">{connectedSystems.note}</p>
-        </Reveal>
       </Container>
     </section>
   );
@@ -205,7 +132,7 @@ function Problem() {
       <Container>
         <Reveal variant="clip" className="max-w-3xl">
           <h2 className="font-display text-[2rem] font-semibold leading-[1.15] sm:text-[2.5rem]">
-            Your managers run the business across a dozen disconnected apps.
+            Your restaurant managers run service across a dozen disconnected apps.
           </h2>
         </Reveal>
 
@@ -246,7 +173,7 @@ function Features() {
   return (
     <section
       id={sectionIds.capabilities}
-      className="scroll-mt-24 bg-[var(--color-canvas-features)] py-28 sm:py-32"
+      className="scroll-mt-24 bg-[var(--color-canvas-features)] py-20 sm:py-24"
     >
       <Container>
         <Reveal variant="clip" className="max-w-[780px]">
@@ -261,75 +188,9 @@ function Features() {
           </p>
         </Reveal>
 
-        <div className="mt-20">
+        <div className="mt-16">
           <FeatureGrid />
         </div>
-
-        <Reveal delay={80} className="mt-12 max-w-3xl">
-          <p className="text-sm leading-[1.7] text-[var(--color-text-muted)]">{featureSection.footerNote}</p>
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function IntelligenceLayer() {
-  return (
-    <section
-      id={sectionIds.intelligence}
-      className="scroll-mt-24 bg-[var(--color-canvas-dark)] py-28 sm:py-32"
-    >
-      <Container>
-        <Reveal variant="clip" className="max-w-[720px]">
-          <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
-            <span className="block font-light">{intelligenceLayer.headingLight}</span>
-            <span className="block font-bold">{intelligenceLayer.headingBold}</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={80} className="max-w-2xl">
-          <p className="mt-5 text-lg leading-[1.625] text-[var(--color-text-on-dark-secondary)]">
-            {intelligenceLayer.intro}
-          </p>
-        </Reveal>
-
-        <Reveal delay={120} className="mt-16">
-          <ol className="grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-            {intelligenceLayer.steps.map((step, index) => (
-              <li key={step.key} className="lg:pr-6">
-                <div className="border-t border-[var(--color-signal)]/40 pt-4">
-                  <span className="font-mono text-sm text-[var(--color-signal)]">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="font-display mt-2 text-lg font-semibold leading-snug text-[var(--color-text-on-dark-primary)]">
-                    {step.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-[1.625] text-[var(--color-text-on-dark-muted)]">
-                    {step.body}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Reveal>
-
-        <Reveal delay={160} className="mt-14 space-y-3">
-          {intelligenceLayer.examples.map((example) => {
-            const [trigger, outcome] = example.split("→").map((part) => part.trim());
-            return (
-              <div
-                key={example}
-                className="ticket-slip-dark flex flex-col gap-1.5 px-5 py-4 sm:flex-row sm:items-center sm:gap-3"
-              >
-                <span className="text-sm text-[var(--color-text-on-dark-secondary)]">{trigger}</span>
-                <span aria-hidden className="font-mono text-[var(--color-signal)] sm:hidden">↓</span>
-                <span aria-hidden className="hidden font-mono text-[var(--color-signal)] sm:inline">
-                  →
-                </span>
-                <span className="text-sm font-medium text-[var(--color-text-on-dark-primary)]">{outcome}</span>
-              </div>
-            );
-          })}
-        </Reveal>
       </Container>
     </section>
   );
@@ -339,7 +200,7 @@ function HowItWorks() {
   return (
     <section
       id={sectionIds.howItWorks}
-      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-28 sm:py-32"
+      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-20 sm:py-24"
     >
       <Container>
         <Reveal variant="clip" className="max-w-[576px]">
@@ -354,7 +215,7 @@ function HowItWorks() {
           </p>
         </Reveal>
 
-        <div className="mt-20 grid gap-16 lg:grid-cols-2 lg:items-center">
+        <div className="mt-14 grid gap-16 lg:grid-cols-2 lg:items-center">
           <RolloutSteps />
           <HeroWorkflowDemo />
         </div>
@@ -369,35 +230,13 @@ function HowItWorks() {
   );
 }
 
-function ConfigureControl() {
+function AiControl() {
   return (
     <section
       id={sectionIds.authority}
-      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-28 sm:py-32"
+      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-20 sm:py-24"
     >
       <Container>
-        <Reveal variant="clip" className="max-w-[576px]">
-          <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
-            <span className="block font-light">{configurability.headingLight}</span>
-            <span className="block font-bold">{configurability.headingBold}</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={80} className="max-w-2xl">
-          <p className="mt-5 leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-            {configurability.intro}
-          </p>
-        </Reveal>
-        <Reveal delay={120} className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-          {configurability.items.map((item) => (
-            <div key={item.label}>
-              <p className="text-sm font-medium text-[var(--color-text-on-dark-primary)]">{item.label}</p>
-              <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-on-dark-muted)]">{item.detail}</p>
-            </div>
-          ))}
-        </Reveal>
-
-        <div className="my-16 border-t border-border-on-dark" />
-
         <Reveal variant="clip" className="max-w-[576px]">
           <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
             <span className="block font-light">{aiControlSection.headingLight}</span>
@@ -414,12 +253,12 @@ function ConfigureControl() {
           <AuthorityTabs />
         </Reveal>
 
-        <Reveal
-          delay={160}
-          className="mt-6 grid max-w-md grid-cols-3 gap-4 border-t border-border-on-dark pt-6"
-        >
+        <Reveal delay={160} className="mt-8 grid max-w-xl grid-cols-3 gap-3">
           {authorityTrustPoints.map((point) => (
-            <div key={point.label}>
+            <div
+              key={point.label}
+              className="rounded-xl border border-border-on-dark bg-white/[0.03] px-4 py-3.5"
+            >
               <p className="text-sm font-medium text-[var(--color-text-on-dark-primary)]">{point.label}</p>
               <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-on-dark-muted)]">
                 {point.detail}
@@ -434,7 +273,7 @@ function ConfigureControl() {
 
 function Proof() {
   return (
-    <section id={sectionIds.proof} className="scroll-mt-24 bg-[var(--color-canvas-features)] py-28">
+    <section id={sectionIds.proof} className="scroll-mt-24 bg-[var(--color-canvas-features)] py-20">
       <Container>
         <Reveal variant="clip" className="mx-auto max-w-[720px] text-center">
           <h2 className="font-display text-[2.5rem] leading-[1.25]">
@@ -446,7 +285,7 @@ function Proof() {
           <p className="mt-5 leading-relaxed text-[var(--color-text-muted)]">{proofSection.intro}</p>
         </Reveal>
 
-        <Reveal delay={120} className="mx-auto mt-16 grid max-w-4xl gap-6 md:grid-cols-2">
+        <Reveal delay={120} className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-3">
           {proofSection.cards.map((card) => (
             <article
               key={card.name}

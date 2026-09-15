@@ -90,7 +90,10 @@ export function AuthorityTabs() {
               tabIndex={selected ? 0 : -1}
               onClick={() => select(index)}
               onKeyDown={(event) => handleKeyDown(event, index)}
-              className="group flex min-h-11 items-start rounded-[3px] bg-transparent px-1 py-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-signal-soft)]"
+              className={cn(
+                "group flex min-h-11 items-start rounded-full px-3 py-1.5 text-left transition-colors duration-[var(--duration-state)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-signal-soft)]",
+                selected ? "bg-[var(--color-signal)]/15" : "bg-transparent",
+              )}
             >
               <span
                 className={cn(

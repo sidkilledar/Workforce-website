@@ -27,23 +27,19 @@ export const demoRequestSchema = z.object({
     .trim()
     .min(2, "Enter your company name.")
     .max(160, "Company name is too long."),
+  // Everything below is optional qualification context. The form asks only
+  // name, work email, and company up front; the rest is collected optionally
+  // or in follow-up. "" is the "not answered" value from an unset <select>.
   role: z
     .string()
     .trim()
-    .min(2, "Enter your role or job title.")
-    .max(120, "Role is too long."),
-  industry: z.enum(industrySlugs, {
-    message: "Select the closest match for your industry.",
-  }),
-  locations: z.enum(locationBands, {
-    message: "Select the number of locations.",
-  }),
-  hourlyEmployees: z.enum(hourlyEmployeeBands, {
-    message: "Select the approximate number of hourly employees.",
-  }),
-  frictionWorkflow: z.enum(frictionWorkflowValues, {
-    message: "Select the workflow that consumes the most manager time.",
-  }),
+    .max(120, "Role is too long.")
+    .optional()
+    .or(z.literal("")),
+  industry: z.enum(industrySlugs).optional().or(z.literal("")),
+  locations: z.enum(locationBands).optional().or(z.literal("")),
+  hourlyEmployees: z.enum(hourlyEmployeeBands).optional().or(z.literal("")),
+  frictionWorkflow: z.enum(frictionWorkflowValues).optional().or(z.literal("")),
   // Optional context: supported integrations aren't publicly confirmed yet,
   // so this stays free text rather than a fixed system list.
   currentTools: z
@@ -80,10 +76,10 @@ export const demoRequestDefaultValues: DemoRequestInput = {
   email: "",
   company: "",
   role: "",
-  industry: demoIndustries[0].value as DemoRequestInput["industry"],
-  locations: locationBands[0],
-  hourlyEmployees: hourlyEmployeeBands[0],
-  frictionWorkflow: frictionWorkflows[0].value,
+  industry: "",
+  locations: "",
+  hourlyEmployees: "",
+  frictionWorkflow: "",
   currentTools: "",
   workflowExample: "",
   message: "",

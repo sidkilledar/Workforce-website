@@ -12,7 +12,8 @@ import { cn } from "@/lib/cn";
  * outer element, and the inner tree is aria-hidden.
  */
 export function BrowserMock() {
-  const { url, sectionLabel, metrics, chart, exceptions, iconRail, ariaLabel } = heroDashboard;
+  const { url, sectionLabel, metrics, chart, exceptions, iconRail, ariaLabel, sampleDataLabel } =
+    heroDashboard;
 
   return (
     <div
@@ -59,9 +60,14 @@ export function BrowserMock() {
 
           {/* Main panel */}
           <div className="flex min-w-0 flex-1 flex-col bg-[var(--color-canvas-features)] p-4">
-            <p className="font-mono text-[12px] font-semibold uppercase leading-4 tracking-[0.1em] text-[var(--color-text-muted)]">
-              {sectionLabel}
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="font-mono text-[12px] font-semibold uppercase leading-4 tracking-[0.1em] text-[var(--color-text-muted)]">
+                {sectionLabel}
+              </p>
+              <span className="rounded-full bg-[rgba(14,13,11,0.06)] px-2 py-0.5 text-[10px] font-medium leading-4 text-[var(--color-text-muted)]">
+                {sampleDataLabel}
+              </span>
+            </div>
 
             {/* Metric cards */}
             <div className="mt-3 grid grid-cols-3 gap-3">
@@ -70,7 +76,7 @@ export function BrowserMock() {
                   key={m.label}
                   className="flex flex-col rounded-lg border border-canvas-raised bg-[var(--color-canvas-elevated)] p-3"
                 >
-                  <span className="font-mono text-[9px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
+                  <span className="font-mono text-[10px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
                     {m.label}
                   </span>
                   <span className="font-display pt-1 text-[16px] leading-6 text-[var(--color-canvas-dark)]">
@@ -92,7 +98,7 @@ export function BrowserMock() {
 
             {/* Chart card */}
             <div className="mt-4 rounded-lg border border-canvas-raised bg-[var(--color-canvas-elevated)] p-3">
-              <p className="font-mono text-[9px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
+              <p className="font-mono text-[10px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
                 {chart.title}
               </p>
               <div className="mt-3 flex items-end gap-2">
@@ -109,7 +115,7 @@ export function BrowserMock() {
                         style={{ height: `${chart.values[i]}%` }}
                       />
                     </span>
-                    <span className="font-mono text-[8px] leading-3 text-[var(--color-text-muted)]">
+                    <span className="font-mono text-[10px] leading-3 text-[var(--color-text-muted)]">
                       {day}
                     </span>
                   </div>
@@ -118,12 +124,12 @@ export function BrowserMock() {
             </div>
 
             {/* Exceptions list — dropped below sm to keep proportions */}
-            <div className="mt-3 hidden overflow-hidden rounded-lg border border-canvas-raised bg-[var(--color-canvas-elevated)] sm:block">
+            <div className="mt-3 overflow-hidden rounded-lg border border-canvas-raised bg-[var(--color-canvas-elevated)]">
               <div className="flex items-center justify-between border-b border-canvas-raised px-3 py-2">
-                <span className="font-mono text-[9px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
+                <span className="font-mono text-[10px] uppercase leading-[13px] tracking-[0.05em] text-[var(--color-text-muted)]">
                   {exceptions.title}
                 </span>
-                <span className="text-[9px] font-semibold leading-[13px] text-[var(--color-signal-strong)]">
+                <span className="text-[10px] font-semibold leading-[13px] text-[var(--color-signal-strong)]">
                   {exceptions.viewAllLabel}
                 </span>
               </div>
@@ -135,15 +141,15 @@ export function BrowserMock() {
                     i < exceptions.rows.length - 1 && "border-b border-[rgba(216,208,196,0.5)]",
                   )}
                 >
-                  <span className="shrink-0 font-mono text-[9px] leading-[13px] text-[var(--color-text-muted)]">
+                  <span className="shrink-0 font-mono text-[10px] leading-[13px] text-[var(--color-text-muted)]">
                     {row.id}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[9px] leading-[13px] text-[var(--color-canvas-dark)]">
+                  <span className="min-w-0 flex-1 truncate text-[10px] leading-[13px] text-[var(--color-canvas-dark)]">
                     {row.label}
                   </span>
                   <span
                     className={cn(
-                      "shrink-0 rounded-full px-1.5 py-0.5 text-[8px] font-semibold leading-3",
+                      "shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-semibold leading-3",
                       TONE_CLASS[row.tone],
                     )}
                   >

@@ -77,10 +77,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-on-dark bg-[var(--color-canvas-dark)]">
-      <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 lg:px-10">
+      <div className="mx-auto flex h-[76px] w-full max-w-[1280px] items-center justify-between px-6 lg:px-10">
         <Link
           href="/"
-          className="font-display flex min-h-11 items-center text-xl font-bold tracking-tight text-[var(--color-text-on-dark-primary)]"
+          className="font-display flex min-h-11 items-center text-2xl font-bold tracking-tight text-[var(--color-text-on-dark-primary)]"
         >
           {siteConfig.name}
         </Link>

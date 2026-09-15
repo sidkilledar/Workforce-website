@@ -1,48 +1,33 @@
-# Workforce OS — Marketing Site
+# WorkforceOS marketing site
 
-Marketing site for Workforce OS, an AI operations manager for frontline businesses. Built with Next.js (App Router), TypeScript, and Tailwind CSS.
+A Next.js App Router site for operational intelligence and execution across frontline businesses.
 
-## Getting started
+## Development
 
-```bash
-npm install
-cp .env.example .env.local   # fill in Resend + site config
-npm run dev
-```
+Install dependencies with `npm install`, configure `.env.local` using `.env.example`, and run `npm run dev`. Open the local URL printed by Next.js.
 
-Open [http://localhost:3000](http://localhost:3000).
+- `npm run build`: production build
+- `npm run lint`: ESLint
+- `npm test`: validation, form, API, navigation, content, and walkthrough tests
 
-## Scripts
+## Structure
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Start the dev server |
-| `npm run build` | Production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | ESLint |
-| `npm run test` | Run the test suite once |
-| `npm run test:watch` | Run tests in watch mode |
+- `/`: homepage, composed in `src/components/site/BusinessHomepage.tsx`
+- `/demo`: request form with optional qualification under “Add more context”
+- `/legal/privacy` and `/legal/terms`: existing legal content
+- `src/components/site/OperationsInteractive.tsx`: walkthrough, communication, configuration
+- `src/components/site/OperationPrimitives.tsx`: event, status, message, rule row
+- `src/lib/operations-scenario.ts`: shared illustrative Event 024 and workflow states
+- `src/lib/site-config.ts`: navigation, customer stories, FAQ, metadata, form choices
+- `src/app/operations.css`: responsive operations desk visual system
+- `docs/redesign/design.md`: content map, tokens, desktop/mobile compositions, state and motion specifications
 
-## Environment variables
+## Content boundaries
 
-See `.env.example`. `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `SALES_INBOX_EMAIL` are required for the `/demo` form to send email — without them, the demo request API returns a graceful error and the form surfaces it to the user.
+The three named pilots and their reported outcomes come from existing project content. No fabricated testimonials or vendor support claims are added. The ambiguous aggregate user figure is omitted pending a precise definition. Product demonstrations are explicitly illustrative. Connection methods and supported write-back are confirmed during setup.
 
-## Project structure
+## Demo delivery and measurement
 
-- `src/app/*` — routes (App Router). Each top-level page (`product`, `industries`, `about`, `pricing`, `demo`, `legal/*`) is a route segment.
-- `src/app/api/demo/route.ts` — demo request endpoint (validation, honeypot, rate limiting, Resend).
-- `src/components/ui/*` — design-system primitives (Button, GlassPanel, Reveal, etc).
-- `src/components/site/*` — page-level sections (Hero, DemoForm, IndustryDetail, etc).
-- `src/components/layout/*` — Header/Footer.
-- `src/lib/site-config.ts` — typed content: nav, industries (restaurants, chains, catering, campuses, other), capabilities, operational timeline, scenario data, and the (currently empty) customer-proof list.
-- `src/lib/validation.ts` — shared Zod schema for the demo form (client + server).
-- `src/components/site/OperationsPanel.tsx` — the shared "command center" visual reused (with different state) across the Hero, Problem, How It Works, and Adaptive Scenario sections.
-- `src/components/ui/ScrollStory.tsx` — reusable pinned scroll-driven narrative primitive, with a stacked fallback below `md`.
+The form uses the existing `/api/demo` route with validation, a honeypot, rate limiting, and Resend. `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and `SALES_INBOX_EMAIL` are needed for email delivery; without them, the form shows a submission error. Automated checks mock delivery and do not email anyone.
 
-## Customer proof
-
-`src/components/site/PilotTrust.tsx` shows the "in active customer testing" placeholder message; the logo/quote grid only renders once `customerProof` in `src/lib/site-config.ts` has entries. Add approved names, logos, and testimonials there once customers have signed off on publication.
-
-## Legal pages
-
-`src/app/legal/privacy` and `src/app/legal/terms` are explicitly marked placeholders pending review by legal counsel — replace the copy before launch.
+The existing analytics adapter tracks CTA clicks, walkthrough engagement, authority selection, form starts, completions, and failures. Configure an analytics provider for collection. Form contents and personal information are not attached to engagement events.

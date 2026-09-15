@@ -1,99 +1,74 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { buildMetadata } from "@/lib/metadata";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
 import { DemoForm } from "@/components/site/DemoForm";
-import { customerProof, pilotImpact } from "@/lib/site-config";
+import { pilotCustomers } from "@/lib/site-config";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Book a Demo",
+  title: "Request a Demo",
   description:
-    "Tell us about your team, the systems you use, and one recurring problem — a coverage scramble, a stockout, a rush you didn't staff for. We'll prepare a WorkforceOS walkthrough on your workflow.",
+    "Bring one recurring operational problem. We will prepare a WorkforceOS walkthrough around your systems, your people, and your approval rules.",
   path: "/demo",
 });
-
-const nextSteps = [
-  { title: "We review your operation", description: "Your team, the systems you run, and where the coordination work piles up shape the conversation." },
-  { title: "We confirm the systems and approval needs", description: "We identify which systems and operational constraints are involved before proposing a pilot." },
-  { title: "We schedule a tailored walkthrough", description: "You see the information flow across your systems, the manager boundary, and a practical first workflow together." },
-  { title: "If there is a fit, we scope a focused pilot", description: "One workflow, one location — not a full integration plan up front." },
-];
-
 export default function DemoPage() {
-  const testimonial = customerProof.find((customer) => customer.quote);
-
   return (
-    <>
-      <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-16">
+    <div className="op-demo-page">
+      <div className="op-container op-demo-grid">
         <div>
-          <Reveal className="max-w-xl">
-            <h1 className="font-display text-balance text-4xl font-semibold leading-[1.06] tracking-[-0.02em] text-[var(--color-text-primary)] sm:text-5xl">
-              Show us one part of the operation you&apos;re running by hand.
-            </h1>
-            <p className="mt-5 text-base leading-relaxed text-[var(--color-text-secondary)]">
-              Tell us about your team, the systems you use, and one recurring problem — a coverage scramble, a
-              stockout, a rush you didn&apos;t staff for. We&apos;ll prepare a walkthrough on your workflow.
-            </p>
-          </Reveal>
-
-          <Reveal delay={80} className="mt-10">
-            <DemoForm />
-          </Reveal>
+          <p className="op-eyebrow">Let’s look at your operation</p>
+          <h1>
+            Start with the work
+            <br />
+            you keep doing by hand.
+          </h1>
+          <p className="op-demo-lede">
+            Tell us a little about your team. We’ll reach out to arrange a
+            walkthrough around your workflow.
+          </p>
+          <DemoForm />
         </div>
-
-        <aside className="flex flex-col gap-8 lg:pt-2">
-          {testimonial ? (
-            <Reveal className="ticket-slip p-6">
-              <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                &ldquo;{testimonial.quote}&rdquo;
-              </p>
-              <p className="mt-4 text-sm font-medium text-[var(--color-text-primary)]">
-                {testimonial.attribution ?? testimonial.name}
-              </p>
-            </Reveal>
-          ) : (
-            <Reveal className="rounded-xl bg-[var(--color-canvas-dark)] p-6 text-[var(--color-text-on-dark-primary)]">
-              <p className="text-3xl font-semibold tabular-nums">{pilotImpact.frontlineUsers}</p>
-              <p className="mt-1 text-sm text-[var(--color-text-on-dark-secondary)]">
-                frontline users supported by active pilots
-              </p>
-            </Reveal>
-          )}
-
-          {customerProof.length > 0 && (
-            <Reveal delay={40} className="flex flex-wrap items-center gap-6">
-              {customerProof.map((customer) => (
-                <Image
-                  key={customer.name}
-                  src={customer.logoSrc}
-                  alt={customer.name}
-                  width={100}
-                  height={28}
-                  className="opacity-60 grayscale"
-                />
-              ))}
-            </Reveal>
-          )}
-
-          <Reveal delay={80}>
-            <h2 className="text-sm font-semibold text-[var(--color-text-primary)]">What happens after you submit</h2>
-            <ol className="mt-4 space-y-5 border-l border-[var(--color-border)] pl-5">
-              {nextSteps.map((step, index) => (
-                <li key={step.title} className="relative">
-                  <span className="ticket-number absolute -left-[26px] top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-canvas-raised)] text-[10px]">
-                    {index + 1}
-                  </span>
-                  <p className="text-sm font-medium text-[var(--color-text-primary)]">{step.title}</p>
-                  <p className="mt-0.5 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                    {step.description}
-                  </p>
-                </li>
-              ))}
-            </ol>
-          </Reveal>
+        <aside className="op-demo-aside">
+          <span className="op-meta">A conversation built around you</span>
+          <h2>
+            One problem.
+            <br />A useful next step.
+          </h2>
+          <ol>
+            {[
+              [
+                "Your current workflow",
+                "Where information lives and where the handoffs slow down.",
+              ],
+              [
+                "The response",
+                "What WorkforceOS can coordinate, and where a manager approves.",
+              ],
+              [
+                "A practical starting point",
+                "The systems, rules, and scope for a focused pilot.",
+              ],
+            ].map(([title, body], i) => (
+              <li key={title}>
+                <span>0{i + 1}</span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="op-demo-proof">
+            <strong>{pilotCustomers.length} active pilots</strong>
+            <p>
+              Built with teams in catering, restaurant groups, and campus
+              recreation.
+            </p>
+          </div>
+          <p className="op-small">
+            Submitting requests a conversation. We’ll confirm a time with you
+            before anything is booked.
+          </p>
         </aside>
-      </Container>
-    </>
+      </div>
+    </div>
   );
 }

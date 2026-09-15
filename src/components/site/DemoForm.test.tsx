@@ -18,11 +18,43 @@ async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
   await user.type(screen.getByLabelText(/full name/i), "Jamie Rivera");
   await user.type(screen.getByLabelText(/work email/i), "jamie@example.com");
   await user.type(screen.getByLabelText(/^company \*$/i), "Rivera Restaurant Group");
-  await user.type(screen.getByLabelText(/role or job title/i), "Director of Operations");
   await user.click(screen.getByLabelText(/i agree to be contacted/i));
 }
 
 describe("DemoForm", () => {
+  it("keeps qualification collapsed and reveals it on request", async () => {
+    const user = userEvent.setup();
+    render(<DemoForm />);
+    const context = screen.getByText("Add more context").closest("details");
+    expect(context).not.toHaveAttribute("open");
+    await user.click(screen.getByText("Add more context"));
+    expect(context).toHaveAttribute("open");
+    expect(screen.getByLabelText(/role or job title/i)).toBeVisible();
+  });
+
+  it("prevents duplicate submission while delivery is pending", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})));
+    const user = userEvent.setup();
+    render(<DemoForm />);
+    await fillValidForm(user);
+    await user.click(screen.getByRole("button", { name: /request a demo/i }));
+    expect(screen.getByRole("button", { name: /sending/i })).toBeDisabled();
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("reveals and focuses invalid optional context returned by the server", async () => {
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false, status: 400,
+      json: async () => ({ message: "Review your details.", fieldErrors: { role: "Role is too long." } }),
+    }));
+    const user = userEvent.setup();
+    render(<DemoForm />);
+    await fillValidForm(user);
+    await user.click(screen.getByRole("button", { name: /request a demo/i }));
+    await waitFor(() => expect(screen.getByLabelText(/role or job title/i)).toHaveFocus());
+    expect(screen.getByText("Add more context").closest("details")).toHaveAttribute("open");
+  });
+
   it("shows validation errors when submitted empty", async () => {
     const user = userEvent.setup();
     render(<DemoForm />);

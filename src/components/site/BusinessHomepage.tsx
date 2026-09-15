@@ -1,402 +1,559 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
-import { Container } from "@/components/ui/Container";
-import { Reveal } from "@/components/ui/Reveal";
-import { TrackedCta } from "@/components/site/TrackedCta";
-import { BrowserMock } from "@/components/site/BrowserMock";
-import { HeroWorkflowDemo } from "@/components/site/HeroWorkflowDemo";
-import { RolloutSteps } from "@/components/site/RolloutSteps";
-import { AuthorityTabs } from "@/components/site/AuthorityTabs";
-import { FeatureGrid } from "@/components/site/FeatureGrid";
-import { DashedRing, PlayCircle } from "@/components/site/featureIcons";
+import { TrackedCta } from "./TrackedCta";
+import { EventRecord } from "./OperationPrimitives";
+import { ConfigurationExample, ModuleFrame } from "./OperationsInteractive";
+import { coverageScenario as event } from "@/lib/operations-scenario";
 import {
-  aiControlSection,
-  authorityTrustPoints,
-  ctaCopy,
-  faqSection,
-  featureSection,
-  finalCtaSection,
-  heroContent,
-  howItWorksSection,
   implementationControl,
-  implementationHonestyNote,
-  patchworkSources,
+  pilotCustomers,
   proofSection,
-  sectionIds,
 } from "@/lib/site-config";
 
-export function BusinessHomepage() {
-  return (
-    <>
-      <Hero />
-      <Proof />
-      <Problem />
-      <Features />
-      <HowItWorks />
-      <AiControl />
-      <Faq />
-      <FinalCta />
-    </>
-  );
-}
-
-/** Splits a sentence around one substring and wraps that substring in <strong>. */
-function withEmphasis(text: string, emphasis: string): ReactNode {
-  const index = text.indexOf(emphasis);
-  if (index === -1) return text;
-  return (
-    <>
-      {text.slice(0, index)}
-      <strong className="font-bold text-[var(--color-text-on-dark-primary)]">{emphasis}</strong>
-      {text.slice(index + emphasis.length)}
-    </>
-  );
-}
+const capabilities = [
+  ["Scheduling", "Coverage requests, eligibility, manager approval"],
+  ["Communication", "Outreach, responses, escalation"],
+  ["Inventory", "Stock thresholds, replenishment tasks"],
+  ["Forecasting", "Demand compared against scheduled coverage"],
+  ["Tasks", "Ownership, deadlines, escalation"],
+  ["Configuration", "Rules, approvals, and terminology per operation"],
+  ["Integrations", "Existing systems, read and write-back where supported"],
+  ["AI control", "Suggest, require approval, or run within approved rules"],
+] as const;
 
 function Hero() {
   return (
-    <section
-      id={sectionIds.hero}
-      className="relative overflow-hidden bg-[var(--color-canvas-hero)] pb-14 pt-24 sm:pt-28"
-    >
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -left-48 -top-52 size-[720px] rounded-full border border-white/25" />
-        <div className="absolute -right-64 top-4 size-[720px] rounded-full border border-white/20" />
-        <DashedRing size={176} className="absolute left-[44%] top-14 hidden text-white/25 lg:block" />
-        <DashedRing
-          size={120}
-          strokeDasharray="2 6"
-          className="absolute bottom-24 right-[7%] hidden text-white/20 lg:block"
-        />
-        <span className="absolute right-10 top-16 size-2 rounded-full bg-white/25 opacity-40" />
+    <section className="op-hero" id="hero">
+      <div className="op-container op-hero-copy-wide">
+        <p className="op-eyebrow">
+          For restaurants, catering, and campus operations
+        </p>
+        <h1>
+          See what needs attention.{" "}
+          <strong>Coordinate what happens next.</strong>
+        </h1>
+        <p className="op-hero-intro">
+          One system for scheduling, communication, inventory, and tasks —
+          built around your rules and your managers’ approvals.
+        </p>
+        <div className="op-hero-actions">
+          <TrackedCta location="hero" variant="cta">
+            Request a Demo
+          </TrackedCta>
+          <a href="#how-it-works" className="op-hero-link">
+            Explore a workflow <span aria-hidden>↗</span>
+          </a>
+        </div>
       </div>
-
-      <Container className="relative">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          <div className="max-w-2xl">
-            <p className="label-mono animate-reveal-soft text-[var(--color-text-on-dark-primary)]">
-              {heroContent.eyebrow}
-            </p>
-            <h1
-              className="font-display mt-4 text-[clamp(2.25rem,5.4vw,4.25rem)] leading-[1.08] text-[var(--color-text-on-dark-primary)]"
-              style={{ letterSpacing: "-0.025em" }}
-            >
-              <span className="block overflow-hidden">
-                <span className="animate-reveal-clip block font-light" style={{ animationDelay: "80ms" }}>
-                  {heroContent.headlineLight}
-                </span>
-              </span>
-              <span className="block overflow-hidden">
-                <span className="animate-reveal-clip block font-bold" style={{ animationDelay: "180ms" }}>
-                  {heroContent.headlineBold}
-                </span>
-              </span>
-            </h1>
-            <p
-              className="animate-reveal-soft mt-5 max-w-[46ch] text-base leading-relaxed text-[var(--color-text-on-dark-primary)] sm:text-lg"
-              style={{ animationDelay: "300ms" }}
-            >
-              {heroContent.subhead}
-            </p>
-            <div
-              className="animate-reveal-soft mt-7 flex flex-col items-start gap-4 sm:flex-row sm:items-center"
-              style={{ animationDelay: "420ms" }}
-            >
-              <TrackedCta location="hero" variant="cta">
-                {ctaCopy.primary}
-              </TrackedCta>
-              <Link
-                href={`#${sectionIds.howItWorks}`}
-                className="group inline-flex items-center gap-3 rounded-full text-sm text-[var(--color-text-on-dark-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text-on-dark-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-              >
-                <span className="flex size-10 items-center justify-center rounded-full bg-white/25 transition-colors duration-[var(--duration-hover)] group-hover:bg-white/35">
-                  <PlayCircle className="size-4 text-[var(--color-text-on-dark-primary)]" />
-                </span>
-                {heroContent.secondaryCta}
-              </Link>
+    </section>
+  );
+}
+function CapabilityList() {
+  return (
+    <section className="op-section op-capabilities-list" id="capability-list">
+      <div className="op-container">
+        <p className="op-eyebrow">Everything the operation touches</p>
+        <div className="op-capabilities-grid">
+          {capabilities.map(([label, detail]) => (
+            <div key={label} className="op-capability-row">
+              <strong>{label}</strong>
+              <span>{detail}</span>
             </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+function ProofStrip() {
+  return (
+    <section className="op-proof-strip" aria-label="Pilot overview">
+      <div className="op-container">
+        <div>
+          <strong>{pilotCustomers.length} active pilots</strong>
+          <p>Built alongside operating teams</p>
+        </div>
+        <div>
+          <strong>Across industries</strong>
+          <p>Catering, restaurants, campus recreation</p>
+        </div>
+        <div>
+          <strong>One workflow to start</strong>
+          <p>Configured around your operation</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+function CoordinationProblem() {
+  return (
+    <section className="op-section" id="problem">
+      <div className="op-container op-problem-grid">
+        <div>
+          <p className="op-eyebrow">The coordination problem</p>
+          <h2>
+            The gap is small.
+            <br />
+            The chase isn’t.
+          </h2>
+          <p className="op-intro">
+            One call-out. Four places to check. A manager holding the whole
+            response together.
+          </p>
+          <p className="op-muted">
+            The issue stays open until someone completes every handoff.
+          </p>
+        </div>
+        <div
+          className="op-coordination"
+          aria-label="A manager manually checks the schedule, contacts available people, follows up in messages, and updates the approval"
+        >
+          <div className="op-map-record">
+            <span className="op-meta">Schedule</span>
+            <strong>Closing shift: 1 role open</strong>
+            <span className="op-manual">Check ↓</span>
           </div>
-
-          <Reveal className="mx-auto w-full max-w-[560px] lg:mx-0 lg:justify-self-end">
-            <BrowserMock />
-          </Reveal>
+          <div className="op-map-record">
+            <span className="op-meta">Availability</span>
+            <strong>Who can actually cover?</strong>
+            <span className="op-manual">Contact ↓</span>
+          </div>
+          <div className="op-manager">
+            <span className="op-avatar">M</span>
+            <strong>Manager</strong>
+            <span className="op-meta">{event.id}</span>
+          </div>
+          <div className="op-map-record">
+            <span className="op-meta">Messages</span>
+            <strong>“Have you heard back?”</strong>
+            <span className="op-manual">Follow up ↓</span>
+          </div>
+          <div className="op-map-record">
+            <span className="op-meta">Approval</span>
+            <strong>Confirm. Then update everyone.</strong>
+            <span className="op-manual">Update ↓</span>
+          </div>
         </div>
-      </Container>
+      </div>
     </section>
   );
 }
-
-function Problem() {
+function PlatformExplanation() {
   return (
-    <section id={sectionIds.problem} className="scroll-mt-24 bg-[var(--color-canvas)] py-16 sm:py-20">
-      <Container>
-        <Reveal variant="clip" className="max-w-3xl">
-          <h2 className="font-display text-[2rem] font-semibold leading-[1.15] sm:text-[2.5rem]">
-            Your restaurant managers run service across a dozen disconnected apps.
+    <section className="op-section op-platform" id="capabilities">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <p className="op-eyebrow">The platform</p>
+          <h2>
+            Your tools talk.
+            <br />
+            WorkforceOS listens, decides, and acts.
           </h2>
-        </Reveal>
-
-        <Reveal delay={100} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {patchworkSources.map((item) => (
-            <div key={item.source} className="ticket-slip px-4 py-5">
-              <p className="ticket-number">{item.source}</p>
-              <p className="mt-2.5 text-sm font-medium leading-snug">{item.label}</p>
+          <p className="op-intro">
+            It reads your schedule, sales, and messages, checks them against
+            your rules, and tells the right person what to do next.
+          </p>
+        </div>
+        <div className="op-platform-flow">
+          <div className="op-source-list">
+            <p className="op-meta">What it reads</p>
+            {[
+              "Schedules & availability",
+              "Sales & demand",
+              "Inventory & stock",
+              "Messages & responses",
+            ].map((x, i) => (
+              <div key={x}>
+                <span className="op-source-symbol" aria-hidden>
+                  {["▦", "↗", "≡", "↳"][i]}
+                </span>
+                {x}
+              </div>
+            ))}
+          </div>
+          <div className="op-connector" aria-hidden>
+            →
+          </div>
+          <div className="op-platform-core">
+            <span className="op-platform-brand">WorkforceOS</span>
+            <ol>
+              <li>Spots the gap</li>
+              <li>Checks it against your rules</li>
+              <li>Contacts or acts on it</li>
+              <li>Logs what happened</li>
+            </ol>
+          </div>
+          <div className="op-connector" aria-hidden>
+            →
+          </div>
+          <div className="op-output-list">
+            <p className="op-meta">What happens next</p>
+            {[
+              "Right people contacted",
+              "Approval recorded",
+              "Relevant systems updated",
+              "Outcome tracked",
+            ].map((x) => (
+              <div key={x}>
+                <span aria-hidden>✓</span>
+                {x}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="op-capability-index">
+          {[
+            "Scheduling",
+            "Communication",
+            "Forecasting",
+            "Inventory",
+            "Exceptions",
+            "Workflows",
+          ].map((x) => (
+            <span key={x}>{x}</span>
+          ))}
+        </div>
+        <p className="op-small">
+          Connections and write-back actions depend on your systems and the
+          workflow configured during setup.
+        </p>
+      </div>
+    </section>
+  );
+}
+function ModuleShowcase() {
+  return (
+    <section className="op-section op-dark" id="how-it-works">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <p className="op-eyebrow">Watch it work</p>
+          <h2>
+            Don’t just spot the gap.
+            <br />
+            <strong>Get it solved.</strong>
+          </h2>
+          <p className="op-intro">
+            Scheduling, communication, inventory, tasks, and the rules that
+            govern them — five parts of one operation. Click through each
+            one to see exactly what happens.
+          </p>
+        </div>
+        <ModuleFrame />
+        <p className="op-demo-summary">
+          Detect the issue → check eligibility → contact the team → record
+          acceptance → get approval → confirm assignment.
+        </p>
+      </div>
+    </section>
+  );
+}
+function Configuration() {
+  return (
+    <section className="op-section" id="ai-control">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <p className="op-eyebrow">Configuration &amp; control</p>
+          <h2>
+            Fits the way
+            <br />
+            your operation works.
+          </h2>
+          <p className="op-intro">
+            No two operations run the same way. We set up the roles, rules,
+            approvals, and escalation paths with your team — compare two
+            examples below.
+          </p>
+        </div>
+        <ConfigurationExample />
+      </div>
+    </section>
+  );
+}
+const integrations = [
+  {
+    category: "Scheduling",
+    input: "Shifts, roles, availability",
+    output: "Assignments and schedule updates where supported",
+    method: "Supported API",
+    status: "Confirm your system",
+  },
+  {
+    category: "Sales / POS",
+    input: "Sales and demand signals",
+    output: "No write-back assumed",
+    method: "Supported API",
+    status: "Confirm your system",
+  },
+  {
+    category: "Communication",
+    input: "Operational responses",
+    output: "Requests and updates on configured channels",
+    method: "Supported API",
+    status: "Channel setup required",
+  },
+  {
+    category: "Payroll, HR, inventory",
+    input: "Scheduled files or exports",
+    output: "Write-back assessed separately",
+    method: "File-based import",
+    status: "Mapping during setup",
+  },
+  {
+    category: "Custom systems",
+    input: "Agreed operational data",
+    output: "Scoped to your workflow",
+    method: "Assessed connection",
+    status: "Technical assessment",
+  },
+];
+function Integrations() {
+  return (
+    <section className="op-section op-integrations" id="connected">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <p className="op-eyebrow">Integrations</p>
+          <h2>
+            Start with the tools
+            <br />
+            you already use.
+          </h2>
+          <p className="op-intro">
+            Connection methods vary by system. We confirm the information
+            available and the actions supported before scoping your pilot.
+          </p>
+        </div>
+        <div className="op-integration-flow">
+          <span>Information in</span>
+          <span aria-hidden>→</span>
+          <strong>WorkforceOS</strong>
+          <span aria-hidden>→</span>
+          <span>Supported updates out</span>
+        </div>
+        <div
+          className="op-integration-table"
+          role="table"
+          aria-label="Integration methods and setup scope"
+        >
+          <div className="op-integration-row op-table-head" role="row">
+            {[
+              "System category",
+              "Information received",
+              "Updates supported",
+              "Connection / status",
+            ].map((x) => (
+              <div role="columnheader" key={x}>
+                {x}
+              </div>
+            ))}
+          </div>
+          {integrations.map((row) => (
+            <div className="op-integration-row" role="row" key={row.category}>
+              <div role="cell">
+                <span className="op-mobile-label">System category</span>
+                <strong>{row.category}</strong>
+              </div>
+              <div role="cell">
+                <span className="op-mobile-label">Information received</span>
+                {row.input}
+              </div>
+              <div role="cell">
+                <span className="op-mobile-label">Updates supported</span>
+                {row.output}
+              </div>
+              <div role="cell">
+                <span className="op-mobile-label">Connection / status</span>
+                <strong>{row.method}</strong>
+                <small>{row.status}</small>
+              </div>
             </div>
           ))}
-        </Reveal>
-
-        <Reveal delay={160} className="mt-8 flex max-w-2xl items-start gap-3">
-          <span
-            aria-hidden
-            className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-[var(--color-signal-soft)] text-[var(--color-signal-strong)]"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 5v14M6 13l6 6 6-6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </span>
-          <p className="text-base font-medium leading-relaxed text-[var(--color-text-primary)]">
-            WorkforceOS turns those scattered signals into one operating view.
-          </p>
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function Features() {
-  return (
-    <section
-      id={sectionIds.capabilities}
-      className="scroll-mt-24 bg-[var(--color-canvas-features)] py-20 sm:py-24"
-    >
-      <Container>
-        <Reveal variant="clip" className="max-w-[780px]">
-          <h2 className="font-display text-[2.5rem] leading-[1.25]">
-            <span className="block font-light">{featureSection.headingLight}</span>
-            <span className="block font-bold">{featureSection.headingBold}</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={80} className="max-w-[761px]">
-          <p className="mt-6 text-[18px] leading-[1.625] text-[var(--color-text-muted)]">
-            {featureSection.intro}
-          </p>
-        </Reveal>
-
-        <div className="mt-16">
-          <FeatureGrid />
         </div>
-      </Container>
+        <Link className="op-inline-link" href="/demo">
+          Discuss your current tools <span aria-hidden>↗</span>
+        </Link>
+      </div>
     </section>
   );
 }
-
-function HowItWorks() {
+function CaseStories() {
   return (
-    <section
-      id={sectionIds.howItWorks}
-      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-20 sm:py-24"
-    >
-      <Container>
-        <Reveal variant="clip" className="max-w-[576px]">
-          <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
-            <span className="block font-light">{howItWorksSection.headingLight}</span>
-            <span className="block font-bold">{howItWorksSection.headingBold}</span>
+    <section className="op-section" id="proof">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <p className="op-eyebrow">Results across industries</p>
+          <h2>
+            Real operations.
+            <br />
+            Less work between the work.
           </h2>
-        </Reveal>
-        <Reveal delay={80} className="max-w-[48ch]">
-          <p className="mt-[30px] text-lg leading-[1.625] text-[var(--color-text-on-dark-muted)]">
-            {withEmphasis(howItWorksSection.subhead, howItWorksSection.subheadEmphasis)}
+          <p className="op-intro">
+            Three active pilots, shaped around the teams running them. These are
+            the outcomes they report.
           </p>
-        </Reveal>
-
-        <div className="mt-14 grid gap-16 lg:grid-cols-2 lg:items-center">
-          <RolloutSteps />
-          <HeroWorkflowDemo />
         </div>
-
-        <Reveal delay={80}>
-          <p className="mt-8 max-w-2xl text-sm leading-relaxed text-[var(--color-text-on-dark-muted)]">
-            {implementationHonestyNote}
-          </p>
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function AiControl() {
-  return (
-    <section
-      id={sectionIds.authority}
-      className="scroll-mt-24 border-t border-border-on-dark bg-[var(--color-canvas-dark)] py-20 sm:py-24"
-    >
-      <Container>
-        <Reveal variant="clip" className="max-w-[576px]">
-          <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
-            <span className="block font-light">{aiControlSection.headingLight}</span>
-            <span className="block font-bold">{aiControlSection.headingBold}</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={80} className="max-w-2xl">
-          <p className="mt-5 leading-relaxed text-[var(--color-text-on-dark-secondary)]">
-            {aiControlSection.intro}
-          </p>
-        </Reveal>
-
-        <Reveal delay={120} className="mt-12">
-          <AuthorityTabs />
-        </Reveal>
-
-        <Reveal delay={160} className="mt-8 grid max-w-xl grid-cols-3 gap-3">
-          {authorityTrustPoints.map((point) => (
-            <div
-              key={point.label}
-              className="rounded-xl border border-border-on-dark bg-white/[0.03] px-4 py-3.5"
-            >
-              <p className="text-sm font-medium text-[var(--color-text-on-dark-primary)]">{point.label}</p>
-              <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-on-dark-muted)]">
-                {point.detail}
-              </p>
-            </div>
-          ))}
-        </Reveal>
-      </Container>
-    </section>
-  );
-}
-
-function Proof() {
-  return (
-    <section id={sectionIds.proof} className="scroll-mt-24 bg-[var(--color-canvas-features)] py-20">
-      <Container>
-        <Reveal variant="clip" className="mx-auto max-w-[720px] text-center">
-          <h2 className="font-display text-[2.5rem] leading-[1.25]">
-            <span className="block font-bold">{proofSection.headingBold}</span>
-            <span className="block font-light">{proofSection.headingLight}</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={80} className="mx-auto max-w-[576px] text-center">
-          <p className="mt-5 leading-relaxed text-[var(--color-text-muted)]">{proofSection.intro}</p>
-        </Reveal>
-
-        <Reveal delay={120} className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-3">
-          {proofSection.cards.map((card) => (
+        <div className="op-stories">
+          {proofSection.cards.map((story, index) => (
             <article
-              key={card.name}
-              className="rounded-2xl border border-canvas-raised bg-[var(--color-canvas-elevated)] p-7"
+              key={story.name}
+              className={`op-story ${index === 0 ? "op-story-featured" : ""}`}
             >
-              <p className="font-display text-xl font-semibold text-[var(--color-text-primary)]">{card.name}</p>
-              <p className="mt-1 text-xs text-[var(--color-text-muted)]">{card.context}</p>
-              <p className="mt-4 text-base font-medium leading-relaxed text-[var(--color-text-primary)]">
-                {card.result}
-              </p>
-              <p className="mt-4 border-t border-canvas-raised pt-4 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                {card.note}
-              </p>
+              <p className="op-meta">{story.context}</p>
+              <h3>{story.name}</h3>
+              {index === 0 ? (
+                <>
+                  <p className="op-story-number">
+                    10-15 <span>hours / week</span>
+                  </p>
+                  <p>
+                    Saved by the operations team on scheduling, staffing, and
+                    daily coordination.
+                  </p>
+                  <div className="op-story-process">
+                    <span>Schedule</span>
+                    <span aria-hidden>→</span>
+                    <span>Staff</span>
+                    <span aria-hidden>→</span>
+                    <span>Coordinate</span>
+                  </div>
+                </>
+              ) : (
+                <p className="op-story-result">{story.result}</p>
+              )}
+              <p className="op-story-note">{story.note.replace(" — ", ": ")}</p>
             </article>
           ))}
-        </Reveal>
-
-        <Reveal delay={160} className="mx-auto mt-10 max-w-2xl text-center">
-          <p className="label-mono text-[var(--color-text-muted)]">{proofSection.aggregate}</p>
-          <p className="mt-8 text-sm leading-relaxed text-[var(--color-text-muted)]">
-            {proofSection.transparencyNote}
-          </p>
-        </Reveal>
-      </Container>
+        </div>
+        <p className="op-small op-proof-qualification">
+          Pilot-reported outcomes, specific to each operation. Results are not a
+          promise for every team. Customer quotes and logos will be added when
+          cleared for publication.
+        </p>
+      </div>
     </section>
   );
 }
-
+const rollout = [
+  [
+    "Choose the first problem",
+    "Start with the recurring coordination work that costs your team time.",
+    "A defined workflow",
+  ],
+  [
+    "Confirm the information",
+    "Review your systems, data, and the actions the workflow needs.",
+    "A connection scope",
+  ],
+  [
+    "Configure the rules",
+    "Set eligibility, approvals, response windows, and escalation owners.",
+    "An agreed operating boundary",
+  ],
+  [
+    "Pilot, measure, expand",
+    "Start with one team. Review completed work before adding more.",
+    "A measured next step",
+  ],
+];
+function Rollout() {
+  return (
+    <section className="op-section op-rollout-section" id="implementation">
+      <div className="op-container">
+        <div className="op-section-heading">
+          <h2>
+            One useful workflow.
+            <br />A practical place to start.
+          </h2>
+        </div>
+        <ol className="op-rollout">
+          {rollout.map(([title, description, output], i) => (
+            <li key={title}>
+              <span className="op-rollout-number">0{i + 1}</span>
+              <h3>{title}</h3>
+              <p>{description}</p>
+              <span className="op-rollout-output">{output}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="op-small">
+          Pilot timing and integration scope are confirmed after reviewing your
+          current systems.
+        </p>
+      </div>
+    </section>
+  );
+}
 function Faq() {
   return (
-    <section id={sectionIds.faq} className="scroll-mt-24 bg-[var(--color-canvas)] py-24">
-      <Container className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
-        <Reveal variant="clip">
-          <h2 className="font-display text-[2.5rem] font-semibold leading-[1.2]">{faqSection.heading}</h2>
-        </Reveal>
-        <Reveal delay={80} className="space-y-3">
-          {implementationControl.map((item) => (
-            <details
-              key={item.question}
-              className="group rounded-xl border border-canvas-raised bg-[var(--color-canvas-elevated)] px-5 py-1"
-            >
-              <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-5 py-4 text-base font-semibold marker:hidden">
-                {item.question}
-                <span
-                  aria-hidden
-                  className="text-xl font-normal text-[var(--color-signal-strong)] group-open:rotate-45"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="max-w-2xl pb-6 text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                {item.answer}
-              </p>
-            </details>
-          ))}
-        </Reveal>
-      </Container>
+    <section className="op-section" id="faq">
+      <div className="op-container op-faq-grid">
+        <h2>
+          A few things
+          <br />
+          you may be wondering.
+        </h2>
+        <div>
+          {implementationControl
+            .filter((_, i) => [1, 2, 3, 4].includes(i))
+            .map((item) => (
+              <details className="op-faq-item" key={item.question}>
+                <summary>
+                  {item.question}
+                  <span aria-hidden>+</span>
+                </summary>
+                <p>{item.answer.replaceAll(" — ", ". ")}</p>
+              </details>
+            ))}
+        </div>
+      </div>
     </section>
   );
 }
-
 function FinalCta() {
   return (
-    <section
-      id={sectionIds.finalCta}
-      className="relative overflow-hidden bg-[var(--color-canvas-hero)] py-24"
-    >
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-15">
-        <div className="absolute -right-24 -top-24 size-80 rounded-full border-2 border-canvas-elevated" />
-        <div className="absolute -bottom-16 -left-16 size-48 rounded-full border border-canvas-elevated" />
-      </div>
-
-      <div className="relative mx-auto max-w-[896px] px-6 text-center">
-        <Reveal variant="clip">
-          <h2 className="font-display text-[2.5rem] leading-[1.25] text-[var(--color-text-on-dark-primary)]">
-            <span className="block font-bold">{finalCtaSection.headingBold}</span>
-            <span className="block font-light">{finalCtaSection.headingLight}</span>
+    <section className="op-section op-final" id="final-cta">
+      <div className="op-container op-final-grid">
+        <div>
+          <h2>
+            Bring us the problem
+            <br />
+            you keep chasing.
           </h2>
-        </Reveal>
-        <Reveal delay={80}>
-          <p className="mx-auto mt-6 max-w-[640px] leading-relaxed text-[var(--color-text-on-dark-primary)]">
-            {finalCtaSection.body}
+          <p className="op-intro">
+            We’ll walk through your workflow, the systems it needs, and where
+            your team stays in control.
           </p>
-        </Reveal>
-        <Reveal delay={120}>
-          <ul className="mx-auto mt-8 grid max-w-2xl gap-3 text-left sm:grid-cols-2">
-            {finalCtaSection.bullets.map((bullet) => (
-              <li
-                key={bullet}
-                className="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--color-text-on-dark-primary)]"
-              >
-                <span
-                  aria-hidden
-                  className="mt-1.5 size-1 shrink-0 rounded-full bg-[var(--color-text-on-dark-primary)]"
-                />
-                {bullet}
-              </li>
-            ))}
-          </ul>
-        </Reveal>
-        <Reveal delay={160} className="mt-10">
-          <div className="flex justify-center">
-            <TrackedCta location="final_cta" variant="cta">
-              {ctaCopy.primary}
-            </TrackedCta>
-          </div>
-          <p className="mt-6 text-sm leading-relaxed text-[var(--color-text-on-dark-primary)]">
-            {finalCtaSection.reassurance}
+          <TrackedCta location="final_cta" variant="cta">
+            Request a Demo
+          </TrackedCta>
+          <p className="op-hero-reassurance">
+            Tell us a little about your team. We’ll reach out to arrange a
+            walkthrough.
           </p>
-        </Reveal>
+        </div>
+        <div>
+          <EventRecord completed />
+          <p className="op-final-caption">
+            Illustrative outcome / The same request, resolved.
+          </p>
+        </div>
       </div>
     </section>
+  );
+}
+export function BusinessHomepage() {
+  return (
+    <div className="operations-site">
+      <Hero />
+      <ProofStrip />
+      <CoordinationProblem />
+      <PlatformExplanation />
+      <CapabilityList />
+      <ModuleShowcase />
+      <Configuration />
+      <Integrations />
+      <CaseStories />
+      <Rollout />
+      <Faq />
+      <FinalCta />
+    </div>
   );
 }

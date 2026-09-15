@@ -13,7 +13,7 @@ export default function OpenGraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#697d71",
+        background: "#57685e",
         color: "#fcfaf5",
         padding: "72px 80px",
         fontFamily: "sans-serif",
@@ -31,8 +31,8 @@ export default function OpenGraphImage() {
           One place to see, understand, and run the operation.
         </div>
         <div style={{ fontSize: 27, lineHeight: 1.35, color: "rgba(252,250,245,0.8)" }}>
-          WorkforceOS connects your POS, scheduling, payroll, inventory, and communication tools into one
-          operational intelligence platform.
+          Operational intelligence and execution for frontline businesses.
+          Connect your systems. Coordinate your people. Complete the response.
         </div>
       </div>
       <div style={{ display: "flex", gap: 24, fontSize: 18, color: "rgba(252,250,245,0.7)" }}>

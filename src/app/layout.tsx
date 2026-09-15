@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Fraunces, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
+import "./operations.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ScrollRuntime } from "@/components/motion/ScrollRuntime";
-import { GrainOverlay } from "@/components/motion/GrainOverlay";
 import { buildMetadata, organizationJsonLd, softwareApplicationJsonLd } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
 
@@ -62,8 +61,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <ScrollRuntime />
-        <GrainOverlay />
-        <AnnouncementBar />
         <Header />
         <main id="main-content" className="flex-1">
           {children}

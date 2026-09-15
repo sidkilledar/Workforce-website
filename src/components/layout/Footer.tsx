@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer className="bg-[var(--color-canvas-dark)] pt-20 pb-10">
       <Container>
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="grid gap-10 md:grid-cols-[2fr_1fr]">
           <div>
             <Link
               href="/"

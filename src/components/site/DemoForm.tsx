@@ -1,13 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import {
   demoRequestDefaultValues,
   demoRequestSchema,
   type DemoRequestInput,
 } from "@/lib/validation";
-import { demoIndustries, frictionWorkflows, hourlyEmployeeBands, locationBands } from "@/lib/site-config";
+import {
+  demoIndustries,
+  frictionWorkflows,
+  hourlyEmployeeBands,
+  locationBands,
+} from "@/lib/site-config";
 import { Button } from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 
@@ -19,12 +30,14 @@ type SubmitState = "idle" | "submitting" | "success" | "error";
 // input's light background, bright signal fails the WCAG 3:1 non-text
 // contrast minimum for a focus indicator (~2.8:1); signal-strong clears it.
 const inputClasses =
-  "w-full rounded-[3px] border border-[var(--color-border)] bg-[var(--color-canvas-elevated)] px-4 py-2.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] transition-colors focus:border-[var(--color-signal-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-signal)]/20";
+  "w-full rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-canvas-elevated)] px-4 py-3 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] transition-colors focus:border-[var(--color-signal-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-signal)]/20";
 
 const labelClasses = "text-sm font-medium text-[var(--color-text-primary)]";
 
 export function DemoForm() {
-  const [values, setValues] = useState<DemoRequestInput>(demoRequestDefaultValues);
+  const [values, setValues] = useState<DemoRequestInput>(
+    demoRequestDefaultValues,
+  );
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<SubmitState>("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
@@ -38,7 +51,11 @@ export function DemoForm() {
   useEffect(() => {
     const firstErrorKey = Object.keys(errors)[0];
     if (!firstErrorKey || !formRef.current) return;
-    const field = formRef.current.elements.namedItem(firstErrorKey) as HTMLElement | null;
+    const field = formRef.current.elements.namedItem(
+      firstErrorKey,
+    ) as HTMLElement | null;
+    const context = field?.closest("details");
+    if (context) context.open = true;
     field?.focus();
   }, [errors]);
 
@@ -48,7 +65,10 @@ export function DemoForm() {
     if (status === "success") successHeadingRef.current?.focus();
   }, [status]);
 
-  function updateField<K extends keyof DemoRequestInput>(key: K, value: DemoRequestInput[K]) {
+  function updateField<K extends keyof DemoRequestInput>(
+    key: K,
+    value: DemoRequestInput[K],
+  ) {
     if (!hasStartedRef.current) {
       hasStartedRef.current = true;
       trackEvent("demo_form_start");
@@ -86,7 +106,8 @@ export function DemoForm() {
       if (response.status === 429) {
         setStatus("error");
         setServerMessage(
-          payload?.message ?? "You've submitted a few requests already. Please try again shortly.",
+          payload?.message ??
+            "You've submitted a few requests already. Please try again shortly.",
         );
         trackEvent("demo_form_submit_error", { reason: "rate_limited" });
         return;
@@ -98,7 +119,8 @@ export function DemoForm() {
         }
         setStatus("error");
         setServerMessage(
-          payload?.message ?? "Something went wrong submitting your request. Please try again.",
+          payload?.message ??
+            "Something went wrong submitting your request. Please try again.",
         );
         trackEvent("demo_form_submit_error", { reason: "server_error" });
         return;
@@ -108,16 +130,27 @@ export function DemoForm() {
       trackEvent("demo_form_complete");
     } catch {
       setStatus("error");
-      setServerMessage("Something went wrong submitting your request. Please try again.");
+      setServerMessage(
+        "Something went wrong submitting your request. Please try again.",
+      );
       trackEvent("demo_form_submit_error", { reason: "network_error" });
     }
   }
 
   if (status === "success") {
     return (
-      <div className="ticket-slip animate-confirm-in p-10 text-center sm:p-14" role="status">
+      <div
+        className="ticket-slip animate-confirm-in p-10 text-center sm:p-14"
+        role="status"
+      >
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-signal-soft)]">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden
+          >
             <path
               d="M5 13l4 4L19 7"
               stroke="var(--color-signal-strong)"
@@ -135,9 +168,12 @@ export function DemoForm() {
           Request received
         </h2>
         <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)]">
-          Thanks. We&apos;ve got your request and sent a confirmation to{" "}
-          <span className="text-[var(--color-text-primary)]">{values.email}</span>. Our team will reach out
-          shortly to find a time that works.
+          Thanks. We&apos;ve received your request. Our team will contact you at{" "}
+          <span className="text-[var(--color-text-primary)]">
+            {values.email}
+          </span>{" "}
+          to find a time that works. This is a request for contact, not a booked
+          appointment.
         </p>
         <button
           type="button"
@@ -155,10 +191,17 @@ export function DemoForm() {
   }
 
   return (
-    <div className="ticket-slip p-6 sm:p-10">
-      <form ref={formRef} noValidate onSubmit={handleSubmit} className="space-y-8">
+    <div className="demo-form-surface">
+      <form
+        ref={formRef}
+        noValidate
+        onSubmit={handleSubmit}
+        className="space-y-8"
+      >
         <fieldset className="space-y-6">
-          <legend className="label-mono text-[var(--color-signal-strong)]">About you</legend>
+          <legend className="label-mono text-[var(--color-signal-strong)]">
+            About you
+          </legend>
           <div className="grid gap-6 sm:grid-cols-2">
             <Field label="Full name *" htmlFor="name" error={errors.name}>
               <input
@@ -189,7 +232,12 @@ export function DemoForm() {
               />
             </Field>
 
-            <Field label="Company *" htmlFor="company" error={errors.company} className="sm:col-span-2">
+            <Field
+              label="Company *"
+              htmlFor="company"
+              error={errors.company}
+              className="sm:col-span-2"
+            >
               <input
                 id="company"
                 name="company"
@@ -205,161 +253,216 @@ export function DemoForm() {
           </div>
         </fieldset>
 
-        <fieldset className="space-y-6">
-          <legend className="label-mono text-[var(--color-signal-strong)]">
-            About your operation <span className="text-[var(--color-text-muted)]">— optional</span>
-          </legend>
-          <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-            Any of this helps us prepare a sharper walkthrough. Skip what you&apos;d rather cover on the call.
+        <Field
+          label="Operational problem (optional)"
+          htmlFor="workflowExample"
+          error={errors.workflowExample}
+        >
+          <textarea
+            id="workflowExample"
+            name="workflowExample"
+            rows={3}
+            className={inputClasses}
+            placeholder="What recurring problem would you like to solve?"
+            value={values.workflowExample}
+            onChange={(event) =>
+              updateField("workflowExample", event.target.value)
+            }
+            aria-invalid={Boolean(errors.workflowExample)}
+            aria-describedby={
+              errors.workflowExample
+                ? "workflowExample-error workflowExample-helper"
+                : "workflowExample-helper"
+            }
+          />
+          <p
+            id="workflowExample-helper"
+            className="mt-1.5 text-xs text-[var(--color-text-muted)]"
+          >
+            A few sentences are enough. Do not include sensitive employee
+            information.
           </p>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Role or job title" htmlFor="role" error={errors.role}>
-              <input
-                id="role"
-                name="role"
-                autoComplete="organization-title"
+        </Field>
+
+        <Field
+          label="Current tools (optional)"
+          htmlFor="currentTools"
+          error={errors.currentTools}
+        >
+          <input
+            id="currentTools"
+            name="currentTools"
+            className={inputClasses}
+            placeholder="Scheduling software, spreadsheets, POS, or other tools"
+            value={values.currentTools}
+            onChange={(event) =>
+              updateField("currentTools", event.target.value)
+            }
+            aria-invalid={Boolean(errors.currentTools)}
+            aria-describedby={
+              errors.currentTools ? "currentTools-error" : undefined
+            }
+          />
+        </Field>
+
+        <details className="demo-more-context">
+          <summary className="cursor-pointer py-3 text-sm font-semibold text-[var(--color-signal-strong)]">
+            Add more context
+          </summary>
+          <div className="space-y-6 pt-4">
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Field
+                label="Role or job title"
+                htmlFor="role"
+                error={errors.role}
+              >
+                <input
+                  id="role"
+                  name="role"
+                  autoComplete="organization-title"
+                  className={inputClasses}
+                  value={values.role}
+                  onChange={(event) => updateField("role", event.target.value)}
+                  aria-invalid={Boolean(errors.role)}
+                  aria-describedby={errors.role ? "role-error" : undefined}
+                />
+              </Field>
+
+              <Field
+                label="Industry"
+                htmlFor="industry"
+                error={errors.industry}
+              >
+                <select
+                  id="industry"
+                  name="industry"
+                  aria-invalid={Boolean(errors.industry)}
+                  aria-describedby={errors.industry ? "industry-error" : undefined}
+                  className={inputClasses}
+                  value={values.industry}
+                  onChange={(event) =>
+                    updateField(
+                      "industry",
+                      event.target.value as DemoRequestInput["industry"],
+                    )
+                  }
+                >
+                  <option value="">Select an industry</option>
+                  {demoIndustries.map((industry) => (
+                    <option key={industry.value} value={industry.value}>
+                      {industry.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+
+              <Field
+                label="Number of locations"
+                htmlFor="locations"
+                error={errors.locations}
+              >
+                <select
+                  id="locations"
+                  name="locations"
+                  aria-invalid={Boolean(errors.locations)}
+                  aria-describedby={errors.locations ? "locations-error" : undefined}
+                  className={inputClasses}
+                  value={values.locations}
+                  onChange={(event) =>
+                    updateField(
+                      "locations",
+                      event.target.value as DemoRequestInput["locations"],
+                    )
+                  }
+                >
+                  <option value="">Select a range</option>
+                  {locationBands.map((band) => (
+                    <option key={band} value={band}>
+                      {band}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+
+              <Field
+                label="Approximate hourly employees"
+                htmlFor="hourlyEmployees"
+                error={errors.hourlyEmployees}
+              >
+                <select
+                  id="hourlyEmployees"
+                  name="hourlyEmployees"
+                  aria-invalid={Boolean(errors.hourlyEmployees)}
+                  aria-describedby={errors.hourlyEmployees ? "hourlyEmployees-error" : undefined}
+                  className={inputClasses}
+                  value={values.hourlyEmployees}
+                  onChange={(event) =>
+                    updateField(
+                      "hourlyEmployees",
+                      event.target.value as DemoRequestInput["hourlyEmployees"],
+                    )
+                  }
+                >
+                  <option value="">Select a range</option>
+                  {hourlyEmployeeBands.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+
+              <Field
+                label="Which workflow consumes the most manager time?"
+                htmlFor="frictionWorkflow"
+                error={errors.frictionWorkflow}
+                className="sm:col-span-2"
+              >
+                <select
+                  id="frictionWorkflow"
+                  name="frictionWorkflow"
+                  aria-invalid={Boolean(errors.frictionWorkflow)}
+                  aria-describedby={errors.frictionWorkflow ? "frictionWorkflow-error" : undefined}
+                  className={inputClasses}
+                  value={values.frictionWorkflow}
+                  onChange={(event) => {
+                    const value = event.target
+                      .value as DemoRequestInput["frictionWorkflow"];
+                    updateField("frictionWorkflow", value);
+                    if (value)
+                      trackEvent("demo_friction_workflow_select", {
+                        workflow: value,
+                      });
+                  }}
+                >
+                  <option value="">Select a workflow</option>
+                  {frictionWorkflows.map((workflow) => (
+                    <option key={workflow.value} value={workflow.value}>
+                      {workflow.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
+
+            <Field
+              label="Optional message"
+              htmlFor="message"
+              error={errors.message}
+            >
+              <textarea
+                id="message"
+                name="message"
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={errors.message ? "message-error" : undefined}
+                rows={4}
                 className={inputClasses}
-                value={values.role}
-                onChange={(event) => updateField("role", event.target.value)}
-                aria-invalid={Boolean(errors.role)}
-                aria-describedby={errors.role ? "role-error" : undefined}
+                value={values.message}
+                onChange={(event) => updateField("message", event.target.value)}
               />
             </Field>
-
-            <Field label="Industry" htmlFor="industry" error={errors.industry}>
-              <select
-                id="industry"
-                name="industry"
-                className={inputClasses}
-                value={values.industry}
-                onChange={(event) =>
-                  updateField("industry", event.target.value as DemoRequestInput["industry"])
-                }
-              >
-                <option value="">Select an industry</option>
-                {demoIndustries.map((industry) => (
-                  <option key={industry.value} value={industry.value}>
-                    {industry.label}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field label="Number of locations" htmlFor="locations" error={errors.locations}>
-              <select
-                id="locations"
-                name="locations"
-                className={inputClasses}
-                value={values.locations}
-                onChange={(event) =>
-                  updateField("locations", event.target.value as DemoRequestInput["locations"])
-                }
-              >
-                <option value="">Select a range</option>
-                {locationBands.map((band) => (
-                  <option key={band} value={band}>
-                    {band}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field
-              label="Approximate hourly employees"
-              htmlFor="hourlyEmployees"
-              error={errors.hourlyEmployees}
-            >
-              <select
-                id="hourlyEmployees"
-                name="hourlyEmployees"
-                className={inputClasses}
-                value={values.hourlyEmployees}
-                onChange={(event) =>
-                  updateField(
-                    "hourlyEmployees",
-                    event.target.value as DemoRequestInput["hourlyEmployees"],
-                  )
-                }
-              >
-                <option value="">Select a range</option>
-                {hourlyEmployeeBands.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
-              </select>
-            </Field>
-
-            <Field
-              label="Which workflow consumes the most manager time?"
-              htmlFor="frictionWorkflow"
-              error={errors.frictionWorkflow}
-              className="sm:col-span-2"
-            >
-              <select
-                id="frictionWorkflow"
-                name="frictionWorkflow"
-                className={inputClasses}
-                value={values.frictionWorkflow}
-                onChange={(event) => {
-                  const value = event.target.value as DemoRequestInput["frictionWorkflow"];
-                  updateField("frictionWorkflow", value);
-                  if (value) trackEvent("demo_friction_workflow_select", { workflow: value });
-                }}
-              >
-                <option value="">Select a workflow</option>
-                {frictionWorkflows.map((workflow) => (
-                  <option key={workflow.value} value={workflow.value}>
-                    {workflow.label}
-                  </option>
-                ))}
-              </select>
-            </Field>
           </div>
-
-          <Field label="Describe a recent example" htmlFor="workflowExample" error={errors.workflowExample}>
-            <textarea
-              id="workflowExample"
-              name="workflowExample"
-              rows={3}
-              className={inputClasses}
-              placeholder="For example: A closer calls out three hours before service, and the manager checks availability, messages several employees, updates the schedule, and confirms coverage manually."
-              value={values.workflowExample}
-              onChange={(event) => updateField("workflowExample", event.target.value)}
-              aria-invalid={Boolean(errors.workflowExample)}
-              aria-describedby={
-                errors.workflowExample ? "workflowExample-error workflowExample-helper" : "workflowExample-helper"
-              }
-            />
-            <p id="workflowExample-helper" className="mt-1.5 text-xs text-[var(--color-text-muted)]">
-              A few sentences are enough. Do not include sensitive employee information.
-            </p>
-          </Field>
-
-          <Field label="Which tools are involved today?" htmlFor="currentTools" error={errors.currentTools}>
-            <input
-              id="currentTools"
-              name="currentTools"
-              className={inputClasses}
-              placeholder="Scheduling software, spreadsheets, Slack, Discord, POS, inventory system, or other tools"
-              value={values.currentTools}
-              onChange={(event) => updateField("currentTools", event.target.value)}
-              aria-invalid={Boolean(errors.currentTools)}
-              aria-describedby={errors.currentTools ? "currentTools-error" : undefined}
-            />
-          </Field>
-
-          <Field label="Optional message" htmlFor="message" error={errors.message}>
-            <textarea
-              id="message"
-              name="message"
-              rows={4}
-              className={inputClasses}
-              value={values.message}
-              onChange={(event) => updateField("message", event.target.value)}
-            />
-          </Field>
-        </fieldset>
+        </details>
 
         {/* Honeypot field — hidden from real users, only bots fill this in. */}
         <div className="hidden" aria-hidden="true">
@@ -370,7 +473,9 @@ export function DemoForm() {
             tabIndex={-1}
             autoComplete="off"
             value={values.company_website}
-            onChange={(event) => updateField("company_website", event.target.value)}
+            onChange={(event) =>
+              updateField("company_website", event.target.value)
+            }
           />
         </div>
 
@@ -386,32 +491,50 @@ export function DemoForm() {
             aria-invalid={Boolean(errors.consent)}
             aria-describedby={errors.consent ? "consent-error" : undefined}
           />
-          <label htmlFor="consent" className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
+          <label
+            htmlFor="consent"
+            className="text-sm leading-relaxed text-[var(--color-text-secondary)]"
+          >
             I agree to be contacted about WorkforceOS and have read the{" "}
-            <Link href="/legal/privacy" className="text-[var(--color-text-primary)] underline underline-offset-2">
+            <Link
+              href="/legal/privacy"
+              className="text-[var(--color-text-primary)] underline underline-offset-2"
+            >
               Privacy Policy
             </Link>
             .
           </label>
         </div>
         {errors.consent && (
-          <p id="consent-error" className="text-sm text-[var(--color-signal-strong)]">
+          <p
+            id="consent-error"
+            className="text-sm text-[var(--color-signal-strong)]"
+          >
             {errors.consent}
           </p>
         )}
 
         {status === "error" && serverMessage && (
-          <p role="alert" className="rounded-[3px] bg-[var(--color-signal-soft)] px-4 py-3 text-sm text-[var(--color-signal-strong)]">
+          <p
+            role="alert"
+            className="rounded-[3px] bg-[var(--color-signal-soft)] px-4 py-3 text-sm text-[var(--color-signal-strong)]"
+          >
             {serverMessage}
           </p>
         )}
 
-        <Button type="submit" size="lg" className="w-full" disabled={status === "submitting"}>
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full rounded-full"
+          disabled={status === "submitting"}
+        >
           {status === "submitting" ? "Sending…" : "Request a Demo"}
         </Button>
 
         <p className="text-center text-xs text-[var(--color-text-muted)]">
-          Fields marked * are required. We use this information to prepare and schedule your walkthrough.
+          Fields marked * are required. We use this information to prepare and
+          schedule your walkthrough.
         </p>
       </form>
     </div>
@@ -438,7 +561,10 @@ function Field({
       </label>
       <div className="mt-2">{children}</div>
       {error && (
-        <p id={`${htmlFor}-error`} className="mt-1.5 text-sm text-[var(--color-signal-strong)]">
+        <p
+          id={`${htmlFor}-error`}
+          className="mt-1.5 text-sm text-[var(--color-signal-strong)]"
+        >
           {error}
         </p>
       )}

@@ -11,30 +11,32 @@ import Link from "next/link";
 import {
   demoRequestDefaultValues,
   demoRequestSchema,
-  type DemoRequestInput,
+  type DemoFormValues as DemoRequestInput,
 } from "@/lib/validation";
 import {
-  demoIndustries,
   frictionWorkflows,
   hourlyEmployeeBands,
   locationBands,
 } from "@/lib/site-config";
-import { Button } from "@/components/ui/Button";
 import { trackEvent } from "@/lib/analytics";
 
 type FieldErrors = Partial<Record<keyof DemoRequestInput, string>>;
 
 type SubmitState = "idle" | "submitting" | "success" | "error";
 
-// focus:border uses signal-strong, not the brighter signal — against the
-// input's light background, bright signal fails the WCAG 3:1 non-text
-// contrast minimum for a focus indicator (~2.8:1); signal-strong clears it.
-const inputClasses =
-  "w-full rounded-lg border border-[var(--color-border-strong)] bg-[var(--color-canvas-elevated)] px-4 py-3 text-base text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] transition-colors focus:border-[var(--color-signal-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--color-signal)]/20";
+const inputClasses = "straw-input";
 
-const labelClasses = "text-sm font-medium text-[var(--color-text-primary)]";
+const labelClasses = "straw-label";
 
-export function DemoForm() {
+// Values match the existing industry slugs so the API shape is unchanged.
+const organizationTypes = [
+  { value: "restaurant-groups", label: "Restaurants and cafés" },
+  { value: "catering", label: "Catering and events" },
+  { value: "campus-sports", label: "Campus departments and recreation" },
+  { value: "other", label: "Other" },
+] as const;
+
+export function DemoForm({ bookingUrl }: { bookingUrl?: string | null }) {
   const [values, setValues] = useState<DemoRequestInput>(
     demoRequestDefaultValues,
   );
@@ -140,41 +142,37 @@ export function DemoForm() {
   if (status === "success") {
     return (
       <div
-        className="ticket-slip animate-confirm-in p-10 text-center sm:p-14"
+        className="straw-confirmation"
         role="status"
       >
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-signal-soft)]">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden
-          >
-            <path
-              d="M5 13l4 4L19 7"
-              stroke="var(--color-signal-strong)"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <h2
-          ref={successHeadingRef}
-          tabIndex={-1}
-          className="font-display mt-5 text-2xl font-semibold text-[var(--color-text-primary)] outline-none sm:text-3xl"
-        >
-          Request received
+        <h2 ref={successHeadingRef} tabIndex={-1}>
+          {bookingUrl ? "Your context has been sent" : "Request received"}
         </h2>
-        <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-[var(--color-text-secondary)]">
-          Thanks. We&apos;ve received your request. Our team will contact you at{" "}
-          <span className="text-[var(--color-text-primary)]">
-            {values.email}
-          </span>{" "}
-          to find a time that works. This is a request for contact, not a booked
-          appointment.
-        </p>
+        {bookingUrl ? (
+          <>
+            <p>
+              Your context has been sent. Choose a meeting time to complete
+              your booking.
+            </p>
+            <a
+              className="straw-button"
+              href={bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Choose a meeting time
+            </a>
+            <p className="straw-note">
+              Your meeting is not booked until you pick a time on the calendar.
+            </p>
+          </>
+        ) : (
+          <p>
+            Thanks. We&apos;ve received your request. Our team will contact you
+            at <strong>{values.email}</strong> to find a time that works. This
+            is a request for contact, not a booked appointment.
+          </p>
+        )}
         <button
           type="button"
           onClick={() => {
@@ -182,7 +180,7 @@ export function DemoForm() {
             setStatus("idle");
             hasStartedRef.current = false;
           }}
-          className="mt-6 text-sm font-medium text-[var(--color-signal-strong)] hover:text-[var(--color-signal)]"
+          className="straw-link-button"
         >
           Submit another request
         </button>
@@ -191,18 +189,16 @@ export function DemoForm() {
   }
 
   return (
-    <div className="demo-form-surface">
+    <div className="straw-form-surface">
       <form
         ref={formRef}
         noValidate
         onSubmit={handleSubmit}
-        className="space-y-8"
+        className="straw-form"
       >
-        <fieldset className="space-y-6">
-          <legend className="label-mono text-[var(--color-signal-strong)]">
-            About you
-          </legend>
-          <div className="grid gap-6 sm:grid-cols-2">
+        <fieldset className="straw-fieldset">
+          <legend>About you and your operation</legend>
+          <div className="straw-grid">
             <Field label="Full name *" htmlFor="name" error={errors.name}>
               <input
                 id="name"
@@ -233,10 +229,10 @@ export function DemoForm() {
             </Field>
 
             <Field
-              label="Company *"
+              label="Organization *"
               htmlFor="company"
               error={errors.company}
-              className="sm:col-span-2"
+              className="straw-span"
             >
               <input
                 id="company"
@@ -250,20 +246,80 @@ export function DemoForm() {
                 aria-describedby={errors.company ? "company-error" : undefined}
               />
             </Field>
+
+            <Field
+              label="Organization type *"
+              htmlFor="industry"
+              error={errors.industry}
+            >
+              <select
+                id="industry"
+                name="industry"
+                required
+                aria-invalid={Boolean(errors.industry)}
+                aria-describedby={errors.industry ? "industry-error" : undefined}
+                className={inputClasses}
+                value={values.industry}
+                onChange={(event) =>
+                  updateField(
+                    "industry",
+                    event.target.value as DemoRequestInput["industry"],
+                  )
+                }
+              >
+                <option value="">Select a type</option>
+                {organizationTypes.map((type) => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </select>
+            </Field>
+
+            <Field
+              label="Team size"
+              htmlFor="hourlyEmployees"
+              error={errors.hourlyEmployees}
+            >
+              <select
+                id="hourlyEmployees"
+                name="hourlyEmployees"
+                aria-invalid={Boolean(errors.hourlyEmployees)}
+                aria-describedby={
+                  errors.hourlyEmployees ? "hourlyEmployees-error" : undefined
+                }
+                className={inputClasses}
+                value={values.hourlyEmployees}
+                onChange={(event) =>
+                  updateField(
+                    "hourlyEmployees",
+                    event.target.value as DemoRequestInput["hourlyEmployees"],
+                  )
+                }
+              >
+                <option value="">Select a range</option>
+                {hourlyEmployeeBands.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </Field>
           </div>
         </fieldset>
 
         <Field
-          label="Operational problem (optional)"
+          label="What would you like Straw to help with? *"
           htmlFor="workflowExample"
           error={errors.workflowExample}
         >
           <textarea
             id="workflowExample"
             name="workflowExample"
-            rows={3}
+            rows={4}
+            required
             className={inputClasses}
-            placeholder="What recurring problem would you like to solve?"
+            placeholder="A recurring task, a handoff that slips, a question you answer every day…"
             value={values.workflowExample}
             onChange={(event) =>
               updateField("workflowExample", event.target.value)
@@ -275,10 +331,7 @@ export function DemoForm() {
                 : "workflowExample-helper"
             }
           />
-          <p
-            id="workflowExample-helper"
-            className="mt-1.5 text-xs text-[var(--color-text-muted)]"
-          >
+          <p id="workflowExample-helper" className="straw-helper">
             A few sentences are enough. Do not include sensitive employee
             information.
           </p>
@@ -306,11 +359,11 @@ export function DemoForm() {
         </Field>
 
         <details className="demo-more-context">
-          <summary className="cursor-pointer py-3 text-sm font-semibold text-[var(--color-signal-strong)]">
+          <summary>
             Add more context
           </summary>
-          <div className="space-y-6 pt-4">
-            <div className="grid gap-6 sm:grid-cols-2">
+          <div className="straw-details-body">
+            <div className="straw-grid">
               <Field
                 label="Role or job title"
                 htmlFor="role"
@@ -326,34 +379,6 @@ export function DemoForm() {
                   aria-invalid={Boolean(errors.role)}
                   aria-describedby={errors.role ? "role-error" : undefined}
                 />
-              </Field>
-
-              <Field
-                label="Industry"
-                htmlFor="industry"
-                error={errors.industry}
-              >
-                <select
-                  id="industry"
-                  name="industry"
-                  aria-invalid={Boolean(errors.industry)}
-                  aria-describedby={errors.industry ? "industry-error" : undefined}
-                  className={inputClasses}
-                  value={values.industry}
-                  onChange={(event) =>
-                    updateField(
-                      "industry",
-                      event.target.value as DemoRequestInput["industry"],
-                    )
-                  }
-                >
-                  <option value="">Select an industry</option>
-                  {demoIndustries.map((industry) => (
-                    <option key={industry.value} value={industry.value}>
-                      {industry.label}
-                    </option>
-                  ))}
-                </select>
               </Field>
 
               <Field
@@ -416,7 +441,7 @@ export function DemoForm() {
                 label="Which workflow consumes the most manager time?"
                 htmlFor="frictionWorkflow"
                 error={errors.frictionWorkflow}
-                className="sm:col-span-2"
+                className="straw-span"
               >
                 <select
                   id="frictionWorkflow"
@@ -465,7 +490,7 @@ export function DemoForm() {
         </details>
 
         {/* Honeypot field — hidden from real users, only bots fill this in. */}
-        <div className="hidden" aria-hidden="true">
+        <div className="straw-honeypot" aria-hidden="true">
           <label htmlFor="company_website">Company website</label>
           <input
             id="company_website"
@@ -479,13 +504,12 @@ export function DemoForm() {
           />
         </div>
 
-        <div className="flex items-start gap-3">
+        <div className="straw-consent">
           <input
             id="consent"
             name="consent"
             type="checkbox"
             required
-            className="mt-1 h-4 w-4 rounded border-[var(--color-border)] bg-[var(--color-canvas-elevated)] accent-[var(--color-signal)]"
             checked={values.consent}
             onChange={(event) => updateField("consent", event.target.checked)}
             aria-invalid={Boolean(errors.consent)}
@@ -493,12 +517,10 @@ export function DemoForm() {
           />
           <label
             htmlFor="consent"
-            className="text-sm leading-relaxed text-[var(--color-text-secondary)]"
           >
-            I agree to be contacted about WorkforceOS and have read the{" "}
+            I agree to be contacted about Straw and have read the{" "}
             <Link
               href="/legal/privacy"
-              className="text-[var(--color-text-primary)] underline underline-offset-2"
             >
               Privacy Policy
             </Link>
@@ -508,7 +530,7 @@ export function DemoForm() {
         {errors.consent && (
           <p
             id="consent-error"
-            className="text-sm text-[var(--color-signal-strong)]"
+            className="straw-error"
           >
             {errors.consent}
           </p>
@@ -517,24 +539,23 @@ export function DemoForm() {
         {status === "error" && serverMessage && (
           <p
             role="alert"
-            className="rounded-[3px] bg-[var(--color-signal-soft)] px-4 py-3 text-sm text-[var(--color-signal-strong)]"
+            className="straw-alert"
           >
             {serverMessage}
           </p>
         )}
 
-        <Button
+        <button
           type="submit"
-          size="lg"
-          className="w-full rounded-full"
+          className="straw-submit"
           disabled={status === "submitting"}
         >
-          {status === "submitting" ? "Sending…" : "Request a Demo"}
-        </Button>
+          {status === "submitting" ? "Sending…" : "Send context"}
+        </button>
 
-        <p className="text-center text-xs text-[var(--color-text-muted)]">
-          Fields marked * are required. We use this information to prepare and
-          schedule your walkthrough.
+        <p className="straw-note">
+          Fields marked * are required. We use this information to prepare your
+          walkthrough. You&apos;ll choose a meeting time after you submit.
         </p>
       </form>
     </div>
@@ -559,11 +580,11 @@ function Field({
       <label htmlFor={htmlFor} className={labelClasses}>
         {label}
       </label>
-      <div className="mt-2">{children}</div>
+      <div className="straw-control">{children}</div>
       {error && (
         <p
           id={`${htmlFor}-error`}
-          className="mt-1.5 text-sm text-[var(--color-signal-strong)]"
+          className="straw-error"
         >
           {error}
         </p>

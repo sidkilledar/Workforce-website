@@ -70,6 +70,22 @@
   --duration-ui: 260ms;
   --duration-state: 300ms;
   --duration-entrance: 700ms;
+
+  /* Straw brand foundation. Shared by the redesigned marketing pages; the
+     legacy --color-* tokens above remain for legal and demo pages. */
+  --straw-bg: #faf9f6;
+  --straw-surface: #ffffff;
+  --straw-text: #20231f;
+  --straw-text-muted: rgba(32, 35, 31, 0.68);
+  --straw-accent: #245c46;
+  --straw-accent-soft: #eaf1eb;
+  --straw-dark: #17251f;
+  --straw-border: rgba(32, 35, 31, 0.12);
+  --straw-border-on-dark: rgba(250, 249, 246, 0.18);
+  --straw-radius: 16px;
+  --straw-shadow: 0 1px 2px rgba(32, 35, 31, 0.04), 0 8px 24px -12px rgba(32, 35, 31, 0.12);
+  --straw-space-section: clamp(4.5rem, 9vw, 8rem);
+  --straw-container: 1200px;
 }
 
 @theme inline {
@@ -148,6 +164,79 @@ body {
      the layout uses on every heading and the wordmark. Per-heading tracking
      (e.g. the hero H1's -0.025em) is set at the call site. */
   font-variation-settings: "SOFT" 0, "WONK" 1;
+}
+
+/* Straw primitives. Opt-in classes only; nothing here targets bare elements. */
+.straw-panel {
+  background: var(--straw-surface);
+  border: 1px solid var(--straw-border);
+  border-radius: var(--straw-radius);
+  box-shadow: var(--straw-shadow);
+}
+
+.straw-heading {
+  font-family: var(--font-display), Georgia, serif;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50, "WONK" 0;
+  letter-spacing: -0.02em;
+  color: var(--straw-text);
+}
+
+.straw-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition:
+    background-color var(--duration-hover) var(--ease-out),
+    border-color var(--duration-hover) var(--ease-out),
+    transform var(--duration-press) var(--ease-out);
+}
+
+.straw-btn:active {
+  transform: scale(0.97);
+}
+
+.straw-btn:focus-visible,
+.straw-link:focus-visible {
+  outline: 2px solid var(--straw-accent);
+  outline-offset: 3px;
+}
+
+.straw-btn-primary {
+  background: var(--straw-accent);
+  color: #ffffff;
+}
+
+.straw-btn-primary:hover {
+  background: #1d4c3a;
+}
+
+.straw-btn-secondary {
+  background: transparent;
+  color: var(--straw-text);
+  border-color: var(--straw-border);
+}
+
+.straw-btn-secondary:hover {
+  background: var(--straw-accent-soft);
+  border-color: var(--straw-accent);
+}
+
+.straw-link {
+  color: var(--straw-text-muted);
+  transition: color var(--duration-hover) var(--ease-out);
+}
+
+.straw-link:hover,
+.straw-link[aria-current="true"] {
+  color: var(--straw-accent);
 }
 
 .label-mono {

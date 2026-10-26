@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/product",
-        destination: "/#capabilities",
+        destination: "/#product",
         permanent: true,
       },
       {
@@ -24,12 +24,24 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/industries",
-        destination: "/#capabilities",
+        destination: "/#industries",
+        permanent: true,
+      },
+      // Legacy industry slugs (see PRODUCT.md and .impeccable/critique) mapped
+      // explicitly so they never shadow the new /industries/[industry] pages.
+      {
+        source: "/industries/campuses",
+        destination: "/industries/campus",
         permanent: true,
       },
       {
-        source: "/industries/:path*",
-        destination: "/#capabilities",
+        source: "/industries/chains",
+        destination: "/industries/restaurants",
+        permanent: true,
+      },
+      {
+        source: "/industries/other",
+        destination: "/#industries",
         permanent: true,
       },
     ];

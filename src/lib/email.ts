@@ -39,13 +39,13 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
   const rows: [string, string][] = [
     ["Name", data.name],
     ["Work email", data.email],
-    ["Company", data.company],
+    ["Organization", data.company],
+    ["Organization type", industryLabel(data.industry)],
   ];
 
   // Optional qualification fields — only included when the requester filled
   // them in, since the form no longer requires any of them.
   if (data.role) rows.push(["Role", data.role]);
-  if (data.industry) rows.push(["Industry", industryLabel(data.industry)]);
   if (data.locations) rows.push(["Locations", data.locations]);
   if (data.hourlyEmployees) rows.push(["Hourly employees", data.hourlyEmployees]);
   if (data.frictionWorkflow) {
@@ -72,15 +72,11 @@ export async function sendDemoRequestNotification(data: DemoRequestInput) {
     html: `
       <div style="font-family:sans-serif;max-width:560px;">
         <h2 style="margin-bottom:4px;">New demo request</h2>
-        <p style="color:#666;margin-top:0;">Submitted via the WorkforceOS website.</p>
+        <p style="color:#666;margin-top:0;">Submitted via the Straw website.</p>
         <table style="border-collapse:collapse;width:100%;">${rowsHtml}</table>
-        ${
-          data.workflowExample
-            ? `<p style="margin-top:16px;"><strong>Recent example</strong><br />${escapeHtml(
-                data.workflowExample,
-              ).replace(/\n/g, "<br />")}</p>`
-            : ""
-        }
+        <p style="margin-top:16px;"><strong>What they'd like Straw to help with</strong><br />${escapeHtml(
+          data.workflowExample,
+        ).replace(/\n/g, "<br />")}</p>
         ${
           data.message
             ? `<p style="margin-top:16px;"><strong>Message</strong><br />${escapeHtml(
@@ -106,12 +102,12 @@ export async function sendDemoRequestConfirmation(data: DemoRequestInput) {
   await resend.emails.send({
     from: fromAddress,
     to: data.email,
-    subject: "We received your WorkforceOS demo request",
+    subject: "We received your Straw demo request",
     html: `
       <div style="font-family:sans-serif;max-width:560px;">
         <h2>Thanks, ${escapeHtml(firstName)}.</h2>
         <p>
-          We received your request for a WorkforceOS demo for ${escapeHtml(
+          We received your request for a Straw demo for ${escapeHtml(
             data.company,
           )}. Our team will reach out at ${escapeHtml(
             data.email,
@@ -119,7 +115,7 @@ export async function sendDemoRequestConfirmation(data: DemoRequestInput) {
         </p>
         <p>In the meantime, feel free to reply to this email with any questions.</p>
         <p style="color:#666;font-size:12px;margin-top:32px;">
-          WorkforceOS &middot; This message was sent because you requested a demo on our website.
+          Straw &middot; This message was sent because you requested a demo on our website.
         </p>
       </div>
     `,

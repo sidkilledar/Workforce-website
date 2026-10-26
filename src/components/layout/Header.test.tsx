@@ -7,6 +7,37 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }));
 
+describe("Header links", () => {
+  it("renders Straw nav, demo CTA, and no Log in without appUrl", () => {
+    render(<Header />);
+    const primary = screen.getByRole("navigation", { name: /primary/i });
+    expect(
+      Array.from(primary.querySelectorAll("a")).map((a) => [
+        a.textContent,
+        a.getAttribute("href"),
+      ]),
+    ).toEqual([
+      ["Product", "#product"],
+      ["Industries", "#industries"],
+      ["How it works", "#how-it-works"],
+    ]);
+    expect(screen.getByText("Straw")).toBeInTheDocument();
+    expect(
+      screen.getAllByRole("link", { name: "Book a personalized demo" })[0],
+    ).toHaveAttribute("href", "/demo");
+    expect(screen.queryByRole("link", { name: /log in/i })).toBeNull();
+  });
+
+  it("renders Log in only when appUrl is supplied", () => {
+    render(<Header appUrl="https://app.example.test" />);
+    const links = screen.getAllByRole("link", { name: "Log in" });
+    expect(links.length).toBeGreaterThan(0);
+    for (const link of links) {
+      expect(link).toHaveAttribute("href", "https://app.example.test");
+    }
+  });
+});
+
 describe("Header mobile menu", () => {
   it("opens, locks scroll, and closes via the toggle button", async () => {
     const user = userEvent.setup();

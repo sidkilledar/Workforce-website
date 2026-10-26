@@ -1,0 +1,33 @@
+{
+  "tool": "Built-in image_gen",
+  "prompts": [
+    {
+      "name": "operationWide",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Wide landscape 2400x1280 composition: cutaway of a lively cafe and small service operation, four staff coordinating work, manager with phone near center, prep counter, shelves of food crates, guests near entry, small unlabeled wall calendar. Keep all four corners largely empty quiet ivory for HTML annotations. Concentrate human action and furniture in central 65 percent. Entire coherent architectural scene with breathing room."
+    },
+    {
+      "name": "operationMobile",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Portrait 1000x1250 composition: compact cutaway cafe service operation, manager holding phone in foreground center, two staff at prep counter behind, stock shelf at side, two guests entering. Generous ivory margins, layered scene vertically, same editorial art style, make main activity readable on phone."
+    },
+    {
+      "name": "adoption",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Very wide landscape 2400x1000: three equal separated conceptual still life groups on one uninterrupted ivory background. Left an open laptop with abstract green calendar blocks and small blank notebook, center three assorted software windows represented as physical simple cards joined by fine lines, right laptop and assorted cards neatly connected with small forest green circular hub. No screen text. Balanced composition clear three groups with equal whitespace, no dividers, no labels."
+    },
+    {
+      "name": "handbook",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Landscape 1200x1000 editorial still life: beautiful open organizational handbook on desk with green cover, unlabeled tab dividers, abstract checklist marks, a small staff portrait card and subtle calendar slip nearby, a manager hand adding a green confirmation check on a record. No writing of any kind. Clear metaphor for rules, roles, remembered context. Elegant generous negative space."
+    },
+    {
+      "name": "restaurants",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Landscape 1200x800 editorial scene: warm cafe restaurant service counter, manager welcoming a guest while a barista prepares drinks and another worker sets a table. Small potted plant, quiet warm ivory background, human hospitality and more time on floor. All people/furniture fit with generous margins, no signs or text."
+    },
+    {
+      "name": "catering",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Landscape 1200x800 editorial scene: professional catering crew setting up an event, two workers arrange a long table with plates and flowers, manager checks phone, covered serving dishes and a wheeled tray. Restrained warm ivory backdrop, generous margins, no lettering."
+    },
+    {
+      "name": "campus",
+      "prompt": "Original premium SaaS editorial illustration for Straw, an AI assistant manager for frontline businesses. Clean sophisticated flat gouache illustration, fine dark forest linework, warm ivory paper background #EFE9DD, restrained forest green #245C46, sage, muted terracotta and blue gray. Human approachable, clear silhouettes, tasteful subtle paper grain, dimensional but not 3D render, no gradients, no logos, absolutely no text letters numbers UI labels or watermarks. Not a screenshot. Landscape 1200x800 editorial scene: campus recreation center, student staff coordinating activities, staff member with clipboard by equipment shelf, two students with basketball and racket, simple gym doorway in background. Welcoming human scene, warm ivory background, generous margins, no lettering."
+    }
+  ]
+}

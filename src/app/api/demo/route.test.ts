@@ -29,7 +29,7 @@ const validPayload = {
   hourlyEmployees: "25–100",
   frictionWorkflow: "scheduling",
   currentTools: "Scheduling software, POS, and team chat",
-  workflowExample: "",
+  workflowExample: "Shift swaps and handoffs across our cafés.",
   message: "",
   consent: true,
   company_website: "",
@@ -49,6 +49,26 @@ describe("POST /api/demo", () => {
     expect(json.status).toBe("success");
     expect(sendNotification).toHaveBeenCalledTimes(1);
     expect(sendConfirmation).toHaveBeenCalledTimes(1);
+  });
+
+  it("requires organization type and what the visitor wants help with", async () => {
+    const response = await POST(makeRequest({ ...validPayload, industry: "", workflowExample: "" }));
+    const json = await response.json();
+    expect(response.status).toBe(400);
+    expect(json.fieldErrors.industry).toBeDefined();
+    expect(json.fieldErrors.workflowExample).toBeDefined();
+    expect(sendNotification).not.toHaveBeenCalled();
+  });
+
+  it("passes qualification context to the notification", async () => {
+    await POST(makeRequest(validPayload));
+    expect(sendNotification).toHaveBeenCalledWith(
+      expect.objectContaining({
+        industry: "restaurant-groups",
+        hourlyEmployees: "25–100",
+        workflowExample: "Shift swaps and handoffs across our cafés.",
+      }),
+    );
   });
 
   it("returns validation errors for missing fields without sending email", async () => {

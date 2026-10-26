@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ScrollRuntime } from "@/components/motion/ScrollRuntime";
 import { buildMetadata, organizationJsonLd, softwareApplicationJsonLd } from "@/lib/metadata";
 import { siteConfig } from "@/lib/site-config";
+import { parseAppUrl } from "@/lib/validation";
 
 // Plus Jakarta Sans is the green-layout body/UI face (Figma). Mapped to
 // --font-sans in globals.css @theme inline.
@@ -47,13 +48,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const jsonLd = [organizationJsonLd(), softwareApplicationJsonLd()];
+  // Login only appears when the external app URL is configured and valid HTTPS.
+  const appUrl = parseAppUrl(process.env.NEXT_PUBLIC_APP_URL) ?? undefined;
 
   return (
     <html
       lang="en"
       className={`${plusJakarta.variable} ${jetbrainsMono.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--color-canvas)]">
+      <body className="min-h-full flex flex-col bg-[var(--straw-bg)]">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-black"
@@ -61,7 +64,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <ScrollRuntime />
-        <Header />
+        <Header appUrl={appUrl} />
         <main id="main-content" className="flex-1">
           {children}
         </main>

@@ -25,18 +25,23 @@ export const demoRequestSchema = z.object({
   company: z
     .string()
     .trim()
-    .min(2, "Enter your company name.")
-    .max(160, "Company name is too long."),
-  // Everything below is optional qualification context. The form asks only
-  // name, work email, and company up front; the rest is collected optionally
-  // or in follow-up. "" is the "not answered" value from an unset <select>.
+    .min(2, "Enter your organization name.")
+    .max(160, "Organization name is too long."),
+  // Organization type and what the visitor wants help with are required
+  // qualification context; everything else below is optional. "" is the
+  // "not answered" value from an unset <select>.
+  industry: z.enum(industrySlugs, { message: "Choose your organization type." }),
+  workflowExample: z
+    .string()
+    .trim()
+    .min(10, "Tell us a little about what you'd like Straw to help with.")
+    .max(600, "Keep this under 600 characters."),
   role: z
     .string()
     .trim()
     .max(120, "Role is too long.")
     .optional()
     .or(z.literal("")),
-  industry: z.enum(industrySlugs).optional().or(z.literal("")),
   locations: z.enum(locationBands).optional().or(z.literal("")),
   hourlyEmployees: z.enum(hourlyEmployeeBands).optional().or(z.literal("")),
   frictionWorkflow: z.enum(frictionWorkflowValues).optional().or(z.literal("")),
@@ -46,12 +51,6 @@ export const demoRequestSchema = z.object({
     .string()
     .trim()
     .max(300, "Keep this under 300 characters.")
-    .optional()
-    .or(z.literal("")),
-  workflowExample: z
-    .string()
-    .trim()
-    .max(600, "Keep this under 600 characters.")
     .optional()
     .or(z.literal("")),
   message: z
@@ -71,7 +70,36 @@ export const demoRequestSchema = z.object({
 
 export type DemoRequestInput = z.infer<typeof demoRequestSchema>;
 
-export const demoRequestDefaultValues: DemoRequestInput = {
+// Form state allows an unanswered organization type before submission.
+export type DemoFormValues = Omit<DemoRequestInput, "industry"> & {
+  industry: DemoRequestInput["industry"] | "";
+};
+
+/**
+ * Returns a safe external URL from configuration, or null when it is unset or
+ * unusable. Only https URLs without embedded credentials pass.
+ */
+function parseHttpsUrl(raw: string | undefined): string | null {
+  const value = raw?.trim();
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.username || url.password || !url.hostname) {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+/** Calendar link shown after a demo request; never combined with form data. */
+export const parseBookingUrl = parseHttpsUrl;
+
+/** Customer app URL (NEXT_PUBLIC_APP_URL); the header login link needs it. */
+export const parseAppUrl = parseHttpsUrl;
+
+export const demoRequestDefaultValues: DemoFormValues = {
   name: "",
   email: "",
   company: "",

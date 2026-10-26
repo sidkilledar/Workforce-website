@@ -1,52 +1,46 @@
 import type { Metadata } from "next";
 import { buildMetadata } from "@/lib/metadata";
 import { DemoForm } from "@/components/site/DemoForm";
-import { pilotCustomers } from "@/lib/site-config";
+import { parseBookingUrl } from "@/lib/validation";
+import "./demo.css";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Request a Demo",
+  title: "Book a Demo",
   description:
-    "Bring one recurring operational problem. We will prepare a WorkforceOS walkthrough around your systems, your people, and your approval rules.",
+    "Share a little context, then choose a time. We start with product examples and a sample walkthrough, then focus on your operation and the tools you use.",
   path: "/demo",
 });
+
+// Evaluated per request so DEMO_BOOKING_URL changes don't need a rebuild.
+export const dynamic = "force-dynamic";
+
+const steps = [
+  ["Product examples", "A quick look at how Straw works across real frontline operations."],
+  ["A sample walkthrough", "See Straw handle a typical task through the app, iMessage, and WhatsApp."],
+  ["Your operation", "We look at your team, your current tools, and whether you'd start fresh, connect them, or do both."],
+];
+
 export default function DemoPage() {
+  // Server-only read; only a validated https URL ever reaches the client.
+  const bookingUrl = parseBookingUrl(process.env.DEMO_BOOKING_URL);
+
   return (
-    <div className="op-demo-page">
-      <div className="op-container op-demo-grid">
+    <div className="straw-booking">
+      <div className="straw-booking-grid">
         <div>
-          <p className="op-eyebrow">Let’s look at your operation</p>
-          <h1>
-            Start with the work
-            <br />
-            you keep doing by hand.
-          </h1>
-          <p className="op-demo-lede">
-            Tell us a little about your team. We’ll reach out to arrange a
-            walkthrough around your workflow.
+          <p className="straw-booking-eyebrow">Book a demo</p>
+          <h1>See Straw work around your operation.</h1>
+          <p className="straw-booking-lede">
+            Tell us about your operation first, then choose a meeting time. We
+            set Straw up for you, and scope any custom features together in the
+            meeting.
           </p>
-          <DemoForm />
+          <DemoForm bookingUrl={bookingUrl} />
         </div>
-        <aside className="op-demo-aside">
-          <span className="op-meta">A conversation built around you</span>
-          <h2>
-            One problem.
-            <br />A useful next step.
-          </h2>
+        <aside className="straw-aside">
+          <h2>What the meeting covers</h2>
           <ol>
-            {[
-              [
-                "Your current workflow",
-                "Where information lives and where the handoffs slow down.",
-              ],
-              [
-                "The response",
-                "What WorkforceOS can coordinate, and where a manager approves.",
-              ],
-              [
-                "A practical starting point",
-                "The systems, rules, and scope for a focused pilot.",
-              ],
-            ].map(([title, body], i) => (
+            {steps.map(([title, body], i) => (
               <li key={title}>
                 <span>0{i + 1}</span>
                 <div>
@@ -56,17 +50,6 @@ export default function DemoPage() {
               </li>
             ))}
           </ol>
-          <div className="op-demo-proof">
-            <strong>{pilotCustomers.length} active pilots</strong>
-            <p>
-              Built with teams in catering, restaurant groups, and campus
-              recreation.
-            </p>
-          </div>
-          <p className="op-small">
-            Submitting requests a conversation. We’ll confirm a time with you
-            before anything is booked.
-          </p>
         </aside>
       </div>
     </div>

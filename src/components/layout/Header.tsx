@@ -7,7 +7,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { ctaNav, navAnchors, siteConfig } from "@/lib/site-config";
-import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { trackEvent } from "@/lib/analytics";
 
@@ -18,7 +17,7 @@ function resolveAnchorHref(href: string, pathname: string) {
   return pathname === "/" ? href : `/${href}`;
 }
 
-export function Header() {
+export function Header({ appUrl }: { appUrl?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
@@ -53,9 +52,8 @@ export function Header() {
     setMobileOpen(false);
   }
 
-  // Highlights whichever nav anchor's section is currently in the reading
-  // band — driven by ScrollTrigger (the shared runtime), never a raw scroll
-  // listener. Only meaningful on the homepage, where the sections live.
+  // Highlights whichever nav anchor's section is in the reading band, driven
+  // by ScrollTrigger. Only meaningful on the homepage, where sections live.
   useGSAP(
     () => {
       if (pathname !== "/") return;
@@ -76,11 +74,11 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border-on-dark bg-[var(--color-canvas-dark)]">
-      <div className="mx-auto flex h-[76px] w-full max-w-[1280px] items-center justify-between px-6 lg:px-10">
+    <header className="sticky top-0 z-50 border-b border-[var(--straw-border)] bg-[var(--straw-bg)]/95 backdrop-blur">
+      <div className="mx-auto flex h-[72px] w-full max-w-[var(--straw-container)] items-center justify-between px-6 lg:px-10">
         <Link
           href="/"
-          className="font-display flex min-h-11 items-center text-2xl font-bold tracking-tight text-[var(--color-text-on-dark-primary)]"
+          className="straw-heading flex min-h-11 items-center text-2xl font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--straw-accent)]"
         >
           {siteConfig.name}
         </Link>
@@ -91,34 +89,32 @@ export function Header() {
               key={link.href}
               href={resolveAnchorHref(link.href, pathname)}
               aria-current={activeHref === link.href ? "true" : undefined}
-              className={cn(
-                "nav-link rounded-sm text-sm font-medium transition-colors duration-[var(--duration-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text-on-dark-primary)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--color-canvas-dark)]",
-                activeHref === link.href
-                  ? "text-[var(--color-text-on-dark-primary)]"
-                  : "text-[var(--color-text-on-dark-secondary)] hover:text-[var(--color-text-on-dark-primary)]",
-              )}
+              className="straw-link rounded-sm text-sm font-medium"
             >
               {link.label}
-              <span className="nav-underline" aria-hidden />
             </Link>
           ))}
         </nav>
 
-        <div className="hidden lg:block">
-          <Button
+        <div className="hidden items-center gap-3 lg:flex">
+          {appUrl ? (
+            <a href={appUrl} className="straw-btn straw-btn-secondary">
+              Log in
+            </a>
+          ) : null}
+          <Link
             href={ctaNav.href}
-            variant="cta"
-            className="text-sm"
+            className="straw-btn straw-btn-primary"
             onClick={() => trackEvent("demo_cta_click", { location: "header" })}
           >
             {ctaNav.label}
-          </Button>
+          </Link>
         </div>
 
         <button
           ref={menuButtonRef}
           type="button"
-          className="flex h-11 w-11 items-center justify-center rounded-lg border border-border-on-dark text-[var(--color-text-on-dark-primary)] lg:hidden"
+          className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--straw-border)] text-[var(--straw-text)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--straw-accent)] lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -134,12 +130,12 @@ export function Header() {
         </button>
       </div>
 
-      {/* Always mounted (not conditionally rendered) so it can play its own
-          exit transition instead of vanishing instantly. */}
+      {/* Always mounted so it can play its own exit transition; `inert` keeps
+          it out of the tab order and accessibility tree while closed. */}
       <div
         id="mobile-nav"
         className={cn(
-          "mobile-menu border-t border-border-on-dark bg-[var(--color-canvas-dark)] px-6 py-6 lg:hidden",
+          "mobile-menu border-t border-[var(--straw-border)] bg-[var(--straw-bg)] px-6 py-6 lg:hidden",
           mobileOpen && "is-open",
         )}
         inert={!mobileOpen ? true : undefined}
@@ -150,29 +146,31 @@ export function Header() {
               key={link.href}
               href={resolveAnchorHref(link.href, pathname)}
               onClick={closeMobileMenu}
-              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--color-text-on-dark-secondary)] hover:bg-white/[0.04] hover:text-[var(--color-text-on-dark-primary)]"
+              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--straw-text)] hover:bg-[var(--straw-accent-soft)]"
             >
               {link.label}
             </Link>
           ))}
+          {appUrl ? (
+            <a
+              href={appUrl}
+              onClick={closeMobileMenu}
+              className="rounded-lg px-3 py-3 text-base font-medium text-[var(--straw-text)] hover:bg-[var(--straw-accent-soft)]"
+            >
+              Log in
+            </a>
+          ) : null}
         </nav>
-        <Button
+        <Link
           href={ctaNav.href}
-          variant="cta"
-          className="mt-4 w-full text-sm"
+          className="straw-btn straw-btn-primary mt-4 w-full"
           onClick={() => {
             trackEvent("demo_cta_click", { location: "mobile_menu" });
             closeMobileMenu();
           }}
         >
           {ctaNav.label}
-        </Button>
-        <a
-          href={`mailto:${siteConfig.email}`}
-          className="mt-5 block px-3 text-sm text-[var(--color-text-on-dark-muted)]"
-        >
-          {siteConfig.email}
-        </a>
+        </Link>
       </div>
     </header>
   );

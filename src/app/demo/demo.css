@@ -1,0 +1,86 @@
+.straw-booking {
+  --b-bg: var(--straw-background, #faf9f6);
+  --b-surface: var(--straw-surface, #ffffff);
+  --b-text: var(--straw-text, #20231f);
+  --b-accent: var(--straw-accent, #245c46);
+  --b-soft: var(--straw-accent-soft, #eaf1eb);
+  --b-dark: var(--straw-dark, #17251f);
+  --b-line: color-mix(in srgb, var(--b-text) 22%, transparent);
+  background: var(--b-bg);
+  color: var(--b-text);
+  padding: 4rem 0 6rem;
+}
+.straw-booking-grid {
+  display: grid;
+  gap: 3rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+@media (min-width: 64rem) {
+  .straw-booking-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 4rem; }
+}
+.straw-booking h1 {
+  font-family: var(--font-fraunces), serif;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  line-height: 1.08;
+  margin: 0.5rem 0 1rem;
+}
+.straw-booking-eyebrow { color: var(--b-accent); font-size: 0.875rem; font-weight: 600; margin: 0; }
+.straw-booking-lede { font-size: 1.125rem; line-height: 1.6; max-width: 36rem; margin: 0 0 2rem; }
+.straw-form-surface, .straw-confirmation {
+  background: var(--b-surface);
+  border: 1px solid var(--b-line);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+@media (min-width: 40rem) { .straw-form-surface, .straw-confirmation { padding: 2rem; } }
+.straw-form { display: grid; gap: 1.5rem; }
+.straw-fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 1.25rem; }
+.straw-fieldset legend { font-weight: 600; color: var(--b-accent); margin-bottom: 1rem; padding: 0; }
+.straw-grid { display: grid; gap: 1.25rem; }
+@media (min-width: 40rem) { .straw-grid { grid-template-columns: 1fr 1fr; } .straw-span { grid-column: 1 / -1; } }
+.straw-label { display: block; font-size: 0.875rem; font-weight: 600; }
+.straw-control { margin-top: 0.4rem; }
+.straw-input {
+  width: 100%;
+  font: inherit;
+  color: var(--b-text);
+  background: var(--b-surface);
+  border: 1px solid color-mix(in srgb, var(--b-text) 45%, transparent);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+}
+.straw-input:focus-visible, .straw-submit:focus-visible, .straw-button:focus-visible,
+.straw-link-button:focus-visible, .straw-form summary:focus-visible {
+  outline: 3px solid var(--b-accent);
+  outline-offset: 2px;
+}
+.straw-helper, .straw-note { font-size: 0.8125rem; margin: 0.4rem 0 0; color: color-mix(in srgb, var(--b-text) 75%, transparent); }
+.straw-error { color: #9b2c1f; font-size: 0.875rem; margin: 0.4rem 0 0; }
+.straw-alert { background: #fbeceb; color: #7a2016; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.875rem; margin: 0; }
+.straw-form summary { cursor: pointer; font-weight: 600; color: var(--b-accent); padding: 0.5rem 0; }
+.straw-details-body { display: grid; gap: 1.25rem; padding-top: 1rem; }
+.straw-honeypot { display: none; }
+.straw-consent { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.875rem; line-height: 1.5; }
+.straw-consent input { margin-top: 0.25rem; width: 1rem; height: 1rem; accent-color: var(--b-accent); }
+.straw-consent a { color: var(--b-text); text-decoration: underline; text-underline-offset: 2px; }
+.straw-submit, .straw-button {
+  display: inline-flex; justify-content: center; align-items: center;
+  font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+  background: var(--b-accent); color: #fff; border: 0; border-radius: 999px; padding: 0.9rem 1.75rem;
+}
+.straw-submit { width: 100%; }
+.straw-submit:disabled { opacity: 0.6; cursor: progress; }
+.straw-confirmation { text-align: center; display: grid; gap: 1rem; justify-items: center; }
+.straw-confirmation h2 { font-family: var(--font-fraunces), serif; font-size: 1.75rem; margin: 0; outline: none; }
+.straw-confirmation p { margin: 0; max-width: 28rem; line-height: 1.6; }
+.straw-link-button { background: none; border: 0; font: inherit; font-weight: 600; color: var(--b-accent); cursor: pointer; text-decoration: underline; }
+.straw-aside { background: var(--b-dark); color: #f4f1ea; border-radius: 12px; padding: 2rem; align-self: start; }
+.straw-aside h2 { font-family: var(--font-fraunces), serif; font-size: 1.75rem; margin: 0 0 1.5rem; }
+.straw-aside ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.25rem; }
+.straw-aside li { display: grid; grid-template-columns: 2rem 1fr; gap: 0.75rem; }
+.straw-aside li > span { color: #9fd0b7; font-weight: 600; }
+.straw-aside h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+.straw-aside p { margin: 0; line-height: 1.55; color: #d6d9d2; }
+@media (prefers-reduced-motion: reduce) { .straw-booking * { transition: none !important; } }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { demoRequestDefaultValues, demoRequestSchema } from "@/lib/validation";
+import { demoRequestDefaultValues, demoRequestSchema, parseAppUrl, parseBookingUrl } from "@/lib/validation";
 
 const validPayload = {
   ...demoRequestDefaultValues,
@@ -7,6 +7,8 @@ const validPayload = {
   email: "jamie@example.com",
   company: "Rivera Restaurant Group",
   role: "Director of Operations",
+  industry: "restaurant-groups",
+  workflowExample: "Shift swaps and handoffs across our cafés.",
   consent: true,
 };
 
@@ -36,18 +38,15 @@ describe("demoRequestSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("accepts a submission with no workflow example or current tools", () => {
-    const result = demoRequestSchema.safeParse({ ...validPayload, workflowExample: "", currentTools: "" });
-    expect(result.success).toBe(true);
+  it("requires organization type and a description of what to help with", () => {
+    expect(demoRequestSchema.safeParse({ ...validPayload, industry: "" }).success).toBe(false);
+    expect(demoRequestSchema.safeParse({ ...validPayload, workflowExample: "" }).success).toBe(false);
   });
 
-  it("accepts a submission with a workflow example and current tools", () => {
-    const result = demoRequestSchema.safeParse({
-      ...validPayload,
-      workflowExample: "A closer calls out three hours before service.",
-      currentTools: "Scheduling software, Slack, spreadsheets",
-    });
-    expect(result.success).toBe(true);
+  it("accepts a submission with no current tools or team size", () => {
+    expect(
+      demoRequestSchema.safeParse({ ...validPayload, currentTools: "", hourlyEmployees: "" }).success,
+    ).toBe(true);
   });
 
   it("rejects a workflow example over the length limit", () => {
@@ -65,4 +64,30 @@ describe("demoRequestSchema", () => {
     });
     expect(result.success).toBe(true);
   });
+});
+
+describe("parseBookingUrl", () => {
+  it("accepts https URLs", () => {
+    expect(parseBookingUrl("https://cal.example.com/straw")).toBe("https://cal.example.com/straw");
+  });
+
+  it.each([undefined, "", "   ", "http://cal.example.com", "javascript:alert(1)", "not a url", "//cal.example.com", "https://user:pw@cal.example.com"])(
+    "rejects unsafe or malformed value %j",
+    (value) => {
+      expect(parseBookingUrl(value)).toBeNull();
+    },
+  );
+});
+
+describe("parseAppUrl", () => {
+  it("accepts https URLs", () => {
+    expect(parseAppUrl("https://app.example.com")).toBe("https://app.example.com/");
+  });
+
+  it.each([undefined, "", "http://app.example.com", "javascript:alert(1)", "not a url", "https://user:pw@app.example.com"])(
+    "hides login for unsafe or unset value %j",
+    (value) => {
+      expect(parseAppUrl(value)).toBeNull();
+    },
+  );
 });

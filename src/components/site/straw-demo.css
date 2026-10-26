@@ -1,0 +1,372 @@
+.straw-demo {
+  --_bg: var(--straw-background, #faf9f6);
+  --_surface: var(--straw-surface, #ffffff);
+  --_text: var(--straw-text, #20231f);
+  --_accent: var(--straw-accent, #245c46);
+  --_accent-soft: var(--straw-accent-soft, #eaf1eb);
+  --_dark: var(--straw-dark, #17251f);
+  --_line: color-mix(in srgb, var(--_text) 14%, transparent);
+  --_muted: color-mix(in srgb, var(--_text) 68%, transparent);
+
+  container-type: inline-size;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  color: var(--_text);
+  background: var(--_bg);
+  border: 1px solid var(--_line);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgb(23 37 31 / 0.05), 0 12px 32px -16px rgb(23 37 31 / 0.18);
+  font-family: var(--font-plus-jakarta), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.straw-demo *,
+.straw-demo *::before,
+.straw-demo *::after {
+  box-sizing: border-box;
+}
+
+.straw-demo ol,
+.straw-demo ul,
+.straw-demo dl,
+.straw-demo dd,
+.straw-demo p,
+.straw-demo h4 {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.straw-demo__sample {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--_muted);
+}
+
+/* Tabs */
+.straw-demo__tabs {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--_line);
+}
+
+.straw-demo__tab {
+  flex: none;
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--_muted);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.straw-demo__tab[aria-selected="true"] {
+  color: var(--_accent);
+  border-bottom-color: var(--_accent);
+}
+
+.straw-demo__panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.straw-demo__toolbar {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.straw-demo__summary {
+  color: var(--_muted);
+}
+
+.straw-demo__channels {
+  display: inline-flex;
+  width: fit-content;
+  padding: 3px;
+  gap: 2px;
+  background: var(--_accent-soft);
+  border-radius: 999px;
+}
+
+.straw-demo__channel {
+  min-height: 40px;
+  padding: 0.25rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--_text);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.straw-demo__channel[aria-pressed="true"] {
+  color: #fff;
+  background: var(--_accent);
+}
+
+/* Conversation + app result: stacked by default */
+.straw-demo__body {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+}
+
+.straw-demo__chat,
+.straw-demo__app,
+.straw-demo__memory {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--_surface);
+  border: 1px solid var(--_line);
+  border-radius: 16px;
+}
+
+.straw-demo__chat-head,
+.straw-demo__app-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--_muted);
+}
+
+.straw-demo__messages {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.straw-demo__msg {
+  display: grid;
+  gap: 2px;
+  max-width: 88%;
+}
+
+.straw-demo__msg[data-from="manager"] {
+  justify-self: end;
+  text-align: right;
+}
+
+.straw-demo__sender {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--_muted);
+}
+
+.straw-demo__bubble {
+  padding: 0.55rem 0.8rem;
+  border-radius: 14px;
+  background: #eceeea;
+}
+
+.straw-demo__msg[data-from="manager"] .straw-demo__bubble {
+  color: #fff;
+  background: var(--_accent);
+}
+
+.straw-demo__chat[data-channel="imessage"] .straw-demo__msg[data-from="manager"] .straw-demo__bubble {
+  background: #2f6fdb;
+}
+
+.straw-demo__chat[data-channel="whatsapp"] {
+  background: #f1efe7;
+}
+
+.straw-demo__chat[data-channel="whatsapp"] .straw-demo__bubble {
+  background: #fff;
+}
+
+.straw-demo__chat[data-channel="whatsapp"] .straw-demo__msg[data-from="manager"] .straw-demo__bubble {
+  color: var(--_text);
+  background: #dcf4cf;
+}
+
+.straw-demo__panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.straw-demo__rows {
+  display: grid;
+}
+
+.straw-demo__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--_line);
+}
+
+.straw-demo__row dt {
+  color: var(--_muted);
+}
+
+.straw-demo__row dd {
+  font-weight: 600;
+  text-align: right;
+}
+
+.straw-demo__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--_text);
+  background: #f1efe7;
+  border: 1px solid var(--_line);
+  border-radius: 999px;
+}
+
+.straw-demo__status::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.straw-demo__status[data-tone="pending"]::before {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+}
+
+.straw-demo__status[data-tone="done"] {
+  color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.straw-demo__status[data-tone="done"]::before {
+  background: currentColor;
+}
+
+.straw-demo__note,
+.straw-demo__hint {
+  font-size: 0.8125rem;
+  color: var(--_muted);
+}
+
+.straw-demo__rules li {
+  padding: 0.5rem 0.75rem;
+  background: var(--_accent-soft);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Progress */
+.straw-demo__progress {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.straw-demo__progress li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--_line);
+  border-radius: 10px;
+  background: var(--_surface);
+  color: var(--_muted);
+}
+
+.straw-demo__progress li[data-state="current"] {
+  color: var(--_text);
+  font-weight: 600;
+  border-color: var(--_accent);
+  background: var(--_accent-soft);
+}
+
+.straw-demo__progress li[data-state="done"] {
+  color: var(--_accent);
+}
+
+.straw-demo__progress-state {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Buttons */
+.straw-demo__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.straw-demo__btn {
+  min-height: 44px;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--_text);
+  background: var(--_surface);
+  border: 1px solid var(--_line);
+  border-radius: 999px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.straw-demo__btn--primary {
+  color: #fff;
+  background: var(--_accent);
+  border-color: var(--_accent);
+}
+
+.straw-demo__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.straw-demo button:focus-visible {
+  outline: 3px solid var(--_accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .straw-demo__tab,
+  .straw-demo__channel,
+  .straw-demo__btn,
+  .straw-demo__progress li {
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+}
+
+/* Wide container: place conversation and app result side by side */
+@container (min-width: 720px) {
+  .straw-demo__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .straw-demo__toolbar {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .straw-demo__progress {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  .straw-demo__progress li {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+}
